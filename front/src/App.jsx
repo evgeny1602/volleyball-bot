@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import WebApp from '@twa-dev/sdk'
 
-function App() {
+export const App = () => {
   const [userData, setUserData] = useState(null)
 
   useEffect(() => {
@@ -13,16 +13,14 @@ function App() {
     }
   }, [])
 
-  // 1. Легкая вибрация при обычном клике
   const handleMainAction = () => {
     WebApp.HapticFeedback.impactOccurred('medium')
     WebApp.showAlert(`Виброотклик сработал!`)
   }
 
-  // 2. Вибрация при закрытии (уведомление о предупреждении)
   const handleClose = () => {
     WebApp.HapticFeedback.notificationOccurred('warning')
-    setTimeout(() => WebApp.close(), 200) // Небольшая задержка, чтобы юзер почувствовал вибро
+    setTimeout(() => WebApp.close(), 200)
   }
 
   return (
@@ -34,7 +32,7 @@ function App() {
       {userData && (
         <div
           className="bg-tg-secondary p-5 rounded-2xl shadow-sm flex items-center gap-4 border border-black/5"
-          onClick={() => WebApp.HapticFeedback.selectionChanged()} // Щелчок при тапе на карточку
+          onClick={() => WebApp.HapticFeedback.selectionChanged()}
         >
           {userData.photo_url ? (
             <img
@@ -95,5 +93,3 @@ function App() {
     </div>
   )
 }
-
-export default App

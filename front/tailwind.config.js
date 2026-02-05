@@ -4,7 +4,6 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Добавляем привязку к системным цветам Telegram
         tg: {
           bg: 'var(--tg-theme-bg-color)',
           text: 'var(--tg-theme-text-color)',
