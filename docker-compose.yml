@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./front
+    container_name: frontend_service
+    ports:
+      - '80:80'
+    volumes:
+      - ./front:/app
+      - /app/node_modules
+    stdin_open: true
