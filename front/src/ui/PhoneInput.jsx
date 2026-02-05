@@ -31,6 +31,7 @@ export const PhoneInput = ({ label, className, value }) => {
       {label && <InputLabel>{label}</InputLabel>}
       <div className="relative flex items-center gap-2">
         <IMaskInput
+          inputMode="numeric"
           inputRef={imaskRef}
           onFocus={() => tgVibro('medium')}
           mask="+{7} (000) 000-00-00"
