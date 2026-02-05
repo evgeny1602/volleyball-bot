@@ -63,6 +63,7 @@ export const DateInput = ({ value, onChange }) => {
       </button>
 
       <IMaskInput
+        onFocus={() => tgVibro('medium')}
         inputRef={imaskRef}
         inputMode="numeric"
         mask={Date}

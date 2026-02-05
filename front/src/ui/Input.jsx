@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { CloseIcon } from '@/ui/CloseIcon'
+import { tgVibro } from '@/utils/telegram'
 
 export const Input = ({ label, onChange }) => {
   const [text, setText] = useState('')
@@ -28,6 +29,7 @@ export const Input = ({ label, onChange }) => {
 
       <div className="flex flex-row items-center">
         <input
+          onFocus={() => tgVibro('medium')}
           ref={inputRef}
           onChange={handleChange}
           value={text}
