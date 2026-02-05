@@ -6,6 +6,7 @@ import { DateInput } from '@/ui/DateInput'
 import { PhoneInput } from '@/ui/PhoneInput'
 import { MoneyInput } from '@/ui/MoneyInput'
 import { GenderInput } from '@/ui/GenderInput'
+import { QuantityInput } from '@/ui/QuantityInput'
 
 export const App = () => {
   const [userData, setUserData] = useState(null)
@@ -38,6 +39,11 @@ export const App = () => {
       <GenderInput
         label="Gender input test"
         onChange={(genderId) => console.log(genderId)}
+      />
+
+      <QuantityInput
+        label="Quantity input test"
+        className="w-45"
       />
     </div>
   )
