@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { tgInit, tgGetAppData } from '@/utils/telegram'
 import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
+import { DateInput } from './ui/DateInput'
 
 export const App = () => {
   const [userData, setUserData] = useState(null)
@@ -21,6 +22,8 @@ export const App = () => {
       <Button variant="success">Default button</Button>
 
       <Input label="Input test" />
+
+      <DateInput />
     </div>
   )
 }
