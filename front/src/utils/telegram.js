@@ -36,7 +36,11 @@ export const tgVibro = (pattern) => {
     case 'heavy':
       WebApp.HapticFeedback.impactOccurred('heavy')
       break
+    case 'success':
+      WebApp.HapticFeedback.notificationOccurred('success')
+      break
+    case 'error':
+      WebApp.HapticFeedback.notificationOccurred('error')
+      break
   }
-
-  // WebApp.HapticFeedback.selectionChanged()
 }

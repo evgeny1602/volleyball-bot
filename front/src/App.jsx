@@ -27,14 +27,28 @@ export const App = () => {
         className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
         onClick={() => tgVibro('medium')}
       >
-        Test vibro Light
+        Test vibro medium
       </button>
 
       <button
         className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
         onClick={() => tgVibro('heavy')}
       >
-        Test vibro Light
+        Test vibro heavy
+      </button>
+
+      <button
+        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
+        onClick={() => tgVibro('success')}
+      >
+        Test vibro success
+      </button>
+
+      <button
+        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
+        onClick={() => tgVibro('error')}
+      >
+        Test vibro error
       </button>
     </div>
   )
