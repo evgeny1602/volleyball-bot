@@ -4,7 +4,8 @@ import { Button } from '@/ui/Button'
 import { Input } from '@/ui/Input'
 import { DateInput } from '@/ui/DateInput'
 import { PhoneInput } from '@/ui/PhoneInput'
-import { MoneyInput } from './ui/MoneyInput'
+import { MoneyInput } from '@/ui/MoneyInput'
+import { GenderInput } from '@/ui/GenderInput'
 
 export const App = () => {
   const [userData, setUserData] = useState(null)
@@ -32,6 +33,11 @@ export const App = () => {
       <MoneyInput
         label="Money input test"
         className="w-35"
+      />
+
+      <GenderInput
+        label="Gender input test"
+        onChange={(genderId) => console.log(genderId)}
       />
     </div>
   )
