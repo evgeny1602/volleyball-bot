@@ -3,38 +3,46 @@ import { IMaskInput } from 'react-imask'
 import { InputLabel } from '@/ui/InputLabel'
 import { CloseIcon } from '@/ui/CloseIcon'
 import { tgVibro } from '@/utils/telegram'
+import { twMerge } from 'tailwind-merge'
 
-export const PhoneInput = ({ label, value }) => {
+export const MoneyInput = ({ label, value, className }) => {
   const imaskRef = useRef(null)
 
-  const [phone, setPhone] = useState(value ? value : '')
+  const [money, setMoney] = useState(value ? value : '')
 
   const handleClearClick = () => {
-    setPhone('')
+    setMoney('')
 
     imaskRef.current?.focus()
   }
 
-  const getPhoneLength = () =>
-    phone.replaceAll('_', '').replaceAll('.', '').length
+  const getMoneyLength = () => money.toString().length
 
   return (
-    <div className="flex flex-col gap-1 w-58">
+    <div className={twMerge('flex flex-col gap-1', className)}>
       {label && <InputLabel>{label}</InputLabel>}
+
       <div className="relative flex items-center gap-2">
         <IMaskInput
-          inputMode="numeric"
+          inputMode="decimal"
           inputRef={imaskRef}
           onFocus={() => tgVibro('medium')}
-          mask="+{7} (000) 000-00-00"
-          value={phone}
+          mask={Number}
+          value={money}
           unmask={true}
-          onAccept={(value, mask) => setPhone(value)}
-          placeholder="+7 (___) ___-__-__"
+          scale={2}
+          thousandsSeparator=" "
+          radix="."
+          normalizeZeros={true}
+          padFractionalZeros={false}
+          min={0}
+          max={1000000}
+          placeholder="0.00"
+          onAccept={(value, mask) => setMoney(value)}
           className="border rounded-3xl border-bot-grey-500 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light px-4 py-2 text-bot-grey-800 transition-all w-full font-mono"
         />
 
-        {getPhoneLength() > 0 && (
+        {getMoneyLength() > 0 && (
           <CloseIcon
             onClick={handleClearClick}
             className="-ml-10"
