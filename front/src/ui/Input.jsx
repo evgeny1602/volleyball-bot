@@ -32,7 +32,7 @@ export const Input = ({ label, onChange }) => {
           onChange={handleChange}
           value={text}
           type="text"
-          className="border rounded-3xl border-bot-grey-500 focus:border-bot-grey-800 focus:outline-0 focus:bg-bot-grey-100 w-full px-4 py-2 text-bot-grey-800 transition-all"
+          className="border rounded-3xl border-bot-grey-500 focus:border-bot-grey-800 focus:outline-0 focus:bg-bot-grey-100 w-full px-4 py-2 text-bot-grey-800 transition-all font-mono"
         />
 
         {text.length > 0 && (
