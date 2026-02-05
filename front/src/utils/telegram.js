@@ -44,3 +44,31 @@ export const tgVibro = (pattern) => {
       break
   }
 }
+
+export const tgAlert = async (message) => {
+  tgVibro('medium')
+
+  if (isDev) return
+
+  return new Promise((resolve) => WebApp.showAlert(message, () => resolve()))
+}
+
+export const tgConfirm = async (message) => {
+  tgVibro('medium')
+
+  if (isDev) return
+
+  return new Promise((resolve) =>
+    WebApp.showConfirm(message, (isConfirmed) => resolve(isConfirmed))
+  )
+}
+
+export const tgPopUp = async (params) => {
+  tgVibro('medium')
+
+  if (isDev) return
+
+  return new Promise((resolve) =>
+    WebApp.showPopup(params, (buttonId) => resolve(buttonId))
+  )
+}

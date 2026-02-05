@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react'
-import { tgInit, tgGetAppData, tgVibro } from './utils/telegram'
+import {
+  tgInit,
+  tgGetAppData,
+  tgAlert,
+  tgConfirm,
+  tgPopUp,
+} from './utils/telegram'
 
 export const App = () => {
   const [userData, setUserData] = useState(null)
@@ -17,38 +23,34 @@ export const App = () => {
   return (
     <div className="flex flex-col min-h-screen p-4 gap-6 select-none">
       <button
-        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
-        onClick={() => tgVibro('light')}
+        className="bg-bot-primary rounded-3xl w-50 text-white hover:cursor-pointer active:scale-[0.96] transition-transform"
+        onClick={() => tgAlert('Test Alert')}
       >
-        Test vibro Light
+        Test Alert
       </button>
 
       <button
-        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
-        onClick={() => tgVibro('medium')}
+        className="bg-bot-primary rounded-3xl w-50 text-white hover:cursor-pointer active:scale-[0.96] transition-transform"
+        onClick={() => tgConfirm('Test Confirm')}
       >
-        Test vibro medium
+        Test Confirm
       </button>
 
       <button
-        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
-        onClick={() => tgVibro('heavy')}
+        className="bg-bot-primary rounded-3xl w-50 text-white hover:cursor-pointer active:scale-[0.96] transition-transform"
+        onClick={() =>
+          tgPopUp({
+            title: 'Test Pop Up',
+            message: 'Test Pop Up------Test Pop Up',
+            buttons: [
+              { id: 'all', type: 'default', text: 'Все' },
+              { id: 'none', type: 'destructive', text: 'Никаких' },
+              { type: 'cancel' },
+            ],
+          })
+        }
       >
-        Test vibro heavy
-      </button>
-
-      <button
-        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
-        onClick={() => tgVibro('success')}
-      >
-        Test vibro success
-      </button>
-
-      <button
-        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
-        onClick={() => tgVibro('error')}
-      >
-        Test vibro error
+        Test Pop Up
       </button>
     </div>
   )
