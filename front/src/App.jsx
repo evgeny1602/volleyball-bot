@@ -16,15 +16,26 @@ export const App = () => {
 
   return (
     <div className="flex flex-col min-h-screen p-4 gap-6 select-none">
-      <button className="bg-bot-grey-800 hover:cursor-pointer active:scale-[0.96] transition-transform">
-        Test
+      <button
+        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
+        onClick={() => tgVibro('light')}
+      >
+        Test vibro Light
       </button>
 
-      {userData ? (
-        <div>{JSON.stringify(userData, null, 2)}</div>
-      ) : (
-        <div>'No user data'</div>
-      )}
+      <button
+        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
+        onClick={() => tgVibro('medium')}
+      >
+        Test vibro Light
+      </button>
+
+      <button
+        className="bg-bot-primary rounded-3xl w-50 hover:cursor-pointer active:scale-[0.96] transition-transform"
+        onClick={() => tgVibro('heavy')}
+      >
+        Test vibro Light
+      </button>
     </div>
   )
 }
