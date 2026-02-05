@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 
 @theme {
+  --color-bot-primary-light: #e5f3ff;
+  --color-bot-primary-medium: #b3dbff;
   --color-bot-primary: #0088ff;
   --color-bot-secondary: #ff8d28;
   --color-bot-success: #27c840;

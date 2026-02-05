@@ -46,7 +46,7 @@ export const DateInput = ({ value, onChange }) => {
     dateText.replaceAll('_', '').replaceAll('.', '').length
 
   const imaskClasses = cn(
-    'border rounded-3xl border-bot-grey-500 focus:border-bot-grey-800 focus:outline-0 focus:bg-bot-grey-100 px-4 py-2 text-bot-grey-800 transition-all w-40 font-mono'
+    'border rounded-3xl border-bot-grey-500 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light px-4 py-2 text-bot-grey-800 transition-all w-40 font-mono'
   )
 
   return (
