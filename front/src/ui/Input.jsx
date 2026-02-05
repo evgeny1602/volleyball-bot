@@ -1,8 +1,10 @@
 import { useState, useRef } from 'react'
 import { CloseIcon } from '@/ui/CloseIcon'
 import { tgVibro } from '@/utils/telegram'
+import { InputLabel } from '@/ui/InputLabel'
+import { twMerge } from 'tailwind-merge'
 
-export const Input = ({ label, onChange }) => {
+export const Input = ({ label, onChange, className }) => {
   const [text, setText] = useState('')
 
   const inputRef = useRef(null)
@@ -22,10 +24,8 @@ export const Input = ({ label, onChange }) => {
   }
 
   return (
-    <div>
-      {label && (
-        <div className="text-bot-primary font-medium text-center">{label}</div>
-      )}
+    <div className={twMerge('flex flex-col gap-1', className)}>
+      {label && <InputLabel>{label}</InputLabel>}
 
       <div className="flex flex-row items-center">
         <input

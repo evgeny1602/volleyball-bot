@@ -1,9 +1,17 @@
 import { cn } from '@/utils/cn'
 import { tgVibro } from '@/utils/telegram'
+import { twMerge } from 'tailwind-merge'
 
-export const Button = ({ variant = 'primary', onClick, children }) => {
-  const baseClasses =
-    'text-white px-4 py-2 rounded-3xl font-medium w-full hover:cursor-pointer active:scale-95 transition-transform'
+export const Button = ({
+  variant = 'primary',
+  onClick,
+  children,
+  className,
+}) => {
+  const baseClasses = twMerge(
+    'text-white px-4 py-2 rounded-3xl font-medium hover:cursor-pointer active:scale-95 transition-transform',
+    className
+  )
 
   const variantClasses = {
     'bg-bot-primary': variant === 'primary',
