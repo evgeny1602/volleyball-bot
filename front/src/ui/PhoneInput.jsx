@@ -27,7 +27,7 @@ export const PhoneInput = ({ label, className, value }) => {
     phone.replaceAll('_', '').replaceAll('.', '').length
 
   return (
-    <div className="flex flex-col gap-1 w-48">
+    <div className="flex flex-col gap-1 w-56">
       {label && <InputLabel>{label}</InputLabel>}
       <div className="relative flex items-center gap-2">
         <IMaskInput
