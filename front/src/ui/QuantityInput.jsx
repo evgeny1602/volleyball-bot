@@ -13,7 +13,9 @@ export const QuantityInput = ({ label, value, className }) => {
       {label && <InputLabel>{label}</InputLabel>}
 
       <div className="relative flex items-center gap-2">
-        <StepButton onClick={() => setQty((qty) => Math.max(0, qty - 1))}>
+        <StepButton
+          onClick={() => setQty((qty) => Math.max(0, (qty ? qty : 0) - 1))}
+        >
           -
         </StepButton>
 
@@ -32,7 +34,9 @@ export const QuantityInput = ({ label, value, className }) => {
           className="text-center border rounded-3xl border-bot-grey-500 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light px-4 py-2 text-bot-grey-800 transition-all w-full font-mono"
         />
 
-        <StepButton onClick={() => setQty((qty) => qty + 1)}>+</StepButton>
+        <StepButton onClick={() => setQty((qty) => (qty ? qty : 0) + 1)}>
+          +
+        </StepButton>
       </div>
     </div>
   )
