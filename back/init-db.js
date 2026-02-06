@@ -7,9 +7,13 @@ export const initDatabase = () => {
       CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         tg_id INTEGER UNIQUE NOT NULL,
-        username TEXT,
-        first_name TEXT,
-        last_name TEXT,
+        tg_username TEXT,
+        tg_avatar_url TEXT,
+        fio TEXT,
+        gender TEXT,
+        phone TEXT,
+        birthday DATETIME,
+        role TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `
