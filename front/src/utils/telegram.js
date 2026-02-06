@@ -15,6 +15,7 @@ export const tgInit = () => {
 
   WebApp.ready()
   WebApp.expand()
+  WebApp.lockOrientation()
 }
 
 export const tgGetAppData = () => {
