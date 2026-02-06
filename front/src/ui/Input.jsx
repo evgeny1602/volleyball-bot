@@ -13,6 +13,10 @@ export const Input = ({ label, onChange, className }) => {
     setText('')
 
     inputRef.current?.focus()
+
+    if (onChange) {
+      onChange('')
+    }
   }
 
   const handleChange = (e) => {

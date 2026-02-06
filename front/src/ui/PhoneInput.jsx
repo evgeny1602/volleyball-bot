@@ -4,7 +4,7 @@ import { InputLabel } from '@/ui/InputLabel'
 import { CloseIcon } from '@/ui/CloseIcon'
 import { tgVibro } from '@/utils/telegram'
 
-export const PhoneInput = ({ label, value }) => {
+export const PhoneInput = ({ label, value, onChange }) => {
   const imaskRef = useRef(null)
 
   const [phone, setPhone] = useState(value ? value : '')
@@ -13,6 +13,18 @@ export const PhoneInput = ({ label, value }) => {
     setPhone('')
 
     imaskRef.current?.focus()
+
+    if (onChange) {
+      onChange('')
+    }
+  }
+
+  const handleAccept = (val) => {
+    setPhone(val)
+
+    if (onChange) {
+      onChange(val)
+    }
   }
 
   const getPhoneLength = () =>
@@ -29,7 +41,7 @@ export const PhoneInput = ({ label, value }) => {
           mask="+{7} (000) 000-00-00"
           value={phone}
           unmask={true}
-          onAccept={(value, mask) => setPhone(value)}
+          onAccept={handleAccept}
           placeholder="+7 (___) ___-__-__"
           className="border rounded-full border-bot-grey-300 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light px-4 py-2 text-bot-grey-800 transition-all w-full"
         />
