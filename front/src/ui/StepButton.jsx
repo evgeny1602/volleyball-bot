@@ -12,7 +12,7 @@ export const StepButton = ({ children, onClick }) => {
   return (
     <button
       onClick={handleClick}
-      className="bg-bot-primary  py-2 px-4 rounded-[50%] text-white font-medium font-mono hover:cursor-pointer active:scale-95 transition-transform"
+      className="bg-bot-primary py-2 px-4 rounded-[50%] text-white font-semibold font-mono hover:cursor-pointer active:scale-95 transition-transform"
     >
       {children}
     </button>
