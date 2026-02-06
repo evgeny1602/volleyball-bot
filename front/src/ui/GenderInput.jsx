@@ -26,7 +26,7 @@ export const GenderInput = ({ label, onChange, className, value }) => {
     <div className={twMerge('flex flex-col gap-1 ', className)}>
       {label && <InputLabel>{label}</InputLabel>}
 
-      <div className="flex w-full bg-bot-grey-100 rounded-full gap-1 p-1">
+      <div className="flex w-full bg-bot-grey-100 rounded-full gap-1 p-1 border-bot-grey-300 border">
         {options.map((option) => (
           <label
             key={option.id}
