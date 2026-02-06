@@ -4,6 +4,7 @@ import { DateInput } from '@/ui/DateInput'
 import { PhoneInput } from '@/ui/PhoneInput'
 import { Button } from '@/ui/Button'
 import { ErrorBubble } from '@/ui/ErrorBubble'
+import { Loader } from '@/ui/Loader'
 import { useState } from 'react'
 import { tgVibro } from '@/utils/telegram'
 import {
@@ -19,6 +20,7 @@ export const RegisterPage = () => {
   const [phone, setPhone] = useState('')
 
   const [isErrorVisible, setIsErrorVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const handleSubmit = () => {
     const isFormValid =
@@ -31,10 +33,14 @@ export const RegisterPage = () => {
     }
 
     if (isFormValid) {
+      setIsLoading(true)
+
       console.log('Send data:')
       console.log({ fio, gender, birthday, phone })
     }
   }
+
+  if (isLoading) return <Loader />
 
   return (
     <div className="flex flex-col items-center gap-20 mt-5 relative">
