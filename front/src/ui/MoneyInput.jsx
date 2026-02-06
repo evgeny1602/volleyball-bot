@@ -39,7 +39,7 @@ export const MoneyInput = ({ label, value, className }) => {
           max={1000000}
           placeholder="0.00"
           onAccept={(value, mask) => setMoney(value)}
-          className="border rounded-full border-bot-grey-300 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light px-4 py-2 text-bot-grey-800 transition-all w-full font-mono"
+          className="border rounded-full border-bot-grey-300 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light px-4 py-2 text-bot-grey-800 transition-all w-full"
         />
 
         {getMoneyLength() > 0 && (

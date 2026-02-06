@@ -12,3 +12,13 @@
   --color-bot-grey-500: #999;
   --color-bot-grey-800: #555;
 }
+
+:root {
+  --tg-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+}
+
+body {
+  font-family: var(--tg-font-family);
+  -webkit-font-smoothing: antialiased;
+}
