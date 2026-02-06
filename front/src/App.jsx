@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react'
 import { tgInit, tgGetAppData } from '@/utils/telegram'
-import { Button } from '@/ui/Button'
-import { Input } from '@/ui/Input'
-import { DateInput } from '@/ui/DateInput'
-import { PhoneInput } from '@/ui/PhoneInput'
-import { MoneyInput } from '@/ui/MoneyInput'
-import { GenderInput } from '@/ui/GenderInput'
-import { QuantityInput } from '@/ui/QuantityInput'
+import { RegisterPage } from '@/pages/RegisterPage'
 
 export const App = () => {
   const [userData, setUserData] = useState(null)
@@ -22,29 +16,8 @@ export const App = () => {
   }, [])
 
   return (
-    <div className="flex flex-col min-h-screen p-4 gap-6 select-none items-center">
-      <Button variant="success">Default button</Button>
-
-      <Input label="Input test" />
-
-      <DateInput label="Date input test" />
-
-      <PhoneInput label="Phone input test" />
-
-      <MoneyInput
-        label="Money input test"
-        className="w-35"
-      />
-
-      <GenderInput
-        label="Gender input test"
-        onChange={(genderId) => console.log(genderId)}
-      />
-
-      <QuantityInput
-        label="Quantity input test"
-        className="w-45"
-      />
+    <div className="flex flex-col min-h-screen p-4 gap-2 select-none items-center bg-bot-page-bg text-bot-grey-800">
+      <RegisterPage />
     </div>
   )
 }

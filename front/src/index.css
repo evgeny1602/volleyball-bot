@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 
 @theme {
+  --color-bot-page-bg: #fafafa;
   --color-bot-primary-light: #e5f3ff;
   --color-bot-primary-medium: #b3dbff;
   --color-bot-primary: #0088ff;
