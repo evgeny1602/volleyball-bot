@@ -6,7 +6,7 @@ import { Button } from '@/ui/Button'
 
 export const RegisterPage = () => {
   return (
-    <div className="flex flex-col items-center gap-20">
+    <div className="flex flex-col items-center gap-20 mt-5 mb-15">
       <div className="text-center w-[70%] flex flex-col gap-4">
         <p>Приветствуем!</p>
         <p>Осталось чуть-чуть, и тебе откроется большой мир волейбола!</p>
