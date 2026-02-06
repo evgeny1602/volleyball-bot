@@ -16,6 +16,7 @@ export const tgInit = () => {
   WebApp.ready()
   WebApp.expand()
   WebApp.lockOrientation()
+  WebApp.enableClosingConfirmation()
 }
 
 export const tgGetAppData = () => {
