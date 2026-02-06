@@ -10,3 +10,13 @@ services:
       - ./front:/app
       - /app/node_modules
     stdin_open: true
+  backend:
+    build:
+      context: ./back
+    container_name: backend_service
+    ports:
+      - '3001:3000'
+    volumes:
+      - ./back/data:/app/data
+    environment:
+      - NODE_ENV=production
