@@ -31,7 +31,7 @@ export const PhoneInput = ({ label, value }) => {
           unmask={true}
           onAccept={(value, mask) => setPhone(value)}
           placeholder="+7 (___) ___-__-__"
-          className="border rounded-3xl border-bot-grey-500 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light px-4 py-2 text-bot-grey-800 transition-all w-full font-mono"
+          className="border rounded-full border-bot-grey-500 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light px-4 py-2 text-bot-grey-800 transition-all w-full font-mono"
         />
 
         {getPhoneLength() > 0 && (
