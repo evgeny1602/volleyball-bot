@@ -33,6 +33,8 @@ export const RegisterPage = () => {
     }
 
     if (isFormValid) {
+      tgVibro('success')
+
       setIsLoading(true)
 
       console.log('Send data:')
