@@ -1,23 +1,63 @@
 import db from './db.js'
 
+const initSqls = [
+  `
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      tg_id INTEGER UNIQUE NOT NULL,
+      tg_username TEXT,
+      tg_avatar_url TEXT,
+      fio TEXT,
+      gender TEXT,
+      phone TEXT,
+      birthday DATETIME,
+      role TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
+  `
+    CREATE TABLE IF NOT EXISTS games (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      location_name TEXT,
+      location_address TEXT,
+      start_datetime DATETIME,
+      duration INTEGER,
+      description TEXT,
+      price FLOAT,
+      max_players INTEGER,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
+  `
+    CREATE TABLE IF NOT EXISTS game_templates (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      location_name TEXT,
+      location_address TEXT,
+      start_datetime DATETIME,
+      duration INTEGER,
+      description TEXT,
+      price FLOAT,
+      max_players INTEGER,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
+  `
+    CREATE TABLE IF NOT EXISTS users_to_games (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER,
+      game_id INTEGER,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
+]
+
 export const initDatabase = () => {
   const createTables = db.transaction(() => {
-    db.prepare(
-      `
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        tg_id INTEGER UNIQUE NOT NULL,
-        tg_username TEXT,
-        tg_avatar_url TEXT,
-        fio TEXT,
-        gender TEXT,
-        phone TEXT,
-        birthday DATETIME,
-        role TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-      )
-    `
-    ).run()
+    for (const sql of initSqls) {
+      db.prepare(sql).run()
+    }
 
     console.log('✅ База данных успешно проверена/инициализирована')
   })
