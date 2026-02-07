@@ -5,25 +5,22 @@ import { DateInput } from '@/ui/DateInput'
 import { PhoneInput } from '@/ui/PhoneInput'
 import { Button } from '@/ui/Button'
 import { tgVibro } from '@/utils/telegram'
-import {
-  isBirthdayValid,
-  isFioValid,
-  isPhoneValid,
-} from '@/utils/form_checkers'
+import { registerSchema } from '@/utils/validations'
 
-export const RegisterForm = ({ onSubmit, isLoading }) => {
+export const RegisterForm = ({ onSubmit, onError }) => {
   const [fio, setFio] = useState('')
   const [gender, setGender] = useState('male')
   const [birthday, setBirthday] = useState('')
   const [phone, setPhone] = useState('')
 
   const handleAction = () => {
-    const isFormValid =
-      isFioValid(fio) && isBirthdayValid(birthday) && isPhoneValid(phone)
+    const result = registerSchema.safeParse({ fio, gender, birthday, phone })
 
-    if (!isFormValid) {
+    if (!result.success) {
       tgVibro('error')
-      onSubmit(null) // Сигнализируем об ошибке валидации
+
+      if (onError) onError()
+
       return
     }
 
@@ -56,9 +53,8 @@ export const RegisterForm = ({ onSubmit, isLoading }) => {
       <Button
         className="mt-10"
         onClick={handleAction}
-        disabled={isLoading}
       >
-        {isLoading ? 'Загрузка...' : 'Подать заявку'}
+        Подать заявку
       </Button>
     </div>
   )

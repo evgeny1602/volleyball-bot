@@ -13,12 +13,6 @@ export const RegisterPage = ({ onRegistered }) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const handleRegisterSubmit = async (formData) => {
-    if (!formData) {
-      setIsErrorVisible(true)
-
-      return
-    }
-
     setIsLoading(true)
 
     try {
@@ -49,7 +43,7 @@ export const RegisterPage = ({ onRegistered }) => {
 
       <RegisterForm
         onSubmit={handleRegisterSubmit}
-        isLoading={isLoading}
+        onError={() => setIsErrorVisible(true)}
       />
 
       <RegisterError
