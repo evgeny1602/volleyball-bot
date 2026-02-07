@@ -12,6 +12,7 @@ const initSqls = [
       phone TEXT,
       birthday DATETIME,
       role TEXT,
+      status TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `,

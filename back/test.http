@@ -1,0 +1,27 @@
+GET http://localhost:3000/api/users
+
+###
+
+GET http://localhost:3000/api/users/12345
+
+###
+POST http://localhost:3000/api/users
+Content-Type: application/json
+
+{
+    "tg_id": "123456",
+    "tg_username": "dev_test",
+    "tg_avatar_url": "https://example.com/avatar.jpg",
+    "fio": "Иванов Иван",
+    "gender": "male",
+    "phone": "79999999999",
+    "birthday": "01.01.1990"
+}
+
+###
+
+DELETE http://localhost:3000/api/users/123456
+
+###
+
+PATCH http://localhost:3000/api/users/approve/12345

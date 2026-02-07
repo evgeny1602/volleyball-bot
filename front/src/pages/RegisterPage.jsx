@@ -7,13 +7,17 @@ import { ErrorBubble } from '@/ui/ErrorBubble'
 import { Loader } from '@/ui/Loader'
 import { useState } from 'react'
 import { tgVibro } from '@/utils/telegram'
+import { createUser } from '@/api/user'
 import {
   isBirthdayValid,
   isFioValid,
   isPhoneValid,
 } from '@/utils/form_checkers'
+import { useTelegramUser } from '@/hooks/useTelegramUser'
 
-export const RegisterPage = () => {
+export const RegisterPage = ({ onRegistered }) => {
+  const { userData } = useTelegramUser()
+
   const [fio, setFio] = useState('')
   const [gender, setGender] = useState('male')
   const [birthday, setBirthday] = useState('')
@@ -22,7 +26,7 @@ export const RegisterPage = () => {
   const [isErrorVisible, setIsErrorVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const isFormValid =
       isFioValid(fio) && isBirthdayValid(birthday) && isPhoneValid(phone)
 
@@ -37,8 +41,21 @@ export const RegisterPage = () => {
 
       setIsLoading(true)
 
-      console.log('Send data:')
-      console.log({ fio, gender, birthday, phone })
+      const response = await createUser({
+        tg_id: userData.id,
+        tg_username: userData.username,
+        tg_avatar_url: userData.photo_url,
+        fio,
+        gender,
+        phone,
+        birthday,
+      })
+
+      if (response.status === 201) {
+        onRegistered()
+      }
+
+      setIsLoading(false)
     }
   }
 

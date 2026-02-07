@@ -3,11 +3,21 @@ import WebApp from '@twa-dev/sdk'
 const isDev = import.meta.env.DEV
 
 const fakeAppData = {
+  query_id: 'AAHdF6IQAAAAAN0XohD9sL9E',
   user: {
     id: 12345,
-    first_name: 'DevUser',
-    username: 'dev_test',
+    first_name: 'Ivan',
+    last_name: 'Ivanov',
+    username: 'ivan_dev',
+    language_code: 'ru',
+    is_premium: true,
+    allows_write_to_pm: true,
+    photo_url: 'https://t.me/i/userpic/160/example.jpg',
   },
+  auth_date: '1700000000',
+  hash: '89d7b1d...567',
+  chat_type: 'sender',
+  chat_instance: '84729384729',
 }
 
 export const tgInit = () => {
