@@ -25,6 +25,4 @@ dist-ssr
 .env.development
 .env.production
 .env
-main.db
-main.db-shm
-main.db-wal
+main.db*
