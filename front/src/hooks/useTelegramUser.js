@@ -1,35 +1,26 @@
 import { useState, useEffect } from 'react'
 import { tgInit, tgGetAppData } from '@/utils/telegram'
-import { getUser } from '@/api/user'
 
 export const useTelegramUser = () => {
-  const [userData, setUserData] = useState(null)
-  const [userStatus, setUserStatus] = useState('loading')
+  const [tgUserData, setTgUserData] = useState(null)
+  const [tgIsLoading, setTgIsLoading] = useState(false)
 
   useEffect(() => {
-    const initApp = async () => {
-      try {
-        tgInit()
+    try {
+      setTgIsLoading(true)
 
-        const appData = tgGetAppData()
+      tgInit()
 
-        if (appData?.user) {
-          setUserData(appData.user)
+      const appData = tgGetAppData()
 
-          const data = await getUser(appData.user.id)
-
-          setUserStatus(data?.exists ? data.user.status : 'unregistered')
-        } else {
-          setUserStatus('unregistered')
-        }
-      } catch (error) {
-        console.error('Ошибка инициализации приложения:', error)
-        setUserStatus('unregistered')
+      if (appData?.user) {
+        setTgUserData(appData.user)
+        setTgIsLoading(false)
       }
+    } catch (error) {
+      console.error('Ошибка инициализации приложения:', error)
     }
-
-    initApp()
   }, [])
 
-  return { userData, userStatus, setUserStatus }
+  return { tgUserData, tgIsLoading }
 }

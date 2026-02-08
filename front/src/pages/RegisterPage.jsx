@@ -1,39 +1,31 @@
 import { Loader } from '@/ui/Loader'
 import { useState } from 'react'
-import { createUser } from '@/api/user'
 import { useTelegramUser } from '@/hooks/useTelegramUser'
+import { useUser } from '@/hooks/useUser'
 import { RegisterForm } from '@/ui/RegisterForm'
 import { RegisterWelcome } from '@/ui/RegisterWelcome'
 import { RegisterError } from '@/ui/RegisterError'
 
 export const RegisterPage = ({ onRegistered }) => {
-  const { userData } = useTelegramUser()
+  const { tgUserData } = useTelegramUser()
+  const { createUser, userIsLoading } = useUser()
 
   const [isErrorVisible, setIsErrorVisible] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
 
   const handleRegisterSubmit = async (formData) => {
-    setIsLoading(true)
+    const response = await createUser({
+      tg_id: tgUserData.id,
+      tg_username: tgUserData.username,
+      tg_avatar_url: tgUserData.photo_url,
+      ...formData,
+    })
 
-    try {
-      const response = await createUser({
-        tg_id: userData.id,
-        tg_username: userData.username,
-        tg_avatar_url: userData.photo_url,
-        ...formData,
-      })
-
-      if (response.status === 201) {
-        onRegistered()
-      }
-    } catch (error) {
-      console.error('Registration error:', error)
-    } finally {
-      setIsLoading(false)
+    if (response.status === 201) {
+      onRegistered()
     }
   }
 
-  if (isLoading) {
+  if (userIsLoading) {
     return <Loader />
   }
 
