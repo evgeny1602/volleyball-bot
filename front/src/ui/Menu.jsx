@@ -17,11 +17,13 @@ const MENU_ITEMS = [
   { id: 'admin', Icon: AdminMenuIcon },
 ]
 
-export const Menu = ({ className }) => {
+export const Menu = ({ className, onSelect }) => {
   const [activeTab, setActiveTab] = useState('home')
 
   const handleClick = (tabId) => {
     setActiveTab(tabId)
+
+    if (onSelect) onSelect(tabId)
   }
 
   return (

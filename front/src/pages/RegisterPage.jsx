@@ -38,7 +38,7 @@ export const RegisterPage = ({ onRegistered }) => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-20 mt-5 relative">
+    <div className="flex flex-col items-center gap-20 pt-5 relative">
       <RegisterWelcome />
 
       <RegisterForm

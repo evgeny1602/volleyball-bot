@@ -8,7 +8,7 @@ export const App = () => {
   const { userStatus, setUserStatus } = useTelegramUser()
 
   return (
-    <div className="flex flex-col min-h-screen p-4 gap-2 select-none items-center bg-bot-page-bg text-bot-grey-800">
+    <div className="flex flex-col min-h-screen gap-2 select-none items-center bg-bot-page-bg text-bot-grey-800">
       {userStatus == 'loading' && <Loader />}
       {userStatus == 'unregistered' && (
         <RegisterPage onRegistered={() => setUserStatus('registered')} />

@@ -29,7 +29,7 @@ export const RegisterForm = ({ onSubmit, onError }) => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-10 mb-40">
+    <div className="flex flex-col items-center gap-10">
       <Input
         label="Фамилия, имя"
         onChange={(val) => setFio(val)}
