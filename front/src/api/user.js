@@ -18,3 +18,14 @@ export async function createUser(userData) {
 
   return response
 }
+
+export const getUsers = async () => {
+  const response = await fetch(`/api/users`)
+
+  if (response.status === 200) {
+    const data = await response.json()
+    return data
+  }
+
+  return null
+}
