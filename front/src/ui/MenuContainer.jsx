@@ -10,9 +10,12 @@ export const MenuContainer = ({ children, className }) => {
       style={{
         msOverflowStyle: 'none',
         scrollbarWidth: 'none',
+        WebkitOverflowScrolling: 'touch',
       }}
     >
+      <div className="min-w-[1px] h-full" />
       {children}
+      <div className="min-w-[1px] h-full" />
     </div>
   )
 }
