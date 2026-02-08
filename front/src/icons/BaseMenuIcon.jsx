@@ -41,7 +41,7 @@ export const BaseMenuIcon = ({
 
       <div
         className={cn(
-          'text-xs uppercase transition-colors duration-300',
+          'text-xs transition-colors duration-300',
           isActive ? 'text-bot-primary font-medium' : 'text-bot-grey-500'
         )}
       >
