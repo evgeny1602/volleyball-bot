@@ -17,7 +17,7 @@ const MENU_ITEMS = [
   { id: 'admin', Icon: AdminMenuIcon },
 ]
 
-export const Menu = () => {
+export const Menu = ({ className }) => {
   const [activeTab, setActiveTab] = useState('home')
 
   const handleClick = (tabId) => {
@@ -25,7 +25,7 @@ export const Menu = () => {
   }
 
   return (
-    <MenuContainer>
+    <MenuContainer className={className}>
       {MENU_ITEMS.map(({ id, Icon }) => (
         <Icon
           key={id}

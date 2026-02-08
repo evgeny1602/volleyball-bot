@@ -21,13 +21,13 @@ export const BaseMenuIcon = ({
       onClick={handleClick}
       className={cn(
         className,
-        'flex flex-col items-center py-2 w-28 rounded-full -mx-2 transition-all duration-300 ease-in-out',
+        'snap-center flex flex-col items-center py-2 min-w-28 rounded-full -mx-2 transition-all duration-200 ease-in-out',
         isActive ? 'bg-bot-grey-200' : 'bg-transparent'
       )}
     >
       <div
         className={cn(
-          'w-6 h-6 transition-colors duration-300',
+          'w-6 h-6 transition-colors duration-100',
           isActive ? 'bg-bot-primary' : 'bg-bot-grey-500'
         )}
         style={{
