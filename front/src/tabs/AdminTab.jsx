@@ -27,18 +27,31 @@ const UserCard = ({ user }) => {
       </div>
 
       <div className="flex flex-row gap-2">
-        <Button
-          variant="success"
-          className="w-full"
-        >
-          Одобрить
-        </Button>
-        <Button
-          className="w-full"
-          variant="danger"
-        >
-          Отклонить
-        </Button>
+        {user.role == 'player' && user.status == 'registered' && (
+          <>
+            <Button
+              variant="success"
+              className="w-full"
+            >
+              Одобрить
+            </Button>
+            <Button
+              className="w-full"
+              variant="danger"
+            >
+              Отклонить
+            </Button>
+          </>
+        )}
+
+        {user.role == 'player' && user.status == 'approved' && (
+          <Button
+            className="w-full"
+            variant="danger"
+          >
+            Удалить
+          </Button>
+        )}
       </div>
     </div>
   )
