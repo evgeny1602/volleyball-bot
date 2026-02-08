@@ -46,7 +46,7 @@ const UserCard = ({ user }) => {
 
 const UsersList = ({ users }) => {
   return (
-    <div className="divide-y divide-bot-grey-300 max-h-[60vh] overflow-y-auto">
+    <div className="divide-y divide-bot-grey-300 max-h-[80vh] overflow-y-auto">
       {users.map((user) => (
         <div className="pt-4 pb-4 last:pb-0">
           <UserCard user={user} />
