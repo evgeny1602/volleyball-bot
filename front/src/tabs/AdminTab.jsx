@@ -46,7 +46,7 @@ const UserCard = ({ user }) => {
 
 const UsersList = ({ users }) => {
   return (
-    <div className="divide-y divide-bot-grey-300 max-h-[80vh] overflow-y-auto">
+    <div className="divide-y divide-bot-grey-300 max-h-[90vh] overflow-y-auto">
       {users.map((user) => (
         <div className="pt-4 pb-4 last:pb-0">
           <UserCard user={user} />
@@ -76,7 +76,7 @@ const ModalHeader = ({ children, onClose }) => {
 
 const ModalWrapper = ({ children }) => {
   return (
-    <div className="w-full p-4 flex flex-col bg-white rounded-3xl shadow-sm max-h-[80vh]">
+    <div className="w-full p-4 flex flex-col bg-white rounded-3xl shadow-sm max-h-[90vh]">
       {children}
     </div>
   )
