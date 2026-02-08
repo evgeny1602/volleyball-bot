@@ -76,7 +76,7 @@ const ModalHeader = ({ children, onClose }) => {
 
 const ModalWrapper = ({ children }) => {
   return (
-    <div className="w-full p-4 flex flex-col bg-white rounded-3xl shadow-sm max-h-[60vh]">
+    <div className="w-full p-4 flex flex-col bg-white rounded-3xl shadow-sm max-h-[80vh]">
       {children}
     </div>
   )
