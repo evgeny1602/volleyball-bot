@@ -21,7 +21,7 @@ export const BaseMenuIcon = ({
       onClick={handleClick}
       className={cn(
         className,
-        'snap-center flex flex-col items-center py-2 min-w-28 rounded-full -mx-4 transition-all duration-200 ease-in-out',
+        'snap-center flex flex-col items-center py-2 min-w-22 rounded-full -mx-2 transition-all duration-200 ease-in-out',
         isActive ? 'bg-bot-grey-200' : 'bg-transparent'
       )}
     >
