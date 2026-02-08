@@ -12,8 +12,8 @@ const MENU_ITEMS = [
   { id: 'home', Icon: HomeMenuIcon },
   { id: 'games', Icon: GamesMenuIcon },
   { id: 'calendar', Icon: CalendarMenuIcon },
-  { id: 'profile', Icon: ProfileMenuIcon },
-  { id: 'faq', Icon: FaqMenuIcon },
+  //   { id: 'profile', Icon: ProfileMenuIcon },
+  //   { id: 'faq', Icon: FaqMenuIcon },
   { id: 'admin', Icon: AdminMenuIcon },
 ]
 
