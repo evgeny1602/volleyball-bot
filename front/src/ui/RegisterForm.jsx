@@ -51,7 +51,7 @@ export const RegisterForm = ({ onSubmit, onError }) => {
       />
 
       <Button
-        className="mt-10"
+        className="mt-10 mb-10"
         onClick={handleAction}
       >
         Подать заявку

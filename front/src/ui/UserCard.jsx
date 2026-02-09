@@ -8,6 +8,7 @@ export const UserCard = ({ user, onUserChange }) => {
 
   const handleApproveUser = async () => {
     const res = await approveUser(user.tg_id)
+
     if (res?.success) {
       if (onUserChange) onUserChange()
     }
@@ -15,7 +16,7 @@ export const UserCard = ({ user, onUserChange }) => {
 
   const handleRejectUser = async () => {
     const isConfirmed = await tgConfirm(
-      'Вы уверены, что хотите отклонить пользователя?'
+      'Вы уверены, что хотите отклонить заявку пользователя?'
     )
 
     if (!isConfirmed) {
@@ -49,8 +50,10 @@ export const UserCard = ({ user, onUserChange }) => {
     <div className="text-bot-grey-800 flex flex-col gap-4 w-full">
       <div className="flex flex-row items-center gap-2">
         <UserAvatar url={user.tg_avatar_url} />
+
         <div>
           <p>{user.tg_username || 'ID: ' + user.tg_id}</p>
+
           <p class="text-sm text-bot-grey-500">
             {user.created_at.replace(
               /^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2}):\d{2}$/,
