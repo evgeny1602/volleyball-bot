@@ -3,14 +3,13 @@ import { Button } from '@/ui/Button'
 import { useUser } from '@/hooks/useUser'
 import { tgConfirm } from '@/utils/telegram'
 
-export const UserCard = ({ user }) => {
-  const { rejectUser, approveUser, deleteUser, getUsers, userIsLoading } =
-    useUser()
+export const UserCard = ({ user, onUserChange }) => {
+  const { rejectUser, approveUser, deleteUser, userIsLoading } = useUser()
 
   const handleApproveUser = async () => {
     const res = await approveUser(user.tg_id)
     if (res?.success) {
-      await getUsers()
+      if (onUserChange) onUserChange()
     }
   }
 
@@ -26,7 +25,7 @@ export const UserCard = ({ user }) => {
     const res = await rejectUser(user.tg_id)
 
     if (res?.success) {
-      await getUsers()
+      if (onUserChange) onUserChange()
     }
   }
 
@@ -42,7 +41,7 @@ export const UserCard = ({ user }) => {
     const res = await deleteUser(user.tg_id)
 
     if (res?.success) {
-      await getUsers()
+      if (onUserChange) onUserChange()
     }
   }
 

@@ -20,6 +20,10 @@ export const UsersList = () => {
     initList()
   }, [])
 
+  const handleUserChange = async () => {
+    await getUsers()
+  }
+
   if (userIsLoading) return <Loader />
 
   return (
@@ -31,7 +35,10 @@ export const UsersList = () => {
             key={user.id}
             className="pt-4 pb-4 last:pb-0"
           >
-            <UserCard user={user} />
+            <UserCard
+              user={user}
+              onUserChange={handleUserChange}
+            />
           </div>
         ))}
     </div>
