@@ -3,6 +3,7 @@ import {
   getUser as apiGetUser,
   createUser as apiCreateUser,
   approveUser as apiApproveUser,
+  rejectUser as apiRejectUser,
   deleteUser as apiDeleteUser,
 } from '@/api/user'
 import { useState } from 'react'
@@ -41,6 +42,13 @@ export const useUser = () => {
     return response
   }
 
+  const rejectUser = async (tgId) => {
+    setUserIsLoading(true)
+    const response = await apiRejectUser(tgId)
+    setUserIsLoading(false)
+    return response
+  }
+
   const deleteUser = async (tgId) => {
     setUserIsLoading(true)
     const response = await apiDeleteUser(tgId)
@@ -56,6 +64,7 @@ export const useUser = () => {
     getUsers,
     createUser,
     approveUser,
+    rejectUser,
     deleteUser,
   }
 }

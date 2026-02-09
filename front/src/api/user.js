@@ -49,6 +49,19 @@ export const approveUser = async (tgId) => {
   return null
 }
 
+export const rejectUser = async (tgId) => {
+  const response = await fetch(`/api/users/reject/${tgId}`, {
+    method: 'PATCH',
+  })
+
+  if (response.status === 200) {
+    const data = await response.json()
+    return data
+  }
+
+  return null
+}
+
 export const deleteUser = async (tgId) => {
   const response = await fetch(`/api/users/${tgId}`, {
     method: 'DELETE',

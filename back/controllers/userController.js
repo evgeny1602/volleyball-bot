@@ -63,6 +63,26 @@ export const createUser = (req, res) => {
   }
 }
 
+export const rejectUser = (req, res) => {
+  try {
+    const { tgId } = req.params
+    const info = db
+      .prepare(`UPDATE users SET status = 'rejected' WHERE tg_id = ?`)
+      .run(tgId)
+
+    if (info.changes > 0) {
+      res.json({
+        success: true,
+        message: `User ${tgId} status updated to rejected`,
+      })
+    } else {
+      res.status(404).json({ success: false, error: 'User not found' })
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 export const approveUser = (req, res) => {
   try {
     const { tgId } = req.params
