@@ -3,7 +3,11 @@ import { useEffect } from 'react'
 import { UserCard } from '@/ui/UserCard'
 import { Loader } from '@/ui/Loader'
 
-const dispayStatuses = ['registered', 'approved', 'rejected']
+const dispayStatuses = [
+  'registered',
+  'approved',
+  // 'rejected'
+]
 
 export const UsersList = () => {
   const { users, getUsers, userIsLoading } = useUser()
