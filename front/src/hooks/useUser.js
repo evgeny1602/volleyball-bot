@@ -6,18 +6,42 @@ import {
   rejectUser as apiRejectUser,
   deleteUser as apiDeleteUser,
 } from '@/api/user'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useTelegramUser } from './useTelegramUser'
 
 export const useUser = () => {
-  const [userIsLoading, setUserIsLoading] = useState(false)
+  const [userIsLoading, setUserIsLoading] = useState(true)
   const [user, setUser] = useState(null)
   const [users, setUsers] = useState([])
+  const [isAdmin, setIsAdmin] = useState(false)
+  const { tgUserData, tgIsLoading } = useTelegramUser()
+
+  useEffect(() => {
+    if (tgIsLoading) {
+      setUserIsLoading(true)
+    }
+  }, [tgIsLoading])
+
+  useEffect(() => {
+    const initUser = async () => {
+      if (tgUserData) {
+        await getUser(tgUserData.id)
+      }
+    }
+
+    initUser()
+  }, [tgUserData])
+
+  const getTgCurrentUser = async () => {
+    await getUser(tgUserData.id)
+  }
 
   const getUser = async (tgId) => {
     setUserIsLoading(true)
     const data = await apiGetUser(tgId)
     setUserIsLoading(false)
     setUser(data)
+    setIsAdmin(data?.role == 'admin')
     return data
   }
 
@@ -66,5 +90,7 @@ export const useUser = () => {
     approveUser,
     rejectUser,
     deleteUser,
+    isAdmin,
+    getTgCurrentUser,
   }
 }

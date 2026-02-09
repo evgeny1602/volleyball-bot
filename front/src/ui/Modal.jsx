@@ -1,14 +1,13 @@
 import { ModalOverlay } from '@/ui/ModalOverlay'
 import { ModalWrapper } from '@/ui/ModalWrapper'
 import { ModalHeader } from '@/ui/ModalHeader'
-import { UsersList } from '@/ui/UsersList'
 
-export const UsersListModal = ({ onClose }) => {
+export const Modal = ({ onClose, children, headerText }) => {
   return (
     <ModalOverlay>
       <ModalWrapper>
-        <ModalHeader onClose={onClose}>Игроки</ModalHeader>
-        <UsersList />
+        <ModalHeader onClose={onClose}>{headerText}</ModalHeader>
+        {children}
       </ModalWrapper>
     </ModalOverlay>
   )

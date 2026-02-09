@@ -3,7 +3,7 @@ import { tgInit, tgGetAppData } from '@/utils/telegram'
 
 export const useTelegramUser = () => {
   const [tgUserData, setTgUserData] = useState(null)
-  const [tgIsLoading, setTgIsLoading] = useState(false)
+  const [tgIsLoading, setTgIsLoading] = useState(true)
 
   useEffect(() => {
     try {

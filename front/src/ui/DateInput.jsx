@@ -84,7 +84,7 @@ export const DateInput = ({ value, onChange, label }) => {
         <input
           ref={dateInputRef}
           type="date"
-          className="absolute opacity-0 pointer-events-none w-0 h-0"
+          className="absolute opacity-0 pointer-events-none w-10 h-10 -z-10 left-0"
           onChange={handleChangeFromDatepicker}
         />
 

@@ -1,12 +1,7 @@
-import { cn } from '@/utils/cn'
-
-export const MenuContainer = ({ children, className }) => {
+export const MenuContainer = ({ children }) => {
   return (
     <div
-      className={cn(
-        className,
-        'flex flex-row flex-nowrap overflow-x-auto scroll-smooth snap-x gap-2 py-1 px-0 bg-white rounded-full shadow-sm w-auto max-w-[95%]'
-      )}
+      className="fixed bottom-5 flex flex-row flex-nowrap overflow-x-auto scroll-smooth snap-x gap-2 py-1 px-0 bg-white rounded-full shadow-sm w-auto max-w-[95%]"
       style={{
         msOverflowStyle: 'none',
         scrollbarWidth: 'none',
