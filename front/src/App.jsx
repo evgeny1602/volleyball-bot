@@ -18,15 +18,17 @@ export const App = () => {
       if (tgUserData) {
         await getUser(tgUserData.id)
         setIsLoading(false)
-
-        if (user?.role == 'admin') {
-          setIsAdmin(true)
-        }
       }
     }
 
     initApp()
   }, [tgUserData])
+
+  useEffect(() => {
+    if (user?.role == 'admin') {
+      setIsAdmin(true)
+    }
+  }, [user])
 
   return (
     <div className="flex flex-col min-h-screen gap-2 select-none items-center bg-bot-page-bg text-bot-grey-800">

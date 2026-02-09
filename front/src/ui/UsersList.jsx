@@ -13,7 +13,11 @@ export const UsersList = () => {
   const { users, getUsers, userIsLoading } = useUser()
 
   useEffect(() => {
-    getUsers()
+    const initList = async () => {
+      await getUsers()
+    }
+
+    initList()
   }, [])
 
   if (userIsLoading) return <Loader />
