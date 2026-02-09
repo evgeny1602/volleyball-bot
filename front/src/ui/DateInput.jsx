@@ -16,8 +16,17 @@ export const DateInput = ({ value, onChange, label }) => {
   const openDatePicker = () => {
     tgVibro('medium')
 
+    // if (dateInputRef.current) {
+    //   dateInputRef.current.showPicker()
+    // }
+
     if (dateInputRef.current) {
-      dateInputRef.current.showPicker()
+      if (typeof dateInputRef.current.showPicker === 'function') {
+        dateInputRef.current.showPicker()
+      } else {
+        dateInputRef.current.focus()
+        dateInputRef.current.click()
+      }
     }
   }
 
