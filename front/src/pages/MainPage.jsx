@@ -5,7 +5,7 @@ import { AdminTab } from '@/tabs/AdminTab'
 import { MyGamesTab } from '@/tabs/MyGamesTab'
 import { CalendarTab } from '@/tabs/CalendarTab'
 
-export function MainPage() {
+export function MainPage({ isAdmin }) {
   const [tabId, setTabId] = useState('home')
 
   return (
@@ -16,6 +16,7 @@ export function MainPage() {
       {tabId === 'calendar' && <CalendarTab />}
 
       <Menu
+        isAdmin={isAdmin}
         className={'fixed bottom-5'}
         onSelect={setTabId}
       />

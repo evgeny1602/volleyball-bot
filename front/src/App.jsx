@@ -11,12 +11,21 @@ export const App = () => {
   const { user, getUser, userIsLoading } = useUser()
   const { tgUserData, tgIsLoading } = useTelegramUser()
   const [isLoading, setIsLoading] = useState(true)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
-    if (tgUserData) {
-      getUser(tgUserData.id)
-      setIsLoading(false)
+    const initApp = async () => {
+      if (tgUserData) {
+        await getUser(tgUserData.id)
+        setIsLoading(false)
+
+        if (user?.role == 'admin') {
+          setIsAdmin(true)
+        }
+      }
     }
+
+    initApp()
   }, [tgUserData])
 
   return (
@@ -24,10 +33,14 @@ export const App = () => {
       {(userIsLoading || tgIsLoading || isLoading) && <Loader />}
 
       {!userIsLoading && !tgIsLoading && !user && (
-        <RegisterPage onRegistered={() => getUser(tgUserData.id)} />
+        <RegisterPage
+          onRegistered={async () => {
+            await getUser(tgUserData.id)
+          }}
+        />
       )}
       {user?.status == 'registered' && <RegisteredPage />}
-      {user?.status == 'approved' && <MainPage />}
+      {user?.status == 'approved' && <MainPage isAdmin={isAdmin} />}
       {user?.status == 'rejected' && <RejectedPage />}
     </div>
   )

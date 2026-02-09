@@ -14,10 +14,10 @@ const MENU_ITEMS = [
   { id: 'calendar', Icon: CalendarMenuIcon },
   //   { id: 'profile', Icon: ProfileMenuIcon },
   //   { id: 'faq', Icon: FaqMenuIcon },
-  { id: 'admin', Icon: AdminMenuIcon },
+  { id: 'admin', adminsOnly: true, Icon: AdminMenuIcon },
 ]
 
-export const Menu = ({ className, onSelect }) => {
+export const Menu = ({ isAdmin, className, onSelect }) => {
   const [activeTab, setActiveTab] = useState('home')
 
   const handleClick = (tabId) => {
@@ -28,7 +28,9 @@ export const Menu = ({ className, onSelect }) => {
 
   return (
     <MenuContainer className={className}>
-      {MENU_ITEMS.map(({ id, Icon }) => (
+      {MENU_ITEMS.filter(
+        (item) => (!isAdmin && !item.adminsOnly) || isAdmin
+      ).map(({ id, Icon }) => (
         <Icon
           key={id}
           onClick={() => handleClick(id)}
