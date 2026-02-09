@@ -4,7 +4,7 @@ import { Calendar } from 'lucide-react'
 import { CloseIcon } from '@/ui/CloseIcon'
 import { tgVibro } from '@/utils/telegram'
 import { InputLabel } from '@/ui/InputLabel'
-import { IMask } from 'react-imask' // Не забудьте импорт объекта IMask
+import { IMask } from 'react-imask'
 
 export const DateInput = ({ value, onChange, label }) => {
   const [dateText, setDateText] = useState(value ? value : '')
@@ -38,7 +38,6 @@ export const DateInput = ({ value, onChange, label }) => {
       {label && <InputLabel>{label}</InputLabel>}
 
       <div className="relative flex items-center gap-2">
-        {/* КОНТЕЙНЕР КНОПКИ И СКРЫТОГО ИНПУТА */}
         <div className="relative overflow-hidden shrink-0">
           <button
             type="button"
@@ -50,13 +49,10 @@ export const DateInput = ({ value, onChange, label }) => {
             />
           </button>
 
-          {/* Нативный инпут растянут на всю площадь кнопки и прозрачен.
-              На iOS 18 клик по нему ВСЕГДА откроет календарь.
-          */}
           <input
             type="date"
             className="absolute inset-0 opacity-0 cursor-pointer s-full"
-            style={{ fontSize: '16px' }} // Предотвращает зум в Safari
+            style={{ fontSize: '16px' }}
             onChange={handleChangeFromDatepicker}
             onInput={() => tgVibro('light')}
           />
