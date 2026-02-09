@@ -1,5 +1,6 @@
 import { RegisterPage } from '@/pages/RegisterPage'
 import { RegisteredPage } from '@/pages/RegisteredPage'
+import { RejectedPage } from '@/pages/RejectedPage'
 import { MainPage } from '@/pages/MainPage'
 import { Loader } from '@/ui/Loader'
 import { useUser } from '@/hooks/useUser'
@@ -27,6 +28,7 @@ export const App = () => {
       )}
       {user?.status == 'registered' && <RegisteredPage />}
       {user?.status == 'approved' && <MainPage />}
+      {user?.status == 'rejected' && <RejectedPage />}
     </div>
   )
 }
