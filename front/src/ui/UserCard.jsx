@@ -15,7 +15,7 @@ export const UserCard = ({ user }) => {
   }
 
   const handleRejectUser = async () => {
-    const isConfirmed = tgConfirm(
+    const isConfirmed = await tgConfirm(
       'Вы уверены, что хотите отклонить пользователя?'
     )
     console.log({ isConfirmed })
