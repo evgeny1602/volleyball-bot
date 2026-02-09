@@ -75,16 +75,17 @@ export const UserCard = ({ user }) => {
           </>
         )}
 
-        {user.role === 'player' && user.status === 'approved' && (
-          <Button
-            className="w-full"
-            variant="danger"
-            onClick={handleDeleteUser}
-            disabled={userIsLoading}
-          >
-            Удалить
-          </Button>
-        )}
+        {user.role === 'player' &&
+          ['rejected', 'approved'].includes(user.status) && (
+            <Button
+              className="w-full"
+              variant="danger"
+              onClick={handleDeleteUser}
+              disabled={userIsLoading}
+            >
+              Удалить
+            </Button>
+          )}
       </div>
     </div>
   )
