@@ -52,7 +52,10 @@ export const UserCard = ({ user, onUserChange }) => {
         <div>
           <p>{user.tg_username || 'ID: ' + user.tg_id}</p>
           <p class="text-sm text-bot-grey-500">
-            {user.created_at.replace(/^(\d{4})-(\d{2})-(\d{2})/, '$3.$2.$1')}
+            {user.created_at.replace(
+              /^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2}):\d{2}$/,
+              '$3.$2.$1 $4'
+            )}
           </p>
         </div>
       </div>
