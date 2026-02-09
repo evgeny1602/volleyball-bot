@@ -18,16 +18,29 @@ export const UserCard = ({ user }) => {
     const isConfirmed = await tgConfirm(
       'Вы уверены, что хотите отклонить пользователя?'
     )
-    console.log({ isConfirmed })
 
-    // const res = await rejectUser(user.tg_id)
-    // if (res?.success) {
-    //   await getUsers()
-    // }
+    if (!isConfirmed) {
+      return
+    }
+
+    const res = await rejectUser(user.tg_id)
+
+    if (res?.success) {
+      await getUsers()
+    }
   }
 
   const handleDeleteUser = async () => {
+    const isConfirmed = await tgConfirm(
+      'Вы уверены, что хотите удалить пользователя?'
+    )
+
+    if (!isConfirmed) {
+      return
+    }
+
     const res = await deleteUser(user.tg_id)
+
     if (res?.success) {
       await getUsers()
     }
