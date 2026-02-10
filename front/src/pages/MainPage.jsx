@@ -46,7 +46,6 @@ export function MainPage() {
               onClick={() => setTabId(id)}
               className="relative flex items-center justify-center py-0 px-1 cursor-pointer transition-colors"
             >
-              {/* Анимированный фон */}
               <AnimatePresence>
                 {isActive && (
                   <motion.div
@@ -61,7 +60,6 @@ export function MainPage() {
                 )}
               </AnimatePresence>
 
-              {/* Иконка (поверх фона) */}
               <div className="relative z-10">
                 <Icon variant={isActive ? 'active' : 'default'} />
               </div>
