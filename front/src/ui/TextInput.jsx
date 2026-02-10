@@ -61,7 +61,7 @@ export const TextInput = ({
                 damping: 30,
               }}
               onClick={handleClear}
-              className="absolute right-1.5 top-1.5 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none"
+              className="absolute right-1 top-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none"
             >
               <CloseIcon className="w-7 h-7" />
             </motion.button>

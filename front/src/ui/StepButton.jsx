@@ -11,7 +11,7 @@ export const StepButton = ({ children, onClick, className }) => {
     <button
       onClick={handleClick}
       className={cn(
-        'h-11 w-11 shrink-0 flex items-center justify-center',
+        'h-8 w-8 shrink-0 flex items-center justify-center',
         'bg-bot-primary text-white rounded-full',
         'font-semibold font-mono hover:cursor-pointer active:scale-90 transition-all',
         className

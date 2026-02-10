@@ -39,19 +39,17 @@ export const NewGameForm = () => {
         onChange={setAddress}
       />
 
-      <div className="flex gap-4 items-center justify-between">
-        <DateInput
-          label="Дата"
-          value={date}
-          onChange={setDate}
-        />
+      <DateInput
+        label="Дата"
+        value={date}
+        onChange={setDate}
+      />
 
-        <TimeInput
-          label="Время"
-          value={time}
-          onChange={setTime}
-        />
-      </div>
+      <TimeInput
+        label="Время"
+        value={time}
+        onChange={setTime}
+      />
 
       <QuantityInput
         label="Длительность (мин.)"

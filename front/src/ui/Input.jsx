@@ -33,9 +33,11 @@ export const Input = ({ label, onChange, className, value, ...props }) => {
           onFocus={() => tgVibro('medium')}
           type="text"
           className={cn(
-            'w-full px-4 py-2.5 rounded-full border border-bot-grey-300 text-bot-grey-800 transition-all',
+            'w-full py-2.5 rounded-full border border-bot-grey-300 text-bot-grey-800 transition-all text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
-            hasValue && 'pr-12'
+            // Стандартный горизонтальный паддинг px-4 заменяем на динамический:
+            // Если текст есть, добавляем по 48px (12 ед.) с каждой стороны для симметрии
+            hasValue ? 'px-12' : 'px-4'
           )}
         />
 
@@ -44,16 +46,16 @@ export const Input = ({ label, onChange, className, value, ...props }) => {
             <motion.button
               type="button"
               key="clear-button"
-              initial={{ opacity: 0, scale: 0.5, x: 0 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.5, x: 0 }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
               transition={{
                 type: 'spring',
                 stiffness: 500,
                 damping: 30,
               }}
               onClick={handleClear}
-              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none "
+              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none active:scale-90"
             >
               <CloseIcon className="w-8 h-8" />
             </motion.button>
