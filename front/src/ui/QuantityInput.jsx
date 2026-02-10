@@ -12,7 +12,7 @@ export const QuantityInput = ({
   onChange,
   className,
   min = 0,
-  max = 100,
+  max = 1000,
 }) => {
   const [isError, setIsError] = useState(false)
   const currentVal = parseInt(value) || 0
