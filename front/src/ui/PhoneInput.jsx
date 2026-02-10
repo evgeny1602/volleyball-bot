@@ -18,11 +18,12 @@ export const PhoneInput = ({ label, value, onChange, className, ...props }) => {
   const hasValue = value?.length > 0
 
   return (
-    <div className={cn('flex flex-col gap-1.5 w-full max-w-53', className)}>
+    <div className={cn('flex flex-col gap-1.5 w-full', className)}>
       {label && <InputLabel>{label}</InputLabel>}
 
       <div className="relative flex items-center">
         <IMaskInput
+          // lazy={true}
           {...props}
           inputRef={(el) => (imaskRef.current = el)}
           inputMode="tel"
@@ -31,11 +32,12 @@ export const PhoneInput = ({ label, value, onChange, className, ...props }) => {
           unmask={true}
           onAccept={(val) => onChange?.(val)}
           onFocus={() => tgVibro('medium')}
-          placeholder="+7 (___) ___-__-__"
+          // placeholder="+7 (___) ___-__-__"
           className={cn(
-            'w-full px-4 py-2.5 rounded-full border border-bot-grey-300 text-bot-grey-800 transition-all',
+            'w-full py-2.5 rounded-full border border-bot-grey-300 text-bot-grey-800 transition-all text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
-            hasValue && 'pr-12'
+            // Добавляем симметричный padding px-12, чтобы уравновесить кнопку очистки справа
+            hasValue ? 'px-12' : 'px-4'
           )}
         />
 
@@ -44,12 +46,12 @@ export const PhoneInput = ({ label, value, onChange, className, ...props }) => {
             <motion.button
               key="clear-phone"
               type="button"
-              initial={{ opacity: 0, scale: 0.5, x: 0 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.5, x: 0 }}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.5 }}
               transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               onClick={handleClear}
-              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none"
+              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none active:scale-90"
             >
               <CloseIcon className="w-8 h-8" />
             </motion.button>

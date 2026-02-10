@@ -64,7 +64,7 @@ export const DateInput = ({ value, onChange, label }) => {
           inputMode="numeric"
           mask={Date}
           value={dateText}
-          lazy={false}
+          lazy={true}
           autofix={true}
           blocks={{
             d: { mask: IMask.MaskedRange, from: 1, to: 31, maxLength: 2 },
@@ -78,7 +78,7 @@ export const DateInput = ({ value, onChange, label }) => {
           }}
           unmask={false}
           onAccept={handleChange}
-          placeholder="ДД.ММ.ГГГГ"
+          // placeholder="ДД.ММ.ГГГГ"
           className={cn(
             'border rounded-full border-bot-grey-300 transition-all w-full py-2.5 text-bot-grey-800 text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
