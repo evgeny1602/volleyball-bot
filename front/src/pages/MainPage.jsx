@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import { MainTab } from '@/tabs/MainTab'
 import { AdminTab } from '@/tabs/AdminTab'
 import { MyGamesTab } from '@/tabs/MyGamesTab'
@@ -18,54 +18,55 @@ const TABS = {
   calendar: CalendarTab,
 }
 
-export const MENU_ITEMS = [
+const MENU_ITEMS_CONFIG = [
   { id: 'home', Icon: HomeMenuIcon },
   { id: 'games', Icon: GamesMenuIcon },
   { id: 'calendar', Icon: CalendarMenuIcon },
   { id: 'admin', adminsOnly: true, Icon: AdminMenuIcon },
 ]
 
+const MenuItem = ({ id, Icon, isActive, onClick }) => (
+  <button
+    onClick={() => onClick(id)}
+    className="relative flex items-center justify-center px-1 cursor-pointer outline-none"
+  >
+    {isActive && (
+      <motion.div
+        layoutId="menu-active"
+        className="absolute inset-0 bg-bot-primary/10 rounded-full"
+        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+      />
+    )}
+
+    <div className="relative z-10">
+      <Icon variant={isActive ? 'active' : 'default'} />
+    </div>
+  </button>
+)
+
 export function MainPage() {
   const [tabId, setTabId] = useState('home')
   const { isAdmin } = useUser()
-  const Tab = TABS[tabId]
+
+  const visibleMenuItems = useMemo(() => {
+    return MENU_ITEMS_CONFIG.filter((item) => !item.adminsOnly || isAdmin)
+  }, [isAdmin])
+
+  const ActiveTab = TABS[tabId]
 
   return (
-    <div className="flex flex-col items-center gap-20 relative h-dvh w-full">
-      <Tab />
+    <div className="flex flex-col items-center relative h-dvh w-full overflow-hidden">
+      <ActiveTab />
 
       <MenuContainer>
-        {MENU_ITEMS.filter(
-          (item) => (!isAdmin && !item.adminsOnly) || isAdmin
-        ).map(({ id, Icon }) => {
-          const isActive = tabId === id
-
-          return (
-            <div
-              key={id}
-              onClick={() => setTabId(id)}
-              className="relative flex items-center justify-center py-0 px-1 cursor-pointer transition-colors"
-            >
-              <AnimatePresence>
-                {isActive && (
-                  <motion.div
-                    layoutId="menu-active"
-                    className="absolute inset-0 bg-bot-primary/10 rounded-full z-0"
-                    transition={{
-                      type: 'spring',
-                      stiffness: 380,
-                      damping: 30,
-                    }}
-                  />
-                )}
-              </AnimatePresence>
-
-              <div className="relative z-10">
-                <Icon variant={isActive ? 'active' : 'default'} />
-              </div>
-            </div>
-          )
-        })}
+        {visibleMenuItems.map((item) => (
+          <MenuItem
+            key={item.id}
+            {...item}
+            isActive={tabId === item.id}
+            onClick={setTabId}
+          />
+        ))}
       </MenuContainer>
     </div>
   )
