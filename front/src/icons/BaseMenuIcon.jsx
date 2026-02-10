@@ -22,9 +22,7 @@ export const BaseMenuIcon = ({
       className={cn(
         className,
         'snap-center flex flex-col items-center py-2 min-w-21 rounded-full -mx-1 transition-all duration-200 ease-in-out',
-        isActive
-          ? 'bg-bot-grey-200'
-          : 'bg-transparent active:scale-80 cursor-pointer'
+        isActive ? '' : 'active:scale-80 cursor-pointer'
       )}
     >
       <div
