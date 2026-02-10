@@ -8,11 +8,11 @@ export const Modal = ({ onClose, children, headerText, Icon }) => {
       <ModalWrapper>
         <ModalHeader onClose={onClose}>
           <div className="flex flex-row items-center gap-2 justify-start">
-            <Icon />
+            <Icon className="w-4 h-4 text-current" />
             {headerText}
           </div>
         </ModalHeader>
-        {children}
+        <div className="max-h-[90vh] overflow-y-auto">{children}</div>
       </ModalWrapper>
     </ModalOverlay>
   )

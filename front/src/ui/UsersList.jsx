@@ -14,10 +14,10 @@ export const UsersList = ({ statuses }) => {
     initList()
   }, [])
 
-  if (userIsLoading) return <Loader />
+  if (userIsLoading) return <Loader variant="small" />
 
   return (
-    <div className="divide-y divide-bot-grey-300 max-h-[90vh] overflow-y-auto">
+    <div className="divide-y divide-bot-grey-300">
       {users
         .filter((user) => statuses.includes(user.status))
         .map((user) => (

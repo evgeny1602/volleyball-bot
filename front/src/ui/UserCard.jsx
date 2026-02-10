@@ -43,7 +43,7 @@ export const UserCard = ({ user, onUserChange, className }) => {
       Component: DeleteButton,
       label: 'Удалить',
       show: ['rejected', 'approved'].includes(user.status),
-      confirmText: 'Вы уверены, что хотите удалить пользователя?',
+      confirmText: 'Вы уверены, что хотите удалить игрока?',
       onClick: () => handleAction(deleteUser),
     },
   ]

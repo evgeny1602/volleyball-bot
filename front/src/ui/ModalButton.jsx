@@ -11,7 +11,7 @@ export const ModalButton = ({ className, modalHeader, ModalContent, Icon }) => {
         className={className}
         onClick={() => setIsOpen(true)}
       >
-        <Icon />
+        <Icon className="w-4 h-4 text-current" />
         {modalHeader}
       </Button>
 

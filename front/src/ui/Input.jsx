@@ -1,52 +1,64 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { CloseIcon } from '@/ui/CloseIcon'
 import { tgVibro } from '@/utils/telegram'
 import { InputLabel } from '@/ui/InputLabel'
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/utils/cn'
 
-export const Input = ({ label, onChange, className }) => {
-  const [text, setText] = useState('')
-
+export const Input = ({ label, onChange, className, value, ...props }) => {
   const inputRef = useRef(null)
 
-  const handleClearClick = () => {
-    setText('')
-
+  const handleClear = () => {
+    tgVibro('light')
+    onChange?.('')
     inputRef.current?.focus()
-
-    if (onChange) {
-      onChange('')
-    }
   }
 
   const handleChange = (e) => {
-    setText(e.target.value)
-
-    if (onChange) {
-      onChange(e.target.value)
-    }
+    onChange?.(e.target.value)
   }
 
+  const hasValue = value?.length > 0
+
   return (
-    <div className={twMerge('flex flex-col gap-1', className)}>
+    <div className={cn('flex flex-col gap-1.5 w-full', className)}>
       {label && <InputLabel>{label}</InputLabel>}
 
-      <div className="flex flex-row items-center">
+      <div className="relative flex items-center">
         <input
-          onFocus={() => tgVibro('medium')}
+          {...props}
           ref={inputRef}
+          value={value ?? ''}
           onChange={handleChange}
-          value={text}
+          onFocus={() => tgVibro('medium')}
           type="text"
-          className="border rounded-full border-bot-grey-300 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light w-full px-4 py-2 text-bot-grey-800 transition-all"
+          className={cn(
+            'w-full px-4 py-2.5 rounded-full border border-bot-grey-300 text-bot-grey-800 transition-all',
+            'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
+            hasValue && 'pr-12'
+          )}
         />
 
-        {text.length > 0 && (
-          <CloseIcon
-            onClick={handleClearClick}
-            className="-ml-8"
-          />
-        )}
+        <AnimatePresence>
+          {hasValue && (
+            <motion.button
+              type="button"
+              key="clear-button"
+              initial={{ opacity: 0, scale: 0.5, x: 0 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.5, x: 0 }}
+              transition={{
+                type: 'spring',
+                stiffness: 500,
+                damping: 30,
+              }}
+              onClick={handleClear}
+              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none "
+            >
+              <CloseIcon className="w-8 h-8" />
+            </motion.button>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )

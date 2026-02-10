@@ -33,6 +33,7 @@ export const RegisterForm = ({ onSubmit, onError, isLoading }) => {
       <Input
         label="Фамилия, имя"
         onChange={(val) => setFio(val)}
+        value={fio}
       />
 
       <GenderInput
@@ -49,6 +50,7 @@ export const RegisterForm = ({ onSubmit, onError, isLoading }) => {
       <PhoneInput
         label="Номер телефона"
         onChange={(val) => setPhone(val)}
+        value={phone}
       />
 
       <RegisterButton
