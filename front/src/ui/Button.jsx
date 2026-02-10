@@ -8,11 +8,6 @@ export const Button = ({
   children,
   className,
 }) => {
-  const baseClasses = twMerge(
-    'text-white px-4 py-2 rounded-full font-medium hover:cursor-pointer active:scale-95 transition-transform',
-    className
-  )
-
   const variantClasses = {
     'bg-bot-primary': variant === 'primary',
     'bg-bot-secondary': variant === 'secondary',
@@ -22,7 +17,11 @@ export const Button = ({
 
   return (
     <button
-      className={cn(baseClasses, variantClasses)}
+      className={cn(
+        'text-white px-4 py-2 rounded-full font-medium hover:cursor-pointer active:scale-95 transition-transform flex flex-row gap-1 items-center justify-center',
+        className,
+        variantClasses
+      )}
       onClick={() => {
         tgVibro('medium')
 

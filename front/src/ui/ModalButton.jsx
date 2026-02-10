@@ -2,12 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/ui/Button'
 import { Modal } from '@/ui/Modal'
 
-export const ModalButton = ({
-  children,
-  className,
-  modalHeader,
-  ModalContent,
-}) => {
+export const ModalButton = ({ className, modalHeader, ModalContent, Icon }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -16,13 +11,15 @@ export const ModalButton = ({
         className={className}
         onClick={() => setIsOpen(true)}
       >
-        {children}
+        <Icon />
+        {modalHeader}
       </Button>
 
       {isOpen && (
         <Modal
           onClose={() => setIsOpen(false)}
           headerText={modalHeader}
+          Icon={Icon}
         >
           <ModalContent />
         </Modal>

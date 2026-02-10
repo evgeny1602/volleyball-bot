@@ -3,6 +3,19 @@ import { Button } from '@/ui/Button'
 import { useUser } from '@/hooks/useUser'
 import { tgConfirm } from '@/utils/telegram'
 import { cn } from '@/utils/cn'
+import { CircleMinus, Check, UserX } from 'lucide-react'
+
+const CircleMinusIcon = () => {
+  return <CircleMinus className="w-4 h-4" />
+}
+
+const CheckIcon = () => {
+  return <Check className="w-4 h-4" />
+}
+
+const UserXIcon = () => {
+  return <UserX className="w-4 h-4" />
+}
 
 export const UserCard = ({ user, onUserChange, className }) => {
   const { rejectUser, approveUser, deleteUser, userIsLoading } = useUser()
@@ -39,7 +52,7 @@ export const UserCard = ({ user, onUserChange, className }) => {
 
         <div>
           <p>{user.tg_username || 'ID: ' + user.tg_id}</p>
-          <p class="text-sm text-bot-grey-500">
+          <p className="text-sm text-bot-grey-500">
             {user.created_at.replace(
               /^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2}):\d{2}$/,
               '$3.$2.$1 $4'
@@ -57,6 +70,7 @@ export const UserCard = ({ user, onUserChange, className }) => {
               onClick={handleApproveUser}
               disabled={userIsLoading}
             >
+              <CheckIcon />
               Одобрить
             </Button>
             <Button
@@ -65,6 +79,7 @@ export const UserCard = ({ user, onUserChange, className }) => {
               onClick={handleRejectUser}
               disabled={userIsLoading}
             >
+              <UserXIcon />
               Отклонить
             </Button>
           </>
@@ -78,6 +93,7 @@ export const UserCard = ({ user, onUserChange, className }) => {
               onClick={handleDeleteUser}
               disabled={userIsLoading}
             >
+              <CircleMinusIcon />
               Удалить
             </Button>
           )}
