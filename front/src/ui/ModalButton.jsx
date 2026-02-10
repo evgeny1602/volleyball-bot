@@ -21,7 +21,7 @@ export const ModalButton = ({ className, modalHeader, ModalContent, Icon }) => {
           headerText={modalHeader}
           Icon={Icon}
         >
-          <ModalContent />
+          <ModalContent onCancel={() => setIsOpen(false)} />
         </Modal>
       )}
     </>
