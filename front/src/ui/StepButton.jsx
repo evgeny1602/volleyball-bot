@@ -1,18 +1,21 @@
 import { tgVibro } from '@/utils/telegram'
+import { cn } from '@/utils/cn'
 
-export const StepButton = ({ children, onClick }) => {
+export const StepButton = ({ children, onClick, className }) => {
   const handleClick = () => {
     tgVibro('medium')
-
-    if (onClick) {
-      onClick()
-    }
+    onClick?.()
   }
 
   return (
     <button
       onClick={handleClick}
-      className="bg-bot-primary py-2 px-4 rounded-[50%] text-white font-semibold font-mono hover:cursor-pointer active:scale-95 transition-transform"
+      className={cn(
+        'h-11 w-11 shrink-0 flex items-center justify-center',
+        'bg-bot-primary text-white rounded-full',
+        'font-semibold font-mono hover:cursor-pointer active:scale-90 transition-all',
+        className
+      )}
     >
       {children}
     </button>

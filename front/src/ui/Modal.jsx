@@ -12,7 +12,9 @@ export const Modal = ({ onClose, children, headerText, Icon }) => {
             {headerText}
           </div>
         </ModalHeader>
-        <div className="max-h-[90vh] overflow-y-auto">{children}</div>
+        <div className="max-h-[90vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:display-none">
+          {children}
+        </div>
       </ModalWrapper>
     </ModalOverlay>
   )

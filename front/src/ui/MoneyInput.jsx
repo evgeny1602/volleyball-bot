@@ -1,34 +1,36 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { IMaskInput } from 'react-imask'
+import { motion, AnimatePresence } from 'framer-motion'
 import { InputLabel } from '@/ui/InputLabel'
 import { CloseIcon } from '@/ui/CloseIcon'
 import { tgVibro } from '@/utils/telegram'
-import { twMerge } from 'tailwind-merge'
+import { cn } from '@/utils/cn'
 
-export const MoneyInput = ({ label, value, className }) => {
+export const MoneyInput = ({ label, value, onChange, className, ...props }) => {
   const imaskRef = useRef(null)
 
-  const [money, setMoney] = useState(value ? value : '')
-
-  const handleClearClick = () => {
-    setMoney('')
-
+  const handleClear = () => {
+    tgVibro('light')
+    onChange?.('')
+    // В IMaskInput работаем напрямую с DOM-элементом через ref
     imaskRef.current?.focus()
   }
 
-  const getMoneyLength = () => money.toString().length
+  const hasValue =
+    value !== undefined && value !== null && value.toString().length > 0
 
   return (
-    <div className={twMerge('flex flex-col gap-1', className)}>
+    <div className={cn('flex flex-col gap-1.5 w-full', className)}>
       {label && <InputLabel>{label}</InputLabel>}
 
-      <div className="relative flex items-center gap-2">
+      <div className="relative flex items-center">
         <IMaskInput
+          {...props}
+          inputRef={(el) => (imaskRef.current = el)}
           inputMode="decimal"
-          inputRef={imaskRef}
           onFocus={() => tgVibro('medium')}
           mask={Number}
-          value={money}
+          value={value?.toString() ?? ''}
           unmask={true}
           scale={2}
           thousandsSeparator=" "
@@ -38,16 +40,34 @@ export const MoneyInput = ({ label, value, className }) => {
           min={0}
           max={1000000}
           placeholder="0.00"
-          onAccept={(value, mask) => setMoney(value)}
-          className="border rounded-full border-bot-grey-300 focus:border-bot-primary-medium focus:outline-0 focus:bg-bot-primary-light px-4 py-2 text-bot-grey-800 transition-all w-full"
+          onAccept={(val) => onChange?.(val)}
+          className={cn(
+            'w-full px-4 py-2.5 rounded-full border border-bot-grey-300 text-bot-grey-800 transition-all',
+            'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
+            hasValue && 'pr-12'
+          )}
         />
 
-        {getMoneyLength() > 0 && (
-          <CloseIcon
-            onClick={handleClearClick}
-            className="-ml-10"
-          />
-        )}
+        <AnimatePresence>
+          {hasValue && (
+            <motion.button
+              key="clear-money"
+              type="button"
+              initial={{ opacity: 0, scale: 0.5, x: 0 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              exit={{ opacity: 0, scale: 0.5, x: 0 }}
+              transition={{
+                type: 'spring',
+                stiffness: 500,
+                damping: 30,
+              }}
+              onClick={handleClear}
+              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none active:scale-90"
+            >
+              <CloseIcon className="w-8 h-8" />
+            </motion.button>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )
