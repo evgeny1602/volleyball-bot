@@ -68,7 +68,9 @@ export const tgAlert = async (message) => {
 export const tgConfirm = async (message) => {
   tgVibro('medium')
 
-  if (isDev) return
+  if (isDev) {
+    return window.confirm(message)
+  }
 
   return new Promise((resolve) =>
     WebApp.showConfirm(message, (isConfirmed) => resolve(isConfirmed))

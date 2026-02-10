@@ -1,103 +1,84 @@
 import { UserAvatar } from '@/ui/UserAvatar'
-import { Button } from '@/ui/Button'
 import { useUser } from '@/hooks/useUser'
-import { tgConfirm } from '@/utils/telegram'
 import { cn } from '@/utils/cn'
-import { CircleMinus, Check, UserX } from 'lucide-react'
+import { DeleteButton } from '@/ui/buttons/DeleteButton'
+import { RejectButton } from '@/ui/buttons/RejectButton'
+import { ApproveButton } from '@/ui/buttons/ApproveButton'
 
-const CircleMinusIcon = () => {
-  return <CircleMinus className="w-4 h-4" />
-}
-
-const CheckIcon = () => {
-  return <Check className="w-4 h-4" />
-}
-
-const UserXIcon = () => {
-  return <UserX className="w-4 h-4" />
+const formatDate = (dateString) => {
+  if (!dateString) return ''
+  return dateString.replace(
+    /^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2}).*$/,
+    '$3.$2.$1 $4'
+  )
 }
 
 export const UserCard = ({ user, onUserChange, className }) => {
   const { rejectUser, approveUser, deleteUser, userIsLoading } = useUser()
 
-  const handleApproveUser = async () => {
-    const res = await approveUser(user.tg_id)
-    if (res?.success && onUserChange) onUserChange()
+  const handleAction = async (actionFn) => {
+    const res = await actionFn(user.tg_id)
+    if (res?.success && onUserChange) {
+      onUserChange()
+    }
   }
 
-  const handleRejectUser = async () => {
-    const isConfirmed = await tgConfirm(
-      'Вы уверены, что хотите отклонить заявку пользователя?'
-    )
-    if (!isConfirmed) return
-    const res = await rejectUser(user.tg_id)
-    if (res?.success && onUserChange) onUserChange()
-  }
+  const isPlayer = user.role === 'player'
 
-  const handleDeleteUser = async () => {
-    const isConfirmed = await tgConfirm(
-      'Вы уверены, что хотите удалить пользователя?'
-    )
-    if (!isConfirmed) return
-    const res = await deleteUser(user.tg_id)
-    if (res?.success && onUserChange) onUserChange()
-  }
+  const BUTTONS = [
+    {
+      Component: ApproveButton,
+      label: 'Одобрить',
+      show: user.status === 'registered',
+      onClick: () => handleAction(approveUser),
+    },
+    {
+      Component: RejectButton,
+      label: 'Отклонить',
+      show: user.status === 'registered',
+      confirmText: 'Вы уверены, что хотите отклонить заявку?',
+      onClick: () => handleAction(rejectUser),
+    },
+    {
+      Component: DeleteButton,
+      label: 'Удалить',
+      show: ['rejected', 'approved'].includes(user.status),
+      confirmText: 'Вы уверены, что хотите удалить пользователя?',
+      onClick: () => handleAction(deleteUser),
+    },
+  ]
 
   return (
     <div
-      className={cn(className, 'text-bot-grey-800 flex flex-col gap-4 w-full')}
+      className={cn('text-bot-grey-800 flex flex-col gap-4 w-full', className)}
     >
       <div className="flex flex-row items-center gap-2">
         <UserAvatar url={user.tg_avatar_url} />
-
         <div>
-          <p>{user.tg_username || 'ID: ' + user.tg_id}</p>
+          <p className="font-medium">
+            {user.tg_username || `ID: ${user.tg_id}`}
+          </p>
           <p className="text-sm text-bot-grey-500">
-            {user.created_at.replace(
-              /^(\d{4})-(\d{2})-(\d{2}) (\d{2}:\d{2}):\d{2}$/,
-              '$3.$2.$1 $4'
-            )}
+            {formatDate(user.created_at)}
           </p>
         </div>
       </div>
 
-      <div className="flex flex-row gap-2">
-        {user.role === 'player' && user.status === 'registered' && (
-          <>
-            <Button
-              variant="success"
-              className="w-full"
-              onClick={handleApproveUser}
-              disabled={userIsLoading}
-            >
-              <CheckIcon />
-              Одобрить
-            </Button>
-            <Button
-              className="w-full"
-              variant="danger"
-              onClick={handleRejectUser}
-              disabled={userIsLoading}
-            >
-              <UserXIcon />
-              Отклонить
-            </Button>
-          </>
-        )}
-
-        {user.role === 'player' &&
-          ['rejected', 'approved'].includes(user.status) && (
-            <Button
-              className="w-full"
-              variant="danger"
-              onClick={handleDeleteUser}
-              disabled={userIsLoading}
-            >
-              <CircleMinusIcon />
-              Удалить
-            </Button>
+      {isPlayer && (
+        <div className="flex flex-row gap-2">
+          {BUTTONS.filter((btn) => btn.show).map(
+            ({ Component, label, show, ...props }, idx) => (
+              <Component
+                key={idx}
+                disabled={userIsLoading}
+                {...props}
+              >
+                {label}
+              </Component>
+            )
           )}
-      </div>
+        </div>
+      )}
     </div>
   )
 }
