@@ -1,14 +1,14 @@
 import { Button } from '@/ui/Button'
-import { Check } from 'lucide-react'
+import { SendHorizontal } from 'lucide-react'
 
-export const ApproveButton = ({ children, ...props }) => {
+export const RegisterButton = ({ children, ...props }) => {
   return (
     <Button
       className="w-full"
       variant="success"
       {...props}
     >
-      <Check className="w-4 h-4" />
+      <SendHorizontal className="w-4 h-4" />
       {children}
     </Button>
   )

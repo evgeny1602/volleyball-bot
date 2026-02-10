@@ -1,53 +1,73 @@
-import { useState, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { tgVibro } from '@/utils/telegram'
 import { InputLabel } from '@/ui/InputLabel'
-import { twMerge } from 'tailwind-merge'
 import { cn } from '@/utils/cn'
+import { GrUser, GrUserFemale } from 'react-icons/gr'
+
+const OPTIONS = [
+  { id: 'male', label: 'Чемпион', Icon: GrUser },
+  { id: 'female', label: 'Чемпионка', Icon: GrUserFemale },
+]
 
 export const GenderInput = ({ label, onChange, className, value }) => {
-  const [gender, setGender] = useState(value ? value : 'male')
-
-  const handleChange = (optionId) => {
-    setGender(optionId)
-
+  const handleChange = (id) => {
     tgVibro('medium')
-
-    if (onChange) {
-      onChange(optionId)
-    }
+    onChange?.(id)
   }
 
-  const options = [
-    { id: 'male', label: 'Чемпион' },
-    { id: 'female', label: 'Чемпионка' },
-  ]
-
   return (
-    <div className={twMerge('flex flex-col gap-1 ', className)}>
+    <div className={cn('flex flex-col gap-1.5', className)}>
       {label && <InputLabel>{label}</InputLabel>}
 
-      <div className="flex w-full bg-bot-grey-100 rounded-full gap-1 p-1 border-bot-grey-300 border">
-        {options.map((option) => (
-          <label
-            key={option.id}
-            className={cn(
-              'flex-1 py-2 px-4 text-center transition-all cursor-pointer rounded-full',
-              gender === option.id
-                ? 'bg-bot-primary text-white shadow-sm font-semibold'
-                : 'text-bot-grey-500'
-            )}
-          >
-            <input
-              type="radio"
-              className="sr-only"
-              name="custom-radio"
-              value={option.id}
-              checked={value === option.id}
-              onChange={() => handleChange(option.id)}
-            />
-            {option.label}
-          </label>
-        ))}
+      <div className="flex w-full bg-bot-grey-100 rounded-full p-1 border border-bot-grey-300 relative overflow-hidden">
+        {OPTIONS.map(({ id, label, Icon }) => {
+          const isActive = value === id
+
+          return (
+            <label
+              key={id}
+              className="flex-1 flex items-center justify-center py-2.5 px-4 rounded-full cursor-pointer select-none relative"
+            >
+              <input
+                type="radio"
+                className="sr-only"
+                name="gender-selection"
+                checked={isActive}
+                onChange={() => handleChange(id)}
+              />
+
+              <AnimatePresence>
+                {isActive && (
+                  <motion.div
+                    layoutId="active-pill"
+                    className="absolute inset-0 bg-bot-primary rounded-full shadow-sm z-0"
+                    transition={{
+                      type: 'spring',
+                      stiffness: 400,
+                      damping: 30,
+                      duration: 0.4,
+                    }}
+                  />
+                )}
+              </AnimatePresence>
+
+              <motion.div
+                className="relative z-10 flex items-center gap-2"
+                initial={false}
+                animate={{
+                  color: isActive ? '#FFFFFF' : '#6b7280',
+                }}
+                transition={{
+                  duration: 0.3,
+                  delay: isActive ? 0.05 : 0,
+                }}
+              >
+                <Icon className="w-4 h-4" />
+                <span className="text-sm font-medium">{label}</span>
+              </motion.div>
+            </label>
+          )
+        })}
       </div>
     </div>
   )

@@ -2,9 +2,8 @@ import { useUser } from '@/hooks/useUser'
 import { useEffect } from 'react'
 import { UserCard } from '@/ui/UserCard'
 import { Loader } from '@/ui/Loader'
-import { usersListDispayStatuses } from '@/config/usersListDisplayStatuses'
 
-export const UsersList = () => {
+export const UsersList = ({ statuses }) => {
   const { users, getUsers, userIsLoading } = useUser()
 
   useEffect(() => {
@@ -20,7 +19,7 @@ export const UsersList = () => {
   return (
     <div className="divide-y divide-bot-grey-300 max-h-[90vh] overflow-y-auto">
       {users
-        .filter((user) => usersListDispayStatuses.includes(user.status))
+        .filter((user) => statuses.includes(user.status))
         .map((user) => (
           <UserCard
             key={user.id}

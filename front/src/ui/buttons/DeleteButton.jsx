@@ -2,11 +2,7 @@ import { Button } from '@/ui/Button'
 import { CircleMinus } from 'lucide-react'
 import { tgConfirm } from '@/utils/telegram'
 
-const CircleMinusIcon = () => {
-  return <CircleMinus className="w-4 h-4" />
-}
-
-export const DeleteButton = ({ onClick, children, disabled, confirmText }) => {
+export const DeleteButton = ({ onClick, children, confirmText, ...props }) => {
   const handleClick = async () => {
     const isConfirmed = await tgConfirm(confirmText)
     if (isConfirmed && onClick) onClick
@@ -17,9 +13,9 @@ export const DeleteButton = ({ onClick, children, disabled, confirmText }) => {
       className="w-full"
       variant="danger"
       onClick={handleClick}
-      disabled={disabled}
+      {...props}
     >
-      <CircleMinusIcon />
+      <CircleMinus className="w-4 h-4" />
       {children}
     </Button>
   )

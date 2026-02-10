@@ -34,6 +34,7 @@ export const RegisterPage = ({ onRegistered }) => {
       <RegisterWelcome />
 
       <RegisterForm
+        isLoading={userIsLoading}
         onSubmit={handleRegisterSubmit}
         onError={() => setIsErrorVisible(true)}
       />
