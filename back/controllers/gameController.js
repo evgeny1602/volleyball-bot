@@ -49,7 +49,8 @@ export const createGame = (req, res) => {
       maxPlayers: max_players,
     } = req.body
 
-    const start_datetime = new Date(`${date} ${time}`).toISOString()
+    const parts = date.split('.')
+    const start_datetime = `${parts[2]}-${parts[1]}-${parts[0]} ${time}`
 
     for (const value of [
       name,

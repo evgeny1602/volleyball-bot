@@ -32,14 +32,15 @@ POST http://localhost:3000/api/games
 Content-Type: application/json
 
 {
-    "name": "Тренировка в Юбилейном",
-    "location_name": "СП Юбилейный",
-    "location_address": "пр.Ленина 203",
-    "start_datetime": "2024-02-13T19:00:00",
-    "duration": "120",
+    "address": "пр.Ленина 203",
+    "date": "12.02.2026",
     "description": "Низкий уровень сложности",
+    "duration": "120",
+    "location": "СП Юбилейный",
+    "maxPlayers": "14",
+    "name": "Тренировка в Юбилейном 2",
     "price": "200",
-    "max_players": "14"
+    "time": "20:00"
 }
 
 ###

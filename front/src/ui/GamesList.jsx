@@ -16,7 +16,7 @@ export const GamesList = ({ date }) => {
   if (!gameIsLoading && games.length === 0) return <NoGames />
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 flex flex-col gap-4">
       {games.map((game, index) => (
         <GameCardShort
           key={index}
