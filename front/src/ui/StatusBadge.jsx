@@ -21,7 +21,7 @@ export const StatusBadge = ({ status = 'out' }) => {
   return (
     <span
       className={cn(
-        'px-2 text-[12px] font-medium rounded-full border leading-none py-0.5',
+        'px-2 text-xs font-medium rounded-full border leading-none py-0.5',
         classes
       )}
     >

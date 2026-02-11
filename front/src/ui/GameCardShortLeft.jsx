@@ -19,18 +19,18 @@ export const GameCardShortLeft = ({ startDatetime, duration }) => {
   }, [startDatetime, duration])
 
   return (
-    <div className="bg-bot-grey-200 py-3 w-21 border-r-3 pr-4 border-bot-primary flex flex-col justify-between items-end shrink-0">
+    <div className="bg-bot-grey-200 py-3 w-18 border-r-3 pr-3 border-bot-primary flex flex-col justify-between items-end shrink-0">
       <div className="flex flex-col items-center">
-        <span className="text-bot-grey-500 leading-none text-sm">
+        <span className="text-bot-grey-500 leading-none text-xs">
           {timeData.date}
         </span>
 
-        <span className="font-bold text-black text-3xl leading-none font-mono">
+        <span className="font-bold text-black text-2xl leading-none font-mono">
           {timeData.day}
         </span>
       </div>
 
-      <div className="flex flex-col items-center font-semibold text-black text-sm leading-none">
+      <div className="flex flex-col items-center font-semibold text-black text-xs leading-none">
         <span>{timeData.start}</span>
 
         <span className="text-bot-grey-500 -mt-0.5 -mb-0.5">-</span>

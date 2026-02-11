@@ -38,8 +38,8 @@ export const GameCardShort = ({ game }) => {
         duration={game.duration}
       />
 
-      <div className="flex flex-col flex-1 pt-2 pl-4 pr-6 pb-2 gap-1">
-        <div className="text-black font-bold border-b border-dashed border-bot-grey-500 pb-2.5 mb-0.5 truncate">
+      <div className="flex flex-col flex-1 pt-2 pl-3 pr-6 pb-2 gap-1">
+        <div className="text-black font-bold border-b border-dashed border-bot-grey-500 pb-2.5 mb-0.5 truncate text-sm">
           {game.name}
         </div>
 

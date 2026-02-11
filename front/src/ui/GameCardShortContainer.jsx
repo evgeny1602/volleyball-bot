@@ -5,7 +5,7 @@ export const GameCardShortContainer = ({ children, className, onClick }) => {
     <div
       onClick={onClick}
       className={cn(
-        'w-full h-35 rounded-4xl shadow-sm bg-white overflow-hidden',
+        'w-full h-31 rounded-4xl shadow-sm bg-white overflow-hidden',
         className
       )}
     >
