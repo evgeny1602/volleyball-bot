@@ -24,7 +24,7 @@ export const GameCardShort = ({ game }) => {
   if (userIsLoading)
     return (
       <GameCardShortContainer>
-        <Loader />
+        <Loader variant="small" />
       </GameCardShortContainer>
     )
 

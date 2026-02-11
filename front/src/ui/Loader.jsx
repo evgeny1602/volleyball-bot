@@ -10,7 +10,7 @@ export const Loader = ({ variant = 'large' }) => {
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center gap-2',
+        'flex flex-col items-center justify-center',
         VARIANTS[variant]
       )}
     >
