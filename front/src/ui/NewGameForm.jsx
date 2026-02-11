@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react'
-import { motion } from 'framer-motion' // Добавляем motion
+import { motion } from 'framer-motion'
+import { z } from 'zod' // Импортируем zod
 import { Input } from '@/ui/Input'
 import { DateInput } from '@/ui/DateInput'
 import { TimeInput } from '@/ui/TimeInput'
@@ -8,9 +9,23 @@ import { TextInput } from '@/ui/TextInput'
 import { MoneyInput } from '@/ui/MoneyInput'
 import { CreateButton } from '@/ui/buttons/CreateButton'
 import { cn } from '@/utils/cn'
-import { tgVibro } from '@/utils/telegram'
+import { tgAlert, tgVibro } from '@/utils/telegram'
 import { Button } from '@/ui/Button'
-import { Trash2 } from 'lucide-react'
+import { Trash2, CircleX } from 'lucide-react'
+import { useGame } from '@/hooks/useGame'
+
+// 1. Описываем схему валидации
+const gameSchema = z.object({
+  name: z.string().min(3, 'Минимум 3 символа'),
+  location: z.string().min(2, 'Укажите место'),
+  address: z.string().min(5, 'Слишком короткий адрес'),
+  date: z.string().regex(/^\d{2}\.\d{2}\.\d{4}$/, 'Формат: ДД.ММ.ГГГГ'),
+  time: z.string().regex(/^\d{2}:\d{2}$/, 'Формат: ЧЧ:ММ'),
+  duration: z.number().min(10, 'Минимум 10 мин').max(3000),
+  description: z.string().min(3, 'Опишите игру подробнее'),
+  price: z.number().min(0, 'Цена не может быть отрицательной'),
+  maxPlayers: z.number().min(2, 'Минимум 2 игрока').max(50),
+})
 
 const COMPONENT_MAP = {
   input: Input,
@@ -22,21 +37,9 @@ const COMPONENT_MAP = {
 }
 
 const FORM_CONFIG = [
-  {
-    id: 'name',
-    type: 'input',
-    label: 'Название игры',
-  },
-  {
-    id: 'location',
-    type: 'input',
-    label: 'Место',
-  },
-  {
-    id: 'address',
-    type: 'input',
-    label: 'Адрес',
-  },
+  { id: 'name', type: 'input', label: 'Название игры' },
+  { id: 'location', type: 'input', label: 'Место' },
+  { id: 'address', type: 'input', label: 'Адрес' },
   { id: 'date', type: 'date', label: 'Дата' },
   { id: 'time', type: 'time', label: 'Время' },
   {
@@ -74,100 +77,132 @@ const INITIAL_STATE = {
 
 export const NewGameForm = ({ onCancel }) => {
   const [form, setForm] = useState(INITIAL_STATE)
+  const [errors, setErrors] = useState({}) // Храним ошибки здесь
   const [showErrors, setShowErrors] = useState(false)
+  const { createGame } = useGame()
 
   const updateField = (field) => (value) => {
-    setForm((prev) => ({ ...prev, [field]: value }))
+    // Приводим к числу для zod, если поле числовое
+    const numericFields = ['duration', 'price', 'maxPlayers']
+    const finalValue = numericFields.includes(field) ? Number(value) : value
+
+    setForm((prev) => ({ ...prev, [field]: finalValue }))
+    // Очищаем ошибку поля при вводе
+    if (errors[field]) {
+      setErrors((prev) => {
+        const newErrors = { ...prev }
+        delete newErrors[field]
+        return newErrors
+      })
+    }
   }
 
-  const isFieldEmpty = (id) => {
-    const value = form[id]
-    return !value || value.toString().trim().length === 0
-  }
-
-  const isFormValid = useMemo(() => {
-    return Object.keys(form).every((id) => !isFieldEmpty(id))
+  // 2. Валидация через useMemo
+  const validationResult = useMemo(() => {
+    return gameSchema.safeParse(form)
   }, [form])
 
-  const triggerValidationUI = () => {
-    setShowErrors(true)
-    setTimeout(() => setShowErrors(false), 1000)
-  }
+  const isFormValid = validationResult.success
 
-  const handleButtonClick = () => {
-    if (!isFormValid) {
+  const handleCreateButtonClick = async () => {
+    if (!validationResult.success) {
       tgVibro('error')
-      triggerValidationUI()
+
+      // Превращаем ошибки zod в удобный объект { field: message }
+      const formattedErrors = {}
+      validationResult.error.issues.forEach((issue) => {
+        formattedErrors[issue.path[0]] = issue.message
+      })
+
+      setErrors(formattedErrors)
+      setShowErrors(true)
+
+      // Скрываем красные точки через секунду, но тексты ошибок оставляем до исправления
+      setTimeout(() => setShowErrors(false), 2000)
       return
     }
-    console.log('Отправка формы:', form)
+
+    const isSuccess = await createGame(form)
+    if (isSuccess) {
+      tgAlert('Игра успешно создана')
+      setForm(INITIAL_STATE)
+    }
   }
 
   return (
-    <div className="flex flex-col gap-4 mt-4">
+    <div className="flex flex-col gap-4 mt-4 mb-10">
       {FORM_CONFIG.map(({ id, type, label, placeholder, props }) => {
         const Component = COMPONENT_MAP[type]
-        const empty = isFieldEmpty(id)
-        const hasError = empty && showErrors
+        const fieldError = errors[id]
+        const hasError = fieldError && showErrors
 
         return (
           <div
             key={id}
-            className="relative"
+            className="relative flex flex-col gap-1"
           >
             <Component
               label={
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-2">
                   {label}
-                  {empty && (
+                  {fieldError && (
                     <span
                       className={cn(
-                        'w-1.5 h-1.5 rounded-full transition-all duration-300',
+                        'text-[10px] font-medium px-2 py-0.5 rounded-full transition-all duration-300',
                         hasError
-                          ? 'bg-red-500 scale-150 shadow-[0_0_8px_rgba(239,68,68,0.8)]'
-                          : 'bg-bot-grey-300'
+                          ? 'bg-red-500 text-white'
+                          : 'bg-red-100 text-red-500'
                       )}
-                    />
+                    >
+                      {fieldError}
+                    </span>
                   )}
                 </span>
               }
               placeholder={placeholder}
               value={form[id]}
               onChange={updateField(id)}
-              className={cn('transition-colors duration-300')}
+              className={cn(fieldError && 'border-red-300')}
               {...props}
             />
           </div>
         )
       })}
 
-      <div className="mt-8 flex flex-col gap-2">
+      <div className="mt-8 flex flex-col gap-4">
         <motion.div
           animate={
             showErrors && !isFormValid ? { x: [-4, 4, -4, 4, 0] } : { x: 0 }
           }
-          transition={{ duration: 0.4, ease: 'easeInOut' }}
+          transition={{ duration: 0.4 }}
         >
           <CreateButton
             className={cn(
-              'w-full transition-all duration-300 active:scale-[0.98]',
+              'w-full transition-all duration-300',
               !isFormValid
-                ? 'opacity-80 saturate-50 shadow-none'
+                ? 'opacity-70 saturate-50'
                 : 'shadow-lg shadow-bot-primary/20'
             )}
-            onClick={handleButtonClick}
+            onClick={handleCreateButtonClick}
           >
-            {isFormValid ? 'Создать игру' : 'Заполните все поля'}
+            {isFormValid ? 'Создать игру' : 'Проверьте ошибки'}
           </CreateButton>
         </motion.div>
 
         <Button
           variant="danger"
           className="w-full"
+          onClick={() => setForm(INITIAL_STATE)}
+        >
+          <Trash2 className="w-4 h-4" /> Очистить
+        </Button>
+
+        <Button
+          variant="danger"
+          className="w-full"
           onClick={onCancel}
         >
-          <Trash2 className="w-4 h-4" />
-          Отмена
+          <CircleX className="w-4 h-4" /> Отмена
         </Button>
       </div>
     </div>

@@ -60,7 +60,10 @@ export const tgVibro = (pattern) => {
 export const tgAlert = async (message) => {
   tgVibro('medium')
 
-  if (isDev) return
+  if (isDev) {
+    alert(message)
+    return
+  }
 
   return new Promise((resolve) => WebApp.showAlert(message, () => resolve()))
 }

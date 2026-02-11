@@ -1,3 +1,5 @@
+import { GamesList } from '@/ui/GamesList'
+
 export const CalendarTab = () => {
-  return <div>Расписание</div>
+  return <GamesList />
 }

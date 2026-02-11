@@ -49,6 +49,7 @@ const initSqls = [
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
       game_id INTEGER,
+      status TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `,

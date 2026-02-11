@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { IMaskInput, IMask } from 'react-imask'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Clock } from 'lucide-react'
@@ -7,20 +7,17 @@ import { tgVibro } from '@/utils/telegram'
 import { InputLabel } from '@/ui/InputLabel'
 import { cn } from '@/utils/cn'
 
-export const TimeInput = ({ value, onChange, label }) => {
-  const [timeText, setTimeText] = useState(value ? value : '')
+export const TimeInput = ({ value = '', onChange, label }) => {
   const imaskRef = useRef(null)
 
   const handleChange = (val) => {
-    setTimeText(val)
     if (onChange) onChange(val)
   }
 
   const handleClearClick = () => {
     tgVibro('light')
-    setTimeText('')
     imaskRef.current?.focus()
-    if (onChange) onChange('')
+    handleChange('')
   }
 
   const handleChangeFromTimepicker = (e) => {
@@ -29,22 +26,19 @@ export const TimeInput = ({ value, onChange, label }) => {
     handleChange(val)
   }
 
-  const getTimeLength = () => timeText.replace(/[^0-9]/g, '').length
-  const hasValue = getTimeLength() > 0
+  const hasValue = value && value.replace(/[^0-9]/g, '').length > 0
 
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {label && <InputLabel>{label}</InputLabel>}
 
       <div className="relative flex items-center">
-        {/* Контейнер иконки часов с прежним фоном */}
         <div className="absolute left-2 z-10 flex items-center justify-center">
           <div className="p-1.5 bg-bot-primary text-white rounded-full flex items-center justify-center transition-transform active:scale-95">
             <Clock className="w-5 h-5" />
           </div>
         </div>
 
-        {/* Невидимый нативный инпут поверх иконки */}
         <input
           type="time"
           className="absolute left-1 z-20 opacity-0 cursor-pointer w-10 h-10"
@@ -71,15 +65,14 @@ export const TimeInput = ({ value, onChange, label }) => {
               maxLength: 2,
             },
           }}
-          value={timeText}
+          value={value}
           lazy={false}
-          placeholder="00:00"
           unmask={false}
-          onAccept={handleChange}
+          onAccept={(val) => handleChange(val)}
           className={cn(
             'border rounded-full border-bot-grey-300 transition-all w-full py-2.5 text-bot-grey-800 text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
-            'px-12' // Место под кнопку часов слева и крестик справа
+            'px-12'
           )}
         />
 

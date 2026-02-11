@@ -25,3 +25,48 @@ DELETE http://localhost:3000/api/users/123456
 ###
 
 PATCH http://localhost:3000/api/users/approve/12345
+
+###
+
+POST http://localhost:3000/api/games
+Content-Type: application/json
+
+{
+    "name": "Тренировка в Юбилейном",
+    "location_name": "СП Юбилейный",
+    "location_address": "пр.Ленина 203",
+    "start_datetime": "2024-02-13T19:00:00",
+    "duration": "120",
+    "description": "Низкий уровень сложности",
+    "price": "200",
+    "max_players": "14"
+}
+
+###
+
+GET http://localhost:3000/api/games/7
+
+###
+
+GET http://localhost:3000/api/games/
+
+###
+
+PUT http://localhost:3000/api/games/2
+Content-Type: application/json
+
+{
+    "name": "Тренировка в Юбилейном 3",
+    "location_name": "СП Юбилейный",
+    "location_address": "пр.Ленина 203",
+    "start_datetime": "2024-02-13T19:00:00",
+    "duration": "120"
+}
+
+###
+
+DELETE http://localhost:3000/api/games/2
+
+###
+
+GET http://localhost:3000/api/games/6/players

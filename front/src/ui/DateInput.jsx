@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useRef } from 'react'
 import { IMaskInput, IMask } from 'react-imask'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Calendar } from 'lucide-react'
@@ -7,20 +7,17 @@ import { tgVibro } from '@/utils/telegram'
 import { InputLabel } from '@/ui/InputLabel'
 import { cn } from '@/utils/cn'
 
-export const DateInput = ({ value, onChange, label }) => {
-  const [dateText, setDateText] = useState(value ? value : '')
+export const DateInput = ({ value = '', onChange, label }) => {
   const imaskRef = useRef(null)
 
   const handleChange = (val) => {
-    setDateText(val)
     if (onChange) onChange(val)
   }
 
   const handleClearClick = () => {
     tgVibro('light')
-    setDateText('')
     imaskRef.current?.focus()
-    if (onChange) onChange('')
+    handleChange('')
   }
 
   const handleChangeFromDatepicker = (e) => {
@@ -33,24 +30,20 @@ export const DateInput = ({ value, onChange, label }) => {
     }
   }
 
-  const getDateLength = () =>
-    dateText.replaceAll('_', '').replaceAll('.', '').length
-
-  const hasValue = getDateLength() > 0
+  const hasValue =
+    value && value.replaceAll('_', '').replaceAll('.', '').length > 0
 
   return (
     <div className="flex flex-col gap-1.5 w-full">
       {label && <InputLabel>{label}</InputLabel>}
 
       <div className="relative flex items-center">
-        {/* Кнопка календаря внутри инпута слева */}
         <div className="absolute left-2 z-10 flex items-center justify-center">
           <div className="p-2 bg-bot-primary text-white rounded-full flex items-center justify-center transition-transform active:scale-95">
             <Calendar className="w-4 h-4" />
           </div>
         </div>
 
-        {/* Невидимый нативный инпут поверх иконки */}
         <input
           type="date"
           className="absolute left-1 z-20 opacity-0 cursor-pointer w-10 h-10"
@@ -63,7 +56,7 @@ export const DateInput = ({ value, onChange, label }) => {
           inputRef={(el) => (imaskRef.current = el)}
           inputMode="numeric"
           mask={Date}
-          value={dateText}
+          value={value}
           lazy={true}
           autofix={true}
           blocks={{
@@ -77,12 +70,10 @@ export const DateInput = ({ value, onChange, label }) => {
             },
           }}
           unmask={false}
-          onAccept={handleChange}
-          // placeholder="ДД.ММ.ГГГГ"
+          onAccept={(val) => handleChange(val)}
           className={cn(
             'border rounded-full border-bot-grey-300 transition-all w-full py-2.5 text-bot-grey-800 text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
-            // px-12 (48px) с каждой стороны для идеальной центровки текста между иконками
             'px-12'
           )}
         />
