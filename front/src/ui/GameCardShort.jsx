@@ -49,7 +49,7 @@ export const GameCardShort = ({ game }) => {
             <GameInfoRow Icon={MapPin}>{game.location_address}</GameInfoRow>
           </div>
 
-          <div className="flex flex-row flex-wrap justify-between items-center mt-auto">
+          <div className="flex flex-row flex-wrap justify-between items-center mt-auto gap-x-1">
             <GameInfoRow
               Icon={CreditCard}
               className="text-black"
