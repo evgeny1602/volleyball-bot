@@ -7,6 +7,8 @@ import gameRoutes from './routes/gameRoutes.js'
 const app = express()
 const PORT = 3000
 
+app.disable('etag')
+
 initDatabase()
 
 app.use(

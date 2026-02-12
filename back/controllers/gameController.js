@@ -3,7 +3,7 @@ import db from '../db.js'
 const getGamePlayers = (id) =>
   db
     .prepare(
-      `select users.*, users_to_games.status from users_to_games LEFT JOIN users ON users_to_games.user_id=users.id where users_to_games.game_id=?`
+      `select users.*, users_to_games.status, users_to_games.created_at as login_date from users_to_games LEFT JOIN users ON users_to_games.user_id=users.id where users_to_games.game_id=? ORDER BY users_to_games.created_at ASC`
     )
     .all(id)
 
@@ -27,7 +27,7 @@ export const getGameById = (req, res) => {
     const game = db.prepare(`SELECT * FROM games WHERE id = ?`).get(id)
     res.json(
       game
-        ? { success: true, game, players: getGamePlayers(id) }
+        ? { success: true, game: { ...game, players: getGamePlayers(id) } }
         : { success: false, error: 'Game not found' }
     )
   } catch (err) {
@@ -47,6 +47,7 @@ export const createGame = (req, res) => {
       description,
       price,
       maxPlayers: max_players,
+      mode,
     } = req.body
 
     const parts = date.split('.')
@@ -56,11 +57,13 @@ export const createGame = (req, res) => {
       name,
       location_name,
       location_address,
-      start_datetime,
+      date,
+      time,
       duration,
       description,
       price,
       max_players,
+      mode,
     ]) {
       if (!value || value === null || value === '') {
         return res.status(400).json({ error: 'All fields are required' })
@@ -68,8 +71,8 @@ export const createGame = (req, res) => {
     }
 
     const stmt = db.prepare(`
-      INSERT INTO games (name, location_name, location_address, start_datetime, duration, description, price, max_players)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO games (name, location_name, location_address, start_datetime, duration, description, price, max_players, mode)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `)
 
     const info = stmt.run(
@@ -80,7 +83,8 @@ export const createGame = (req, res) => {
       duration || 120,
       description || null,
       price || 0,
-      max_players || 14
+      max_players || 14,
+      mode || 'main'
     )
 
     res.status(201).json({
@@ -98,19 +102,24 @@ export const updateGame = (req, res) => {
     const { id } = req.params
     const {
       name,
-      location_name,
-      location_address,
-      start_datetime,
+      location: location_name,
+      address: location_address,
+      date,
+      time,
       duration,
       description,
       price,
-      max_players,
+      maxPlayers: max_players,
+      mode,
     } = req.body
+
+    const parts = date.split('.')
+    const start_datetime = `${parts[2]}-${parts[1]}-${parts[0]} ${time}`
 
     const stmt = db.prepare(`
       UPDATE games 
       SET name = ?, location_name = ?, location_address = ?, start_datetime = ?, 
-          duration = ?, description = ?, price = ?, max_players = ?
+          duration = ?, description = ?, price = ?, max_players = ?, mode = ?
       WHERE id = ?
     `)
 
@@ -123,6 +132,7 @@ export const updateGame = (req, res) => {
       description,
       price,
       max_players,
+      mode,
       id
     )
 

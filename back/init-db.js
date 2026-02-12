@@ -27,6 +27,7 @@ const initSqls = [
       description TEXT,
       price FLOAT,
       max_players INTEGER,
+      mode TEXT,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `,

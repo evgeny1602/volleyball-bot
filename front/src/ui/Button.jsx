@@ -1,6 +1,5 @@
 import { cn } from '@/utils/cn'
 import { tgVibro } from '@/utils/telegram'
-import { Loader2 } from 'lucide-react'
 
 const VARIANTS = {
   primary: 'bg-bot-primary',
@@ -32,7 +31,7 @@ export const Button = ({
       disabled={isInactive}
       className={cn(
         'text-white px-4 py-2 rounded-full font-medium transition-all duration-200',
-        'flex flex-row gap-2 items-center justify-center relative overflow-hidden min-h-[40px]',
+        'flex flex-row gap-2 items-center justify-center relative overflow-hidden min-h-6',
         !isInactive &&
           'active:scale-95 hover:brightness-110 hover:cursor-pointer',
         isInactive && 'opacity-60 pointer-events-none select-none',

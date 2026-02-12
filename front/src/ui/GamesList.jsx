@@ -4,7 +4,7 @@ import { NoGames } from '@/ui/NoGames'
 import { GameCardShort } from '@/ui/GameCardShort'
 import { useEffect } from 'react'
 
-export const GamesList = ({ date }) => {
+export const GamesList = () => {
   const { games, getGames, gameIsLoading } = useGame()
 
   useEffect(() => {
