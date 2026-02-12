@@ -28,6 +28,7 @@ import {
 import { UserAvatar } from './UserAvatar'
 import { cn } from '@/utils/cn'
 import { useGame } from '@/hooks/useGame'
+import { tgAlert } from '@/utils/telegram'
 
 const GameCardExtContainer = ({ children }) => (
   <div className="mt-4 flex flex-col gap-6">{children}</div>
@@ -58,7 +59,7 @@ const PlayerCard = ({ player, onPromote, onRemove }) => {
           <Button
             variant="success"
             className="h-7 px-2 text-xs gap-1"
-            onClick={() => onPromote(player.tg_id)}
+            onClick={() => onPromote(player.id)}
           >
             <ArrowUpCircle size={12} />
             <span>В основу</span>
@@ -68,7 +69,7 @@ const PlayerCard = ({ player, onPromote, onRemove }) => {
         <Button
           variant="danger"
           className="h-7 px-2 text-xs gap-1"
-          onClick={() => onRemove(player.tg_id)}
+          onClick={() => onRemove(player.id)}
         >
           <MinusCircle size={12} />
           <span>Убрать</span>
@@ -78,7 +79,7 @@ const PlayerCard = ({ player, onPromote, onRemove }) => {
   )
 }
 
-const PlayersList = ({ players, className }) => {
+const PlayersList = ({ players, className, onRemove, onPromote }) => {
   if (!players.length) return null
 
   return (
@@ -87,13 +88,15 @@ const PlayersList = ({ players, className }) => {
         <PlayerCard
           key={player.tg_id}
           player={player}
+          onRemove={onRemove}
+          onPromote={onPromote}
         />
       ))}
     </div>
   )
 }
 
-const PlayersSection = ({ players }) => {
+const PlayersSection = ({ players, onRemove, onPromote }) => {
   if (!players) return null
 
   if (players.length === 0) return null
@@ -105,7 +108,10 @@ const PlayersSection = ({ players }) => {
       </div>
 
       <div className="bg-white p-3 border-bot-grey-200 rounded-b-3xl border">
-        <PlayersList players={players.filter((p) => p.status === 'main')} />
+        <PlayersList
+          players={players.filter((p) => p.status === 'main')}
+          onRemove={onRemove}
+        />
 
         {players.filter((p) => p.status === 'reserve').length > 0 && (
           <div className="w-full flex flex-col items-center mt-3 mb-5">
@@ -116,21 +122,33 @@ const PlayersSection = ({ players }) => {
           </div>
         )}
 
-        <PlayersList players={players.filter((p) => p.status === 'reserve')} />
+        <PlayersList
+          players={players.filter((p) => p.status === 'reserve')}
+          onRemove={onRemove}
+          onPromote={onPromote}
+        />
       </div>
     </div>
   )
 }
 
-export const GameCardExtForm = ({ gameId, onCancel }) => {
-  const { user, userIsLoading } = useUser()
-  const { currentGame: game, getGame } = useGame()
+export const GameCardExtForm = ({ gameId, onCancel, onChange, onEdit }) => {
+  const { user, userIsLoading, createGuestUser } = useUser()
+  const {
+    currentGame: game,
+    getGame,
+    joinGame,
+    leaveGame,
+    promotePlayer,
+    deleteGame,
+    gameIsLoading,
+  } = useGame()
+
+  const isLoading = userIsLoading || gameIsLoading
 
   useEffect(() => {
     getGame(gameId)
   }, [gameId])
-
-  console.log(game)
 
   const { isAdmin, status, gameDate, isRegistered } = useMemo(() => {
     const playerStatus =
@@ -143,7 +161,7 @@ export const GameCardExtForm = ({ gameId, onCancel }) => {
     }
   }, [user, game])
 
-  if (userIsLoading)
+  if (isLoading)
     return (
       <GameCardExtContainer>
         <Loader variant="small" />
@@ -151,11 +169,71 @@ export const GameCardExtForm = ({ gameId, onCancel }) => {
     )
 
   const actions = {
-    signIn: () => console.log('Записаться'),
-    signOut: () => console.log('Отказаться'),
-    addGuest: () => console.log('Добавить гостя'),
-    edit: () => console.log('Редактировать'),
-    delete: () => console.log('Удалить'),
+    signIn: async () => {
+      try {
+        await joinGame(game.id, user.id)
+        onChange?.()
+      } catch (err) {
+        tgAlert(err.message)
+      }
+    },
+    signOut: async () => {
+      try {
+        await leaveGame(game.id, user.id)
+        onChange?.()
+      } catch (err) {
+        tgAlert(err.message)
+      }
+    },
+    addGuest: async () => {
+      const guestFio = 'Гость'
+      const guestNumbers = game.players
+        .map((p) => p.fio)
+        .filter((fio) => fio.startsWith(guestFio))
+        .map((fio) => parseInt(fio.split(' ')[1]))
+      const newGuestNumber = Math.max(...guestNumbers, 0) + 1
+      const newGuestFio = `${guestFio} ${newGuestNumber}`
+
+      const guestData = await createGuestUser(newGuestFio)
+
+      if (!guestData) {
+        console.log('Ошибка при создании гостя')
+        return
+      }
+
+      try {
+        await joinGame(game.id, guestData.userId)
+        onChange?.()
+      } catch (err) {
+        tgAlert(err.message)
+      }
+    },
+    editGame: onEdit,
+    deleteGame: async () => {
+      try {
+        await deleteGame(game.id)
+        onChange?.()
+        onCancel?.()
+      } catch (err) {
+        tgAlert(err.message)
+      }
+    },
+    deletePlayer: async (playerId) => {
+      try {
+        await leaveGame(game.id, playerId)
+        onChange?.()
+      } catch (err) {
+        alert(err.message)
+      }
+    },
+    promotePlayer: async (playerId) => {
+      try {
+        await promotePlayer(game.id, playerId)
+        onChange?.()
+      } catch (err) {
+        alert(err.message)
+      }
+    },
   }
 
   return (
@@ -205,7 +283,11 @@ export const GameCardExtForm = ({ gameId, onCancel }) => {
         )}
       </div>
 
-      <PlayersSection players={game.players} />
+      <PlayersSection
+        players={game.players}
+        onRemove={actions.deletePlayer}
+        onPromote={actions.promotePlayer}
+      />
 
       {isAdmin && (
         <div className="flex flex-col gap-3">
@@ -218,14 +300,14 @@ export const GameCardExtForm = ({ gameId, onCancel }) => {
           </Button>
           <Button
             variant="secondary"
-            onClick={actions.edit}
+            onClick={actions.editGame}
           >
             <FilePenLine size={18} />
             Изменить игру
           </Button>
           <Button
             variant="danger"
-            onClick={actions.delete}
+            onClick={actions.deleteGame}
           >
             <Trash2 size={18} />
             Удалить игру

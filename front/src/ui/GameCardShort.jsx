@@ -11,10 +11,26 @@ import { GameLocation } from '@/ui/GameLocation'
 import { GameAddress } from '@/ui/GameAddress'
 import { GamePrice } from '@/ui/GamePrice'
 import { GamePlayers } from '@/ui/GamePlayers'
+import { GameForm } from './GameForm'
 
-export const GameCardShort = ({ game }) => {
+const gameToFormData = (game) => {
+  const dateParts = game.start_datetime.split(' ')
+  const [y, m, d] = dateParts[0].split('-')
+
+  return {
+    ...game,
+    location: game.location_name,
+    address: game.location_address,
+    maxPlayers: game.max_players,
+    date: `${d}.${m}.${y}`,
+    time: dateParts[1],
+  }
+}
+
+export const GameCardShort = ({ game, onChange }) => {
   const { user, userIsLoading } = useUser()
-  const [isExtOpen, setIsExtOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [mode, setMode] = useState('view')
 
   const status = useMemo(() => {
     if (!user || !game?.players) return 'out'
@@ -23,7 +39,13 @@ export const GameCardShort = ({ game }) => {
 
   const handleClick = () => {
     tgVibro('medium')
-    setIsExtOpen(true)
+    setMode('view')
+    setIsModalOpen(true)
+  }
+
+  const handleModalClosed = () => {
+    setIsModalOpen(false)
+    onChange?.()
   }
 
   if (userIsLoading)
@@ -32,6 +54,8 @@ export const GameCardShort = ({ game }) => {
         <Loader variant="small" />
       </GameCardShortContainer>
     )
+
+  console.log(game)
 
   return (
     <>
@@ -64,15 +88,23 @@ export const GameCardShort = ({ game }) => {
         </div>
       </GameCardShortContainer>
 
-      {isExtOpen && (
+      {isModalOpen && (
         <Modal
-          onClose={() => setIsExtOpen(false)}
+          onClose={handleModalClosed}
           headerText={game.name}
         >
-          <GameCardExtForm
-            gameId={game.id}
-            onCancel={() => setIsExtOpen(false)}
-          />
+          {mode == 'view' ? (
+            <GameCardExtForm
+              gameId={game.id}
+              onCancel={handleModalClosed}
+              onEdit={() => setMode('edit')}
+            />
+          ) : (
+            <GameForm
+              initialState={gameToFormData(game)}
+              onCancel={() => setMode('view')}
+            />
+          )}
         </Modal>
       )}
     </>

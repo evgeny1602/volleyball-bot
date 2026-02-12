@@ -4,6 +4,9 @@ import {
   createGame as apiCreateGame,
   updateGame as apiUpdateGame,
   deleteGame as apiDeleteGame,
+  joinGame as apiJoinGame,
+  leaveGame as apiLeaveGame,
+  promotePlayer as apiPromotePlayer,
 } from '@/api/game'
 import { useState } from 'react'
 
@@ -67,6 +70,53 @@ export const useGame = () => {
     }
   }
 
+  const joinGame = async (gameId, userId) => {
+    setGameIsLoading(true)
+    try {
+      const response = await apiJoinGame(gameId, userId)
+
+      if (response?.success) {
+        await getGame(gameId)
+      }
+
+      return response
+    } catch (error) {
+      console.error('Join game error:', error)
+      throw error
+    } finally {
+      setGameIsLoading(false)
+    }
+  }
+
+  const leaveGame = async (gameId, userId) => {
+    setGameIsLoading(true)
+    try {
+      const response = await apiLeaveGame(gameId, userId)
+      if (response?.success) {
+        await getGame(gameId)
+      }
+      return response
+    } finally {
+      setGameIsLoading(false)
+    }
+  }
+
+  const promotePlayer = async (gameId, userId) => {
+    setGameIsLoading(true)
+    try {
+      const response = await apiPromotePlayer(gameId, userId)
+      if (response?.success) {
+        await getGame(gameId)
+      }
+      return response
+    } catch (error) {
+      console.error('Promote player error:', error)
+      throw error
+    } finally {
+      setGameIsLoading(false)
+    }
+  }
+
   return {
     gameIsLoading,
     games,
@@ -76,5 +126,8 @@ export const useGame = () => {
     createGame,
     updateGame,
     deleteGame,
+    joinGame,
+    leaveGame,
+    promotePlayer,
   }
 }

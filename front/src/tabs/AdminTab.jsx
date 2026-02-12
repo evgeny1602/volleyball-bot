@@ -1,35 +1,55 @@
 import { ModalButton } from '@/ui/ModalButton'
 import { UsersList } from '@/ui/UsersList'
-import { NewGameForm } from '@/ui/NewGameForm'
+import { GameForm } from '@/ui/GameForm'
 import { Users, Volleyball } from 'lucide-react'
+import { AdminTabContainer } from '@/ui/AdminTabContainer'
+import { useGame } from '@/hooks/useGame'
 
-const ADMIN_ACTIONS = [
-  {
-    id: 'create-game',
-    label: 'Создать игру',
-    Icon: Volleyball,
-    Content: NewGameForm,
-  },
-  {
-    id: 'users-list',
-    label: 'Игроки',
-    Icon: Users,
-    Content: () => <UsersList statuses={['registered', 'approved']} />,
-  },
-]
+const NEW_GAME_DATA = {
+  name: '',
+  location: '',
+  address: '',
+  date: '',
+  time: '',
+  duration: '',
+  description: '',
+  price: '',
+  maxPlayers: '',
+}
 
 export const AdminTab = () => {
+  const { createGame } = useGame()
+
+  const ADMIN_ACTIONS = [
+    {
+      label: 'Создать игру',
+      Icon: Volleyball,
+      ModalContent: ({ onCancel }) => (
+        <GameForm
+          initialState={NEW_GAME_DATA}
+          onSubmit={createGame}
+          onCancel={onCancel}
+        />
+      ),
+    },
+    {
+      label: 'Игроки',
+      Icon: Users,
+      ModalContent: () => <UsersList statuses={['registered', 'approved']} />,
+    },
+  ]
+
   return (
-    <div className="flex flex-col h-dvh items-center justify-center w-full p-8 gap-4 overflow-hidden">
-      {ADMIN_ACTIONS.map(({ id, label, Icon, Content }) => (
+    <AdminTabContainer>
+      {ADMIN_ACTIONS.map(({ label, Icon, ModalContent }) => (
         <ModalButton
-          key={id}
           className="w-full"
+          key={label}
           modalHeader={label}
-          ModalContent={Content}
           Icon={Icon}
+          ModalContent={ModalContent}
         />
       ))}
-    </div>
+    </AdminTabContainer>
   )
 }

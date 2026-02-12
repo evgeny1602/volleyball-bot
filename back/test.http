@@ -32,15 +32,15 @@ POST http://localhost:3000/api/games
 Content-Type: application/json
 
 {
+    "name": "Тренировка в Юбилейном 2",
+    "location": "СП Юбилейный",
     "address": "пр.Ленина 203",
     "date": "12.02.2026",
-    "description": "Низкий уровень сложности",
+    "time": "20:00",
     "duration": "120",
-    "location": "СП Юбилейный",
-    "maxPlayers": "14",
-    "name": "Тренировка в Юбилейном 2",
-    "price": "200",
-    "time": "20:00"
+    "description": "Низкий уровень сложности",
+    "price": "200",    
+    "maxPlayers": "14"      
 }
 
 ###
@@ -66,8 +66,44 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:3000/api/games/2
+DELETE http://localhost:3000/api/games/16
 
 ###
 
 GET http://localhost:3000/api/games/6/players
+
+###
+
+POST http://localhost:3000/api/games/7/join
+Content-Type: application/json
+
+{
+    "user_id": "14"
+}
+
+###
+
+POST http://localhost:3000/api/games/7/leave
+Content-Type: application/json
+
+{
+    "user_id": "14"
+}
+
+###
+
+POST http://localhost:3000/api/games/7/promote
+Content-Type: application/json
+
+{
+    "user_id": "14"
+}
+
+###
+
+POST http://localhost:3000/api/users/guest
+Content-Type: application/json
+
+{
+    "fio": "Гость"
+}

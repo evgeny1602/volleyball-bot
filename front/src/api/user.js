@@ -74,3 +74,21 @@ export const deleteUser = async (tgId) => {
 
   return null
 }
+
+export const createGuestUser = async (fio) => {
+  const response = await fetch(`/api/users/guest`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ fio }),
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Не удалось создать гостя')
+  }
+
+  return data
+}

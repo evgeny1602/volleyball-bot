@@ -61,3 +61,42 @@ export const deleteGame = async (id) => {
 
   return null
 }
+
+export const joinGame = async (gameId, userId) => {
+  const response = await fetch(`/api/games/${gameId}/join`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ user_id: userId }),
+  })
+
+  const data = await response.json()
+
+  if (!response.ok) {
+    throw new Error(data.error || 'Ошибка при записи на игру')
+  }
+
+  return data // { success: true, status: 'main', ... }
+}
+
+export const leaveGame = async (gameId, userId) => {
+  const response = await fetch(`/api/games/${gameId}/leave`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: userId }),
+  })
+  return await response.json()
+}
+
+export const promotePlayer = async (gameId, userId) => {
+  const response = await fetch(`/api/games/${gameId}/promote`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_id: userId }),
+  })
+  const data = await response.json()
+  if (!response.ok)
+    throw new Error(data.error || 'Ошибка при переводе в основу')
+  return data
+}

@@ -5,6 +5,7 @@ import {
   approveUser as apiApproveUser,
   rejectUser as apiRejectUser,
   deleteUser as apiDeleteUser,
+  createGuestUser as apiCreateGuestUser,
 } from '@/api/user'
 import { useEffect, useState } from 'react'
 import { useTelegramUser } from './useTelegramUser'
@@ -80,6 +81,19 @@ export const useUser = () => {
     return response
   }
 
+  const createGuestUser = async (fio) => {
+    setUserIsLoading(true)
+    try {
+      const data = await apiCreateGuestUser(fio)
+      return data
+    } catch (error) {
+      console.error('Create guest error:', error)
+      throw error
+    } finally {
+      setUserIsLoading(false)
+    }
+  }
+
   return {
     userIsLoading,
     user,
@@ -92,5 +106,6 @@ export const useUser = () => {
     deleteUser,
     isAdmin,
     getTgCurrentUser,
+    createGuestUser,
   }
 }

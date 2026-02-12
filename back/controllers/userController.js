@@ -2,7 +2,9 @@ import db from '../db.js'
 
 export const getAllUsers = (req, res) => {
   try {
-    const stmt = db.prepare('SELECT * FROM users ORDER BY created_at DESC')
+    const stmt = db.prepare(
+      'SELECT * FROM users WHERE tg_id > 0 ORDER BY created_at DESC'
+    )
     const users = stmt.all()
     res.json({ success: true, count: users.length, data: users })
   } catch (err) {
@@ -20,6 +22,46 @@ export const getUserByTgId = (req, res) => {
   }
 }
 
+export const createGuestUser = (req, res) => {
+  try {
+    const { fio } = req.body
+
+    if (!fio) return res.status(400).json({ error: 'fio is required' })
+
+    const randomTgId = -Math.floor(Date.now() + Math.random() * 1000)
+
+    const stmt = db.prepare(`
+        INSERT INTO users (tg_id, tg_username, tg_avatar_url, fio, gender, phone, birthday, role, status)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `)
+
+    const info = stmt.run(
+      randomTgId,
+      'Guest', // tg_username
+      null, // tg_avatar_url
+      fio, // fio
+      'male', // gender
+      null, // phone
+      null, // birthday
+      'player', // role
+      'approved' // status
+    )
+
+    res.status(201).json({
+      success: true,
+      message: 'Guest user created successfully',
+      userId: info.lastInsertRowid,
+      tgId: randomTgId,
+    })
+  } catch (err) {
+    console.error('Create guest error:', err)
+    if (err.message.includes('UNIQUE constraint failed')) {
+      return res.status(409).json({ error: 'Conflict: try again' })
+    }
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 export const createUser = (req, res) => {
   try {
     const {
@@ -33,6 +75,7 @@ export const createUser = (req, res) => {
       role,
       status,
     } = req.body
+
     if (!tg_id) return res.status(400).json({ error: 'tg_id is required' })
 
     const stmt = db.prepare(`

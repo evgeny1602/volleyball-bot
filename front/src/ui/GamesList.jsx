@@ -21,6 +21,7 @@ export const GamesList = () => {
         <GameCardShort
           key={index}
           game={game}
+          onChange={getGames}
         />
       ))}
     </div>

@@ -47,7 +47,6 @@ export const createGame = (req, res) => {
       description,
       price,
       maxPlayers: max_players,
-      mode,
     } = req.body
 
     const parts = date.split('.')
@@ -63,7 +62,6 @@ export const createGame = (req, res) => {
       description,
       price,
       max_players,
-      mode,
     ]) {
       if (!value || value === null || value === '') {
         return res.status(400).json({ error: 'All fields are required' })
@@ -84,7 +82,7 @@ export const createGame = (req, res) => {
       description || null,
       price || 0,
       max_players || 14,
-      mode || 'main'
+      'main'
     )
 
     res.status(201).json({
@@ -149,6 +147,24 @@ export const updateGame = (req, res) => {
 export const deleteGame = (req, res) => {
   try {
     const { id } = req.params
+
+    const guests = db
+      .prepare(
+        `SELECT users.tg_id as tg_id FROM users_to_games LEFT JOIN users ON users_to_games.user_id=users.id WHERE users.tg_id < 0 AND users_to_games.game_id=?`
+      )
+      .all(id)
+
+    const deleteMany = db.transaction((tgIds) => {
+      const stmt = db.prepare('DELETE FROM users WHERE tg_id = ?')
+      for (const tgId of tgIds) {
+        stmt.run(tgId)
+      }
+    })
+
+    deleteMany(guests.map((guest) => guest.tg_id))
+
+    db.prepare(`DELETE FROM users_to_games WHERE game_id = ?`).run(id)
+
     const info = db.prepare('DELETE FROM games WHERE id = ?').run(id)
 
     if (info.changes > 0) {
@@ -157,6 +173,172 @@ export const deleteGame = (req, res) => {
       res.status(404).json({ success: false, error: 'Game not found' })
     }
   } catch (err) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export const joinGame = (req, res) => {
+  try {
+    const { id: game_id } = req.params
+    const { user_id } = req.body
+
+    if (!user_id) {
+      return res.status(400).json({ error: 'User ID is required' })
+    }
+
+    const game = db
+      .prepare('SELECT max_players, mode FROM games WHERE id = ?')
+      .get(game_id)
+
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' })
+    }
+
+    const existingPlayer = db
+      .prepare(
+        'SELECT id FROM users_to_games WHERE game_id = ? AND user_id = ?'
+      )
+      .get(game_id, user_id)
+
+    if (existingPlayer) {
+      return res.status(400).json({ error: 'Player already joined this game' })
+    }
+
+    const { current_count } = db
+      .prepare(
+        "SELECT COUNT(*) as current_count FROM users_to_games WHERE game_id = ? AND status = 'main'"
+      )
+      .get(game_id)
+
+    const restCount = game.max_players - current_count
+
+    const status =
+      game.mode == 'reserve' ? 'reserve' : restCount > 0 ? 'main' : 'reserve'
+
+    const gameNewMode = restCount <= 1 ? 'reserve' : 'main'
+
+    const stmt = db.prepare(`
+      INSERT INTO users_to_games (game_id, user_id, status, created_at)
+      VALUES (?, ?, ?, datetime('now'))
+    `)
+
+    stmt.run(game_id, user_id, status)
+
+    if (game.mode == 'main' && gameNewMode == 'reserve') {
+      const stmt = db.prepare(`
+        UPDATE games SET mode = ? WHERE id = ?
+      `)
+      stmt.run(gameNewMode, game_id)
+    }
+
+    res.json({
+      success: true,
+      status,
+      message: status === 'main' ? 'Joined main roster' : 'Joined reserve',
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export const leaveGame = (req, res) => {
+  try {
+    const { id: game_id } = req.params
+    const { user_id } = req.body
+
+    if (!user_id) {
+      return res.status(400).json({ error: 'User ID is required' })
+    }
+
+    const playerRecord = db
+      .prepare(
+        'SELECT status FROM users_to_games WHERE game_id = ? AND user_id = ?'
+      )
+      .get(game_id, user_id)
+
+    if (!playerRecord) {
+      return res.status(404).json({ error: 'Player record not found' })
+    }
+
+    db.prepare(
+      'DELETE FROM users_to_games WHERE game_id = ? AND user_id = ?'
+    ).run(game_id, user_id)
+
+    const tgId = db.prepare('SELECT tg_id FROM users WHERE id = ?').get(user_id)
+
+    if (tgId && parseInt(tgId.tg_id) < 0) {
+      db.prepare('DELETE FROM users WHERE tg_id = ?').run(tgId.tg_id)
+    }
+
+    res.json({
+      success: true,
+      message: 'Successfully left the game',
+    })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export const promotePlayer = (req, res) => {
+  try {
+    const { id: game_id } = req.params
+    const { user_id } = req.body
+
+    if (!user_id) {
+      return res.status(400).json({ error: 'User ID is required' })
+    }
+
+    const playerRecord = db
+      .prepare(
+        'SELECT status FROM users_to_games WHERE game_id = ? AND user_id = ?'
+      )
+      .get(game_id, user_id)
+
+    if (!playerRecord) {
+      return res.status(404).json({ error: 'Player not found in this game' })
+    }
+
+    if (playerRecord.status === 'main') {
+      return res
+        .status(400)
+        .json({ error: 'Player is already in the main roster' })
+    }
+
+    const game = db
+      .prepare('SELECT max_players FROM games WHERE id = ?')
+      .get(game_id)
+    const { current_main_count } = db
+      .prepare(
+        "SELECT COUNT(*) as current_main_count FROM users_to_games WHERE game_id = ? AND status = 'main'"
+      )
+      .get(game_id)
+
+    if (current_main_count >= game.max_players) {
+      return res.status(400).json({
+        error: 'Main roster is full. Remove someone first or increase limit.',
+      })
+    }
+
+    const stmt = db.prepare(`
+      UPDATE users_to_games 
+      SET status = 'main' 
+      WHERE game_id = ? AND user_id = ?
+    `)
+
+    const info = stmt.run(game_id, user_id)
+
+    if (info.changes > 0) {
+      res.json({
+        success: true,
+        message: 'Player promoted to main roster successfully',
+      })
+    } else {
+      res.status(500).json({ error: 'Failed to update player status' })
+    }
+  } catch (err) {
+    console.error(err)
     res.status(500).json({ error: 'Internal server error' })
   }
 }

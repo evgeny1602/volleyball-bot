@@ -9,4 +9,8 @@ router.get('/:id', gameController.getGameById)
 router.put('/:id', gameController.updateGame)
 router.delete('/:id', gameController.deleteGame)
 
+router.post('/:id/join', gameController.joinGame)
+router.post('/:id/leave', gameController.leaveGame)
+router.post('/:id/promote', gameController.promotePlayer)
+
 export default router
