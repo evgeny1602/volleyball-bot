@@ -11,7 +11,7 @@ import {
   ArrowUpCircle,
 } from 'lucide-react'
 
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/hooks/useUsers'
 import { GameInfoRow } from '@/ui/GameInfoRow'
 import { StatusBadge } from './StatusBadge'
 import { Loader } from '@/ui/Loader'
@@ -304,6 +304,7 @@ export const GameCardExtForm = ({
             <UserPlus size={18} />
             Добавить гостя
           </Button>
+
           <Button
             variant="secondary"
             onClick={actions.editGame}
@@ -311,6 +312,7 @@ export const GameCardExtForm = ({
             <FilePenLine size={18} />
             Изменить игру
           </Button>
+
           <Button
             variant="danger"
             onClick={actions.deleteGame}

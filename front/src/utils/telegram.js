@@ -35,6 +35,8 @@ export const tgGetAppData = () => {
   return WebApp.initDataUnsafe
 }
 
+export const tgGetUser = () => tgGetAppData().user
+
 export const tgVibro = (pattern) => {
   if (isDev) return
 

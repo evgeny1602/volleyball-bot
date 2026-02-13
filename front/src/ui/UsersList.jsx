@@ -1,4 +1,4 @@
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/hooks/useUsers'
 import { useEffect } from 'react'
 import { UserCard } from '@/ui/UserCard'
 import { Loader } from '@/ui/Loader'

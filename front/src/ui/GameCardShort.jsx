@@ -16,10 +16,15 @@ export const GameCardShort = ({ user, game, onChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [mode, setMode] = useState('view')
 
-  const handleClick = () => {
+  const handleCardClick = () => {
     tgVibro('medium')
     setMode('view')
     setIsModalOpen(true)
+  }
+
+  const handleFormSubmit = (formData) => {
+    onChange(formData)
+    setMode('view')
   }
 
   const handleModalClosed = () => {
@@ -27,12 +32,12 @@ export const GameCardShort = ({ user, game, onChange }) => {
     onChange?.()
   }
 
-  console.log(game)
+  // console.log(game)
 
   return (
     <>
       <GameCardShortContainer
-        onClick={handleClick}
+        onClick={handleCardClick}
         className="flex flex-row"
       >
         <GameCardShortLeft
@@ -81,6 +86,7 @@ export const GameCardShort = ({ user, game, onChange }) => {
             <GameForm
               initialFormData={gameToFormData(game)}
               onCancel={() => setMode('view')}
+              onSubmit={handleFormSubmit}
             />
           )}
         </Modal>

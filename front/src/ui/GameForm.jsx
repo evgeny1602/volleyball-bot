@@ -84,7 +84,7 @@ export const GameForm = ({ onSubmit, onCancel, initialFormData }) => {
         <>
           <SubmitButton
             validation={validation}
-            onClick={() => onSubmit(formData).then(onCancel)}
+            onClick={() => onSubmit(formData)}
           />
           <ClearButton onClick={() => setFormData(EMPTY_FORM_DATA)} />
           <CancelButton onClick={onCancel} />

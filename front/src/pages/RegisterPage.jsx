@@ -1,7 +1,7 @@
 import { Loader } from '@/ui/Loader'
 import { useState } from 'react'
 import { useTelegramUser } from '@/hooks/useTelegramUser'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/hooks/useUsers'
 import { RegisterForm } from '@/ui/RegisterForm'
 import { RegisterWelcome } from '@/ui/RegisterWelcome'
 import { RegisterError } from '@/ui/RegisterError'

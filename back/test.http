@@ -1,11 +1,14 @@
 GET http://localhost:3000/api/users
+x-debug-mode: 1
 
 ###
 
 GET http://localhost:3000/api/users/12345
+x-debug-mode: 1
 
 ###
 POST http://localhost:3000/api/users
+x-debug-mode: 1
 Content-Type: application/json
 
 {
@@ -21,14 +24,17 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:3000/api/users/123456
+x-debug-mode: 1
 
 ###
 
 PATCH http://localhost:3000/api/users/approve/12345
+x-debug-mode: 1
 
 ###
 
 POST http://localhost:3000/api/games
+x-debug-mode: 1
 Content-Type: application/json
 
 {
@@ -46,14 +52,17 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/api/games/7
+x-debug-mode: 1
 
 ###
 
 GET http://localhost:3000/api/games/
+x-debug-mode: 1
 
 ###
 
 PUT http://localhost:3000/api/games/2
+x-debug-mode: 1
 Content-Type: application/json
 
 {
@@ -67,14 +76,17 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:3000/api/games/16
+x-debug-mode: 1
 
 ###
 
 GET http://localhost:3000/api/games/6/players
+x-debug-mode: 1
 
 ###
 
 POST http://localhost:3000/api/games/7/join
+x-debug-mode: 1
 Content-Type: application/json
 
 {
@@ -84,6 +96,7 @@ Content-Type: application/json
 ###
 
 POST http://localhost:3000/api/games/7/leave
+x-debug-mode: 1
 Content-Type: application/json
 
 {
@@ -93,6 +106,7 @@ Content-Type: application/json
 ###
 
 POST http://localhost:3000/api/games/7/promote
+x-debug-mode: 1
 Content-Type: application/json
 
 {
@@ -102,6 +116,7 @@ Content-Type: application/json
 ###
 
 POST http://localhost:3000/api/users/guest
+x-debug-mode: 1
 Content-Type: application/json
 
 {

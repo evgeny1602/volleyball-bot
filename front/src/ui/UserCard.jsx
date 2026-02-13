@@ -1,5 +1,5 @@
 import { UserAvatar } from '@/ui/UserAvatar'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/hooks/useUsers'
 import { cn } from '@/utils/cn'
 import { DeleteButton } from '@/ui/buttons/DeleteButton'
 import { RejectButton } from '@/ui/buttons/RejectButton'

@@ -3,15 +3,20 @@ import { Loader } from '@/ui/Loader'
 import { NoGames } from '@/ui/NoGames'
 import { GameCardShort } from '@/ui/GameCardShort'
 import { useEffect } from 'react'
-import { useUser } from '@/hooks/useUser'
+import { useUser } from '@/hooks/useUsers'
 
 export const GamesList = () => {
-  const { games, getGames, gameIsLoading } = useGame()
+  const { games, getGames, gameIsLoading, updateGame } = useGame()
   const { user, userIsLoading } = useUser()
 
   useEffect(() => {
     getGames()
   }, [])
+
+  const handleGameChange = async (gameId, formData) => {
+    await updateGame(gameId, formData)
+    getGames()
+  }
 
   if (gameIsLoading || userIsLoading) return <Loader />
 
@@ -23,7 +28,7 @@ export const GamesList = () => {
         <GameCardShort
           key={index}
           game={game}
-          onChange={getGames}
+          onChange={(formData) => handleGameChange(game.id, formData)}
           user={user}
         />
       ))}
