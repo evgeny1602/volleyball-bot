@@ -35,7 +35,8 @@ const GameCardExtContainer = ({ children }) => (
 
 const PlayerCard = ({ player, onPromote, onRemove, canPromote }) => {
   const formattedDate = useMemo(
-    () => dateTimeFormatGameCard(new Date(player.login_date)),
+    () =>
+      dateTimeFormatGameCard(new Date(player.login_date.replace(/-/g, '/'))),
     [player.login_date]
   )
 
