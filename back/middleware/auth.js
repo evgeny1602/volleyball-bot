@@ -6,7 +6,9 @@ export const validateTelegramData = (req, res, next) => {
     return next()
   }
 
-  const initData = req.headers['x-telegram-init-data']
+  const initData = JSON.parse(req.headers['x-telegram-init-data'])
+  initData.user = JSON.stringify(initData.user)
+
   if (!initData) return res.status(401).json({ error: 'No Telegram data' })
 
   try {
@@ -18,6 +20,8 @@ export const validateTelegramData = (req, res, next) => {
     for (const [key, value] of urlParams.entries()) {
       if (key !== 'hash') dataToVerify.push(`${key}=${value}`)
     }
+
+    console.log(dataToVerify)
 
     const secretKey = crypto
       .createHmac('sha256', 'WebAppData')

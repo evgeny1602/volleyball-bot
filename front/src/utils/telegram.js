@@ -3,21 +3,22 @@ import WebApp from '@twa-dev/sdk'
 const isDev = import.meta.env.DEV
 
 const fakeAppData = {
-  query_id: 'AAHdF6IQAAAAAN0XohD9sL9E',
   user: {
-    id: 12345,
-    first_name: 'Ivan',
-    last_name: 'Ivanov',
-    username: 'ivan_dev',
+    id: 450980607,
+    first_name: 'Evgeny',
+    last_name: '',
+    username: 'evgeny1602',
     language_code: 'ru',
-    is_premium: true,
     allows_write_to_pm: true,
-    photo_url: 'https://t.me/i/userpic/160/example.jpg',
+    photo_url:
+      'https://t.me/i/userpic/320/9yAlG4r7_30UQWSB-ks7Lo929kSPgx1qAbKF4Y0Qg2o.svg',
   },
-  auth_date: '1700000000',
-  hash: '89d7b1d...567',
-  chat_type: 'sender',
-  chat_instance: '84729384729',
+  chat_instance: '4903906999596755832',
+  chat_type: 'private',
+  auth_date: '1770964724',
+  signature:
+    '2_PRqmznGRGM-G85eCNoP_rqDknmMouzuwp9GSDo_Smm_GTTHLu8fzuQAA7FZLaqDjKf1RcEq1XAwEM9xNSXCA',
+  hash: 'bce28c1b6abd5caefdcbd6123da0f6d8c514da471e52567d6e17aae5fd791ff7',
 }
 
 export const tgInit = () => {
@@ -33,6 +34,12 @@ export const tgGetAppData = () => {
   if (isDev) return fakeAppData
 
   return WebApp.initDataUnsafe
+}
+
+export const tgGetAppDataRaw = () => {
+  if (isDev) return fakeAppData
+
+  return WebApp.initData
 }
 
 export const tgGetUser = () => tgGetAppData().user

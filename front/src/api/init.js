@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { tgGetAppData } from '@/utils/telegram'
+import { tgGetAppDataRaw } from '@/utils/telegram'
 
 export const api = axios.create({
   baseURL: '/api',
@@ -7,7 +7,7 @@ export const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-  config.headers['X-Telegram-Init-Data'] = JSON.stringify(tgGetAppData())
+  config.headers['X-Telegram-Init-Data'] = tgGetAppDataRaw()
 
   return config
 })
