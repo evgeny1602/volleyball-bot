@@ -7,7 +7,14 @@ import {
 
 export const GameCardShortLeft = ({ startDatetime, duration }) => {
   const timeData = useMemo(() => {
-    const start = new Date(startDatetime)
+    const safeIsoString = startDatetime?.replace(/-/g, '/')
+
+    const start = new Date(safeIsoString)
+
+    if (isNaN(start.getTime())) {
+      return { date: '—', day: '—', start: '—', end: '—' }
+    }
+
     const end = new Date(start.getTime() + duration * 60000)
 
     return {
