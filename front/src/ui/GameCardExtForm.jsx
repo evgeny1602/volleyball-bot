@@ -28,6 +28,7 @@ import { useGameActions, useGame } from '@/hooks/games'
 import { useCurrentUser, useUserMutations } from '@/hooks/users'
 import { LoaderFullScreen } from '@/ui/LoaderFullscreen'
 import { tgConfirm } from '@/utils/telegram'
+import { safariDateFix } from '@/utils/formatters'
 
 const GameCardExtContainer = ({ children }) => (
   <div className={cn('mt-4 flex flex-col gap-6')}>{children}</div>
@@ -35,8 +36,7 @@ const GameCardExtContainer = ({ children }) => (
 
 const PlayerCard = ({ player, onPromote, onRemove, canPromote }) => {
   const formattedDate = useMemo(
-    () =>
-      dateTimeFormatGameCard(new Date(player.login_date.replace(/-/g, '/'))),
+    () => dateTimeFormatGameCard(new Date(safariDateFix(player.login_date))),
     [player.login_date]
   )
 
@@ -183,7 +183,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
   const game = data.game
   const signInText = game.mode === 'main' ? 'Записаться' : 'Записаться в резерв'
   const isJoined = game.players.some((p) => p.tg_id === user.tg_id)
-  const gameDate = new Date(game.start_datetime.replace(/-/g, '/'))
+  const gameDate = new Date(safariDateFix(game.start_datetime))
   const mainCount = game.players.filter((p) => p.status === 'main').length
   const reserveCount = game.players.filter((p) => p.status === 'reserve').length
   const canPromote = mainCount < game.max_players

@@ -4,12 +4,11 @@ import {
   dayOfWeekFameCard,
   timeFormatGameCard,
 } from '@/utils/formatters'
+import { safariDateFix } from '@/utils/formatters'
 
 export const GameCardShortLeft = ({ startDatetime, duration }) => {
   const timeData = useMemo(() => {
-    const safeIsoString = startDatetime?.replace(/-/g, '/')
-
-    const start = new Date(safeIsoString)
+    const start = new Date(safariDateFix(startDatetime))
 
     if (isNaN(start.getTime())) {
       return { date: '—', day: '—', start: '—', end: '—' }
