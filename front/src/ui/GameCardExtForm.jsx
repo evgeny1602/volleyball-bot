@@ -128,8 +128,8 @@ const PlayersSection = ({
 
       <div className="bg-white p-3 border-bot-grey-200 rounded-b-3xl border">
         {players.filter((p) => p.status === 'main').length > 0 && (
-          <div className="w-full flex flex-col items-center -mt-2 mb-4">
-            <span className="bg-white px-2 text-center text-bot-grey-400 text-xs -mb-1.5 z-1">
+          <div className="w-full flex flex-col items-center -mt-1 mb-4">
+            <span className="bg-white px-2 text-center text-bot-grey-400 text-xs -mb-2 z-1">
               Основа [{mainCount}]
             </span>
             <div className="w-full border-b border-dashed border-bot-grey-300"></div>

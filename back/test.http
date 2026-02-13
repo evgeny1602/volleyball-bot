@@ -38,10 +38,10 @@ x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "name": "Тренировка в Юбилейном 11",
+    "name": "Тренировка в Юбилейном 14",
     "location": "СП Юбилейный",
     "address": "пр. Ленина 203",
-    "date": "17.02.2026",
+    "date": "18.02.2026",
     "time": "20:00",
     "duration": "120",
     "description": "Низкий уровень сложности",
