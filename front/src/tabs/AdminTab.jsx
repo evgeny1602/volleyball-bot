@@ -5,18 +5,6 @@ import { Users, Volleyball } from 'lucide-react'
 import { AdminTabContainer } from '@/ui/AdminTabContainer'
 import { useGame } from '@/hooks/useGame'
 
-const NEW_GAME_DATA = {
-  name: '',
-  location: '',
-  address: '',
-  date: '',
-  time: '',
-  duration: '',
-  description: '',
-  price: '',
-  maxPlayers: '',
-}
-
 export const AdminTab = () => {
   const { createGame } = useGame()
 
@@ -26,7 +14,6 @@ export const AdminTab = () => {
       Icon: Volleyball,
       ModalContent: ({ onCancel }) => (
         <GameForm
-          initialState={NEW_GAME_DATA}
           onSubmit={createGame}
           onCancel={onCancel}
         />

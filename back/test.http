@@ -34,7 +34,7 @@ Content-Type: application/json
 {
     "name": "Тренировка в Юбилейном 2",
     "location": "СП Юбилейный",
-    "address": "пр.Ленина 203",
+    "address": "пр. Ленина 203",
     "date": "12.02.2026",
     "time": "20:00",
     "duration": "120",

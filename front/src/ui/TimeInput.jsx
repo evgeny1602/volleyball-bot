@@ -7,7 +7,7 @@ import { tgVibro } from '@/utils/telegram'
 import { InputLabel } from '@/ui/InputLabel'
 import { cn } from '@/utils/cn'
 
-export const TimeInput = ({ value = '', onChange, label }) => {
+export const TimeInput = ({ value = '', onChange, label, className }) => {
   const imaskRef = useRef(null)
 
   const handleChange = (val) => {
@@ -29,7 +29,7 @@ export const TimeInput = ({ value = '', onChange, label }) => {
   const hasValue = value && value.replace(/[^0-9]/g, '').length > 0
 
   return (
-    <div className="flex flex-col gap-1.5 w-full">
+    <div className={cn('flex flex-col gap-1.5 w-full', className)}>
       {label && <InputLabel>{label}</InputLabel>}
 
       <div className="relative flex items-center">

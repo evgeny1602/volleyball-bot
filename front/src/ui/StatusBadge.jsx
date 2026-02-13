@@ -15,7 +15,11 @@ const STATUS_MAP = {
   },
 }
 
-export const StatusBadge = ({ status = 'out' }) => {
+export const StatusBadge = ({ user, game }) => {
+  const status =
+    !user || !game?.players
+      ? 'out'
+      : game.players.find((p) => p.tg_id === user.tg_id)?.status || 'out'
   const { label, classes } = STATUS_MAP[status] || STATUS_MAP.out
 
   return (

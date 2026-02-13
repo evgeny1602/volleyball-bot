@@ -1,6 +1,4 @@
-import { useMemo, useState } from 'react'
-import { useUser } from '@/hooks/useUser'
-import { Loader } from '@/ui/Loader'
+import { useState } from 'react'
 import { StatusBadge } from '@/ui/StatusBadge'
 import { GameCardShortLeft } from '@/ui/GameCardShortLeft'
 import { GameCardShortContainer } from '@/ui/GameCardShortContainer'
@@ -12,30 +10,11 @@ import { GameAddress } from '@/ui/GameAddress'
 import { GamePrice } from '@/ui/GamePrice'
 import { GamePlayers } from '@/ui/GamePlayers'
 import { GameForm } from './GameForm'
+import { gameToFormData } from '@/utils/formatters'
 
-const gameToFormData = (game) => {
-  const dateParts = game.start_datetime.split(' ')
-  const [y, m, d] = dateParts[0].split('-')
-
-  return {
-    ...game,
-    location: game.location_name,
-    address: game.location_address,
-    maxPlayers: game.max_players,
-    date: `${d}.${m}.${y}`,
-    time: dateParts[1],
-  }
-}
-
-export const GameCardShort = ({ game, onChange }) => {
-  const { user, userIsLoading } = useUser()
+export const GameCardShort = ({ user, game, onChange }) => {
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [mode, setMode] = useState('view')
-
-  const status = useMemo(() => {
-    if (!user || !game?.players) return 'out'
-    return game.players.find((p) => p.tg_id === user.tg_id)?.status || 'out'
-  }, [user, game.players])
 
   const handleClick = () => {
     tgVibro('medium')
@@ -47,13 +26,6 @@ export const GameCardShort = ({ game, onChange }) => {
     setIsModalOpen(false)
     onChange?.()
   }
-
-  if (userIsLoading)
-    return (
-      <GameCardShortContainer>
-        <Loader variant="small" />
-      </GameCardShortContainer>
-    )
 
   console.log(game)
 
@@ -81,7 +53,10 @@ export const GameCardShort = ({ game, onChange }) => {
 
             <div className="flex flex-row flex-wrap justify-between items-center mt-auto gap-x-1">
               <GamePrice game={game} />
-              <StatusBadge status={status} />
+              <StatusBadge
+                user={user}
+                game={game}
+              />
               <GamePlayers game={game} />
             </div>
           </div>
@@ -93,15 +68,18 @@ export const GameCardShort = ({ game, onChange }) => {
           onClose={handleModalClosed}
           headerText={game.name}
         >
-          {mode == 'view' ? (
+          {mode == 'view' && (
             <GameCardExtForm
+              user={user}
               gameId={game.id}
               onCancel={handleModalClosed}
               onEdit={() => setMode('edit')}
             />
-          ) : (
+          )}
+
+          {mode == 'edit' && (
             <GameForm
-              initialState={gameToFormData(game)}
+              initialFormData={gameToFormData(game)}
               onCancel={() => setMode('view')}
             />
           )}

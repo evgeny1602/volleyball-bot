@@ -31,3 +31,17 @@ export const dateTimeFormatGameCard = (date) => {
 
   return `${day}.${month}.${year} ${hours}:${minutes}`
 }
+
+export const gameToFormData = (game) => {
+  const dateParts = game.start_datetime.split(' ')
+  const [y, m, d] = dateParts[0].split('-')
+
+  return {
+    ...game,
+    location: game.location_name,
+    address: game.location_address,
+    maxPlayers: game.max_players,
+    date: `${d}.${m}.${y}`,
+    time: dateParts[1],
+  }
+}

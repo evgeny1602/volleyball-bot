@@ -132,8 +132,14 @@ const PlayersSection = ({ players, onRemove, onPromote }) => {
   )
 }
 
-export const GameCardExtForm = ({ gameId, onCancel, onChange, onEdit }) => {
-  const { user, userIsLoading, createGuestUser } = useUser()
+export const GameCardExtForm = ({
+  user,
+  gameId,
+  onCancel,
+  onChange,
+  onEdit,
+}) => {
+  const { userIsLoading, createGuestUser } = useUser()
   const {
     currentGame: game,
     getGame,
