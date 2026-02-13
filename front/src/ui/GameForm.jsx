@@ -10,6 +10,7 @@ import { SubmitButton } from '@/ui/buttons/SubmitButton'
 import { ClearButton } from '@/ui/buttons/ClearButton'
 import { CancelButton } from '@/ui/buttons/CancelButton'
 import { BaseForm } from '@/ui/BaseForm'
+import { useGameActions } from '@/hooks/games'
 
 const EMPTY_FORM_DATA = {
   name: '',
@@ -64,7 +65,9 @@ const FIELDS_CONFIG = [
   },
 ]
 
-export const GameForm = ({ onSubmit, onCancel, initialFormData }) => {
+export const GameForm = ({ onCancel, initialFormData }) => {
+  const { createGame, updateGame } = useGameActions()
+
   const [formData, setFormData] = useState(initialFormData || EMPTY_FORM_DATA)
   const validation = useMemo(() => GAME_SCHEMA.safeParse(formData), [formData])
 
@@ -73,6 +76,23 @@ export const GameForm = ({ onSubmit, onCancel, initialFormData }) => {
       ...prev,
       [id]: isNumber ? (value === '' ? '' : Number(value)) : value,
     }))
+  }
+
+  const handleSubmitClick = async () => {
+    if (initialFormData) {
+      console.log('Обновление', initialFormData.id, formData)
+      await updateGame({ id: initialFormData.id, data: formData })
+    }
+
+    if (!initialFormData) {
+      await createGame(formData)
+    }
+
+    onCancel?.()
+  }
+
+  const handleClearClick = () => {
+    setFormData(EMPTY_FORM_DATA)
   }
 
   return (
@@ -84,9 +104,9 @@ export const GameForm = ({ onSubmit, onCancel, initialFormData }) => {
         <>
           <SubmitButton
             validation={validation}
-            onClick={() => onSubmit(formData)}
+            onClick={handleSubmitClick}
           />
-          <ClearButton onClick={() => setFormData(EMPTY_FORM_DATA)} />
+          <ClearButton onClick={handleClearClick} />
           <CancelButton onClick={onCancel} />
         </>
       }

@@ -1,4 +1,5 @@
 import { cn } from '@/utils/cn'
+import { useCurrentUser } from '@/hooks/users'
 
 const STATUS_MAP = {
   out: {
@@ -15,7 +16,9 @@ const STATUS_MAP = {
   },
 }
 
-export const StatusBadge = ({ user, game }) => {
+export const StatusBadge = ({ game }) => {
+  const { user } = useCurrentUser()
+
   const status =
     !user || !game?.players
       ? 'out'

@@ -1,9 +1,28 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { usersApi } from '@/api/users'
+import { tgGetUser } from '@/utils/telegram'
 
 export const USER_KEYS = {
   all: ['users'],
   detail: (tgId) => ['users', tgId],
+}
+
+export const useCurrentUser = () => {
+  const tgUser = tgGetUser()
+  const tgId = tgUser.id
+
+  const query = useQuery({
+    queryKey: ['users', 'me', tgId],
+    queryFn: () => usersApi.getByTgId(tgId),
+    enabled: !!tgId,
+    staleTime: 5 * 60 * 1000,
+  })
+
+  return {
+    ...query,
+    user: query.data?.user || null,
+    tgUser,
+  }
 }
 
 export const useUsers = () => {

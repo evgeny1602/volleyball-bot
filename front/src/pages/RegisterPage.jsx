@@ -1,31 +1,26 @@
 import { Loader } from '@/ui/Loader'
 import { useState } from 'react'
-import { useTelegramUser } from '@/hooks/useTelegramUser'
-import { useUser } from '@/hooks/useUsers'
 import { RegisterForm } from '@/ui/RegisterForm'
 import { RegisterWelcome } from '@/ui/RegisterWelcome'
 import { RegisterError } from '@/ui/RegisterError'
+import { useCurrentUser, useUserMutations } from '@/hooks/users'
 
-export const RegisterPage = ({ onRegistered }) => {
-  const { tgUserData } = useTelegramUser()
-  const { createUser, userIsLoading } = useUser()
+export const RegisterPage = () => {
+  const { tgUser, isLoading } = useCurrentUser()
+  const { createUser, isPending } = useUserMutations()
 
   const [isErrorVisible, setIsErrorVisible] = useState(false)
 
-  const handleRegisterSubmit = async (formData) => {
-    const response = await createUser({
-      tg_id: tgUserData.id,
-      tg_username: tgUserData.username,
-      tg_avatar_url: tgUserData.photo_url,
+  const handleCreateUser = async (formData) => {
+    await createUser({
       ...formData,
+      tg_id: tgUser.id,
+      tg_username: tgUser.username,
+      tg_avatar_url: tgUser.photo_url,
     })
-
-    if (response.status === 201) {
-      onRegistered()
-    }
   }
 
-  if (userIsLoading) {
+  if (isLoading || isPending) {
     return <Loader />
   }
 
@@ -34,8 +29,8 @@ export const RegisterPage = ({ onRegistered }) => {
       <RegisterWelcome />
 
       <RegisterForm
-        isLoading={userIsLoading}
-        onSubmit={handleRegisterSubmit}
+        isLoading={isLoading || isPending}
+        onSubmit={handleCreateUser}
         onError={() => setIsErrorVisible(true)}
       />
 

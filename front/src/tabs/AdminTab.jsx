@@ -3,21 +3,13 @@ import { UsersList } from '@/ui/UsersList'
 import { GameForm } from '@/ui/GameForm'
 import { Users, Volleyball } from 'lucide-react'
 import { AdminTabContainer } from '@/ui/AdminTabContainer'
-import { useGame } from '@/hooks/useGame'
 
 export const AdminTab = () => {
-  const { createGame } = useGame()
-
   const ADMIN_ACTIONS = [
     {
       label: 'Создать игру',
       Icon: Volleyball,
-      ModalContent: ({ onCancel }) => (
-        <GameForm
-          onSubmit={createGame}
-          onCancel={onCancel}
-        />
-      ),
+      ModalContent: ({ onCancel }) => <GameForm onCancel={onCancel} />,
     },
     {
       label: 'Игроки',

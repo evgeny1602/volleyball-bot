@@ -16,16 +16,15 @@ export const RegisterForm = ({ onSubmit, onError, isLoading }) => {
   const handleAction = () => {
     const result = registerSchema.safeParse({ fio, gender, birthday, phone })
 
-    if (!result.success) {
+    console.log({ fio, gender, birthday, phone })
+
+    if (result.success) {
+      tgVibro('success')
+      onSubmit({ fio, gender, birthday, phone })
+    } else {
       tgVibro('error')
-
-      if (onError) onError()
-
-      return
+      onError?.()
     }
-
-    tgVibro('success')
-    onSubmit({ fio, gender, birthday, phone })
   }
 
   return (
@@ -45,6 +44,7 @@ export const RegisterForm = ({ onSubmit, onError, isLoading }) => {
       <DateInput
         label="Дата рождения"
         onChange={(val) => setBirthday(val)}
+        value={birthday}
       />
 
       <PhoneInput

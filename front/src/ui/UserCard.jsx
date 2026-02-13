@@ -1,9 +1,10 @@
 import { UserAvatar } from '@/ui/UserAvatar'
-import { useUser } from '@/hooks/useUsers'
 import { cn } from '@/utils/cn'
 import { DeleteButton } from '@/ui/buttons/DeleteButton'
 import { RejectButton } from '@/ui/buttons/RejectButton'
 import { ApproveButton } from '@/ui/buttons/ApproveButton'
+import { useUserMutations } from '@/hooks/users'
+import { Loader } from '@/ui/Loader'
 
 const formatDate = (dateString) => {
   if (!dateString) return ''
@@ -13,45 +14,50 @@ const formatDate = (dateString) => {
   )
 }
 
-export const UserCard = ({ user, onUserChange, className }) => {
-  const { rejectUser, approveUser, deleteUser, userIsLoading } = useUser()
+const UserCardContainer = ({ children, className }) => (
+  <div
+    className={cn('text-bot-grey-800 flex flex-col gap-4 w-full', className)}
+  >
+    {children}
+  </div>
+)
 
-  const handleAction = async (actionFn) => {
-    const res = await actionFn(user.tg_id)
-    if (res?.success && onUserChange) {
-      onUserChange()
-    }
-  }
-
-  const isPlayer = user.role === 'player'
+export const UserCard = ({ user, className }) => {
+  const { approveUser, deleteUser, rejectUser, isPending } = useUserMutations()
 
   const BUTTONS = [
     {
       Component: ApproveButton,
       label: 'Одобрить',
       show: user.status === 'registered',
-      onClick: () => handleAction(approveUser),
+      onClick: () => approveUser(user.tg_id),
     },
     {
       Component: RejectButton,
       label: 'Отклонить',
       show: user.status === 'registered',
       confirmText: 'Вы уверены, что хотите отклонить заявку?',
-      onClick: () => handleAction(rejectUser),
+      onClick: async () => await rejectUser(user.tg_id),
     },
     {
       Component: DeleteButton,
       label: 'Удалить',
       show: ['rejected', 'approved'].includes(user.status),
       confirmText: 'Вы уверены, что хотите удалить игрока?',
-      onClick: () => handleAction(deleteUser),
+      onClick: () => deleteUser(user.tg_id),
     },
   ]
 
+  if (isPending) {
+    return (
+      <UserCardContainer className={className}>
+        <Loader variant="small" />
+      </UserCardContainer>
+    )
+  }
+
   return (
-    <div
-      className={cn('text-bot-grey-800 flex flex-col gap-4 w-full', className)}
-    >
+    <UserCardContainer className={className}>
       <div className="flex flex-row items-center gap-2">
         <UserAvatar url={user.tg_avatar_url} />
         <div>
@@ -64,13 +70,12 @@ export const UserCard = ({ user, onUserChange, className }) => {
         </div>
       </div>
 
-      {isPlayer && (
+      {user.role === 'player' && (
         <div className="flex flex-row gap-2">
           {BUTTONS.filter((btn) => btn.show).map(
-            ({ Component, label, show, ...props }, idx) => (
+            ({ Component, label, ...props }, idx) => (
               <Component
                 key={idx}
-                disabled={userIsLoading}
                 {...props}
               >
                 {label}
@@ -79,6 +84,6 @@ export const UserCard = ({ user, onUserChange, className }) => {
           )}
         </div>
       )}
-    </div>
+    </UserCardContainer>
   )
 }

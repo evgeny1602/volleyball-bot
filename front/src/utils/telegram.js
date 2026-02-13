@@ -2,6 +2,9 @@ import WebApp from '@twa-dev/sdk'
 
 const isDev = import.meta.env.DEV
 
+const fakeAppDataRaw =
+  'user=%7B%22id%22%3A450980607%2C%22first_name%22%3A%22Evgeny%22%2C%22last_name%22%3A%22%22%2C%22username%22%3A%22evgeny1602%22%2C%22language_code%22%3A%22ru%22%2C%22allows_write_to_pm%22%3Atrue%2C%22photo_url%22%3A%22https%3A%5C%2F%5C%2Ft.me%5C%2Fi%5C%2Fuserpic%5C%2F320%5C%2F9yAlG4r7_30UQWSB-ks7Lo929kSPgx1qAbKF4Y0Qg2o.svg%22%7D&chat_instance=4903906999596755832&chat_type=private&auth_date=1770964724&signature=2_PRqmznGRGM-G85eCNoP_rqDknmMouzuwp9GSDo_Smm_GTTHLu8fzuQAA7FZLaqDjKf1RcEq1XAwEM9xNSXCA&hash=bce28c1b6abd5caefdcbd6123da0f6d8c514da471e52567d6e17aae5fd791ff7'
+
 const fakeAppData = {
   user: {
     id: 450980607,
@@ -37,7 +40,7 @@ export const tgGetAppData = () => {
 }
 
 export const tgGetAppDataRaw = () => {
-  if (isDev) return fakeAppData
+  if (isDev) return fakeAppDataRaw
 
   return WebApp.initData
 }

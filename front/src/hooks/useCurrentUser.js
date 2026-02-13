@@ -15,7 +15,7 @@ export const useCurrentUser = () => {
 
   return {
     ...query,
-    user: query.data,
+    user: query.data?.user || null,
     tgUser,
   }
 }

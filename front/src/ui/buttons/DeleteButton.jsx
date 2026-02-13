@@ -5,7 +5,7 @@ import { tgConfirm } from '@/utils/telegram'
 export const DeleteButton = ({ onClick, children, confirmText, ...props }) => {
   const handleClick = async () => {
     const isConfirmed = await tgConfirm(confirmText)
-    if (isConfirmed && onClick) onClick
+    if (isConfirmed) onClick?.()
   }
 
   return (
