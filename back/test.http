@@ -12,8 +12,8 @@ x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "tg_id": "123456",
-    "tg_username": "dev_test",
+    "tg_id": "123460",
+    "tg_username": "dev_test5",
     "tg_avatar_url": "https://example.com/avatar.jpg",
     "fio": "Иванов Иван",
     "gender": "male",

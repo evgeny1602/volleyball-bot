@@ -38,7 +38,7 @@ export const GamesList = ({ isLoading, games }) => {
   }
 
   return (
-    <>
+    <div className="h-screen overflow-y-auto scrollable-content pb-70">
       <div className="w-full flex flex-col gap-4">
         {games.map((game, index) => (
           <GameCardShort
@@ -73,6 +73,6 @@ export const GamesList = ({ isLoading, games }) => {
           />
         </Modal>
       )}
-    </>
+    </div>
   )
 }
