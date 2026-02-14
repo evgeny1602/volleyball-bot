@@ -25,7 +25,7 @@ const getGamePlayers = (id) =>
 
 export const getAllGames = (req, res) => {
   try {
-    const stmt = db.prepare('SELECT * FROM games ORDER BY start_datetime DESC')
+    const stmt = db.prepare('SELECT * FROM games ORDER BY start_datetime ASC')
     const games = stmt.all()
     const data = games.map((game) => ({
       ...game,
