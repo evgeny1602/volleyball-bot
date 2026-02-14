@@ -31,7 +31,7 @@ import { tgConfirm } from '@/utils/telegram'
 import { safariDateFix } from '@/utils/formatters'
 
 const GameCardExtContainer = ({ children }) => (
-  <div className={cn('mt-4 flex flex-col gap-6')}>{children}</div>
+  <div className="mt-4 flex flex-col gap-6 scrollable-content">{children}</div>
 )
 
 const PlayerCard = ({ player, onPromote, onRemove, canPromote }) => {
