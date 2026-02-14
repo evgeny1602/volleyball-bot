@@ -36,26 +36,36 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
     onSelect?.(date)
   }
 
+  // Обработчик завершения перетаскивания
+  const handleDragEnd = (event, info) => {
+    const swipeThreshold = 50 // порог чувствительности в пикселях
+    if (info.offset.x > swipeThreshold) {
+      handlePrevClick()
+    } else if (info.offset.x < -swipeThreshold) {
+      handleNextClick()
+    }
+  }
+
   return (
     <div
       className={cn(
-        'flex flex-col items-center bg-white rounded-4xl shadow-sm overflow-hidden w-full pt-2 pb-4',
+        'flex flex-col items-center bg-white rounded-4xl shadow-sm overflow-hidden w-full pt-2 pb-4 touch-none',
         className
       )}
     >
-      {/* Заголовок */}
       <div className="text-md font-light text-bot-grey-800 uppercase tracking-tight">
         {monthYear}
       </div>
 
       <div className="flex items-center w-full px-4 h-13">
-        <ArrowButton
-          direction="left"
-          onClick={handlePrevClick}
-        />
+        <div className="shrink-0">
+          <ArrowButton
+            direction="left"
+            onClick={handlePrevClick}
+          />
+        </div>
 
-        {/* Контейнер с анимацией */}
-        <div className="relative flex-1 overflow-hidden mx-2">
+        <div className="relative flex-1 overflow-hidden mx-2 h-full">
           <AnimatePresence
             initial={false}
             custom={direction}
@@ -64,6 +74,12 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
             <motion.div
               key={currentWeekStart.toISOString()}
               custom={direction}
+              // Настройки Drag
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.7}
+              onDragEnd={handleDragEnd}
+              // Анимации
               variants={{
                 enter: (direction) => ({
                   x: direction > 0 ? '100%' : '-100%',
@@ -82,10 +98,10 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
               animate="center"
               exit="exit"
               transition={{
-                x: { type: 'spring', stiffness: 150, damping: 30 },
+                x: { type: 'spring', stiffness: 200, damping: 25 },
                 opacity: { duration: 0.2 },
               }}
-              className="flex justify-between items-center w-full"
+              className="flex justify-between items-center w-full h-full cursor-grab active:cursor-grabbing"
             >
               {weekDays.map((date, index) => {
                 const isSelected = isSameDay(date, selectedDate)
@@ -93,16 +109,16 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
 
                 return (
                   <button
-                    key={index}
+                    key={date.toISOString()} // Лучше использовать дату как ключ
                     onClick={() => handleDateClick(date)}
                     className={cn(
-                      'date-button w-8 h-8 flex flex-col items-center justify-center rounded-[50%] transition-all duration-200',
+                      'date-button shrink-0 w-9 h-9 flex flex-col items-center justify-center rounded-full transition-all duration-200',
                       isSelected && 'bg-bot-primary text-white'
                     )}
                   >
                     <span
                       className={cn(
-                        'text-xs tracking-tighter font-semibold',
+                        'text-xs tracking-tighter font-semibold pointer-events-none',
                         isSelected
                           ? 'text-white'
                           : isToday
@@ -112,10 +128,9 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
                     >
                       {date.getDate()}
                     </span>
-
                     <span
                       className={cn(
-                        'text-[10px] uppercase tracking-tighter font-regular',
+                        'text-[10px] uppercase tracking-tighter font-regular pointer-events-none',
                         isSelected
                           ? 'text-white'
                           : isToday
@@ -132,10 +147,12 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
           </AnimatePresence>
         </div>
 
-        <ArrowButton
-          direction="right"
-          onClick={handleNextClick}
-        />
+        <div className="shrink-0">
+          <ArrowButton
+            direction="right"
+            onClick={handleNextClick}
+          />
+        </div>
       </div>
     </div>
   )
