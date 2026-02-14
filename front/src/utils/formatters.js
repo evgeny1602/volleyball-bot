@@ -47,3 +47,35 @@ export const gameToFormData = (game) => {
     time: dateParts[1],
   }
 }
+
+export const getWeekDays = (baseDate) => {
+  const days = []
+  const date = new Date(baseDate)
+  const day = date.getDay()
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1)
+  date.setDate(diff)
+
+  for (let i = 0; i < 7; i++) {
+    days.push(new Date(date))
+    date.setDate(date.getDate() + 1)
+  }
+  return days
+}
+
+export const getMonthYear = (weekStart) =>
+  weekStart
+    .toLocaleString('ru-RU', {
+      month: 'long',
+      year: 'numeric',
+    })
+    .replace(' г.', '')
+
+export const isSameDay = (d1, d2) => d1.toDateString() === d2.toDateString()
+
+export const getDateStr = (date) => {
+  const y = date.getFullYear()
+  const m = (date.getMonth() + 1).toString().padStart(2, '0')
+  const d = date.getDate().toString().padStart(2, '0')
+
+  return `${y}-${m}-${d}`
+}

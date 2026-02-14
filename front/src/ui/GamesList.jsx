@@ -7,10 +7,10 @@ import { useModal } from '@/hooks/useModal'
 import { Modal } from '@/ui/Modal'
 import { GameCardExtForm } from '@/ui/GameCardExtForm'
 import { GameForm } from '@/ui/GameForm'
-import { gameToFormData } from '@/utils/formatters'
+import { gameToFormData, getDateStr } from '@/utils/formatters'
 import { tgVibro } from '@/utils/telegram'
 
-export const GamesList = () => {
+export const GamesList = ({ filterDate }) => {
   const { data, isLoading } = useGames()
   const [currentGame, setCurrentGame] = useState(null)
   const {
@@ -26,9 +26,14 @@ export const GamesList = () => {
 
   if (isLoading) return <Loader />
 
-  const games = data?.data || []
+  const filterDateStr = getDateStr(filterDate)
 
-  if (!games) return <NoGames />
+  const games =
+    data?.data.filter(
+      (game) => game.start_datetime.split(' ')[0] == filterDateStr
+    ) || []
+
+  if (games.length == 0) return <NoGames />
 
   const handleCardShortClick = (game) => {
     tgVibro('medium')
@@ -44,7 +49,7 @@ export const GamesList = () => {
 
   return (
     <>
-      <div className="w-full p-4 flex flex-col gap-4">
+      <div className="w-full flex flex-col gap-4">
         {games.map((game, index) => (
           <GameCardShort
             key={index}
