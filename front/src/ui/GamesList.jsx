@@ -1,17 +1,15 @@
 import { Loader } from '@/ui/Loader'
 import { NoGames } from '@/ui/NoGames'
 import { GameCardShort } from '@/ui/GameCardShort'
-import { useGames } from '@/hooks/games'
 import { useState } from 'react'
 import { useModal } from '@/hooks/useModal'
 import { Modal } from '@/ui/Modal'
 import { GameCardExtForm } from '@/ui/GameCardExtForm'
 import { GameForm } from '@/ui/GameForm'
-import { gameToFormData, getDateStr } from '@/utils/formatters'
+import { gameToFormData } from '@/utils/formatters'
 import { tgVibro } from '@/utils/telegram'
 
-export const GamesList = ({ filterDate }) => {
-  const { data, isLoading } = useGames()
+export const GamesList = ({ isLoading, games }) => {
   const [currentGame, setCurrentGame] = useState(null)
   const {
     isOpen: isViewOpen,
@@ -26,20 +24,12 @@ export const GamesList = ({ filterDate }) => {
 
   if (isLoading) return <Loader />
 
-  const filterDateStr = getDateStr(filterDate)
-
-  const games =
-    data?.data.filter(
-      (game) => game.start_datetime.split(' ')[0] == filterDateStr
-    ) || []
-
   if (games.length == 0) return <NoGames />
 
   const handleCardShortClick = (game) => {
     tgVibro('medium')
     setCurrentGame(game)
     openView()
-    // console.log('Game clicked:', game)
   }
 
   const handleOnEdit = (gameId) => {

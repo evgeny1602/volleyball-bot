@@ -79,3 +79,12 @@ export const getDateStr = (date) => {
 
   return `${y}-${m}-${d}`
 }
+
+export const getWeekDates = () => {
+  const d1 = new Date()
+  const d2 = new Date()
+  d2.setDate(d2.getDate() + 7)
+  const start = getDateStr(d1)
+  const end = getDateStr(d2)
+  return { start, end }
+}

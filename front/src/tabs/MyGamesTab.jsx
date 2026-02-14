@@ -1,3 +1,5 @@
+import { MyGamesList } from '@/ui/MyGamesList'
+
 export const MyGamesTab = () => {
-  return <div>Мои игры</div>
+  return <MyGamesList />
 }

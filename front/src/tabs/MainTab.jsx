@@ -1,3 +1,5 @@
+import { MainGamesList } from '@/ui/MainGamesList'
+
 export const MainTab = () => {
-  return <div>Главная</div>
+  return <MainGamesList />
 }
