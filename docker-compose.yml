@@ -18,5 +18,6 @@ services:
       - '3001:3000'
     volumes:
       - ./back/data:/app/data
+      - ./back/uploads:/app/uploads
     environment:
       - NODE_ENV=production
