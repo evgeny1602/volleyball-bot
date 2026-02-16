@@ -5,6 +5,8 @@ import { initDatabase } from './init-db.js'
 import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
 import templateRoutes from './routes/templateRoutes.js'
+import newRoutes from './routes/newRoutes.js'
+import uploadRoutes from './routes/uploadRoutes.js'
 import { validateTelegramData } from './middleware/auth.js'
 
 const app = express()
@@ -22,12 +24,14 @@ app.use(
   })
 )
 app.use(express.json())
-
 app.use(validateTelegramData)
+app.use('/uploads', express.static('uploads'))
 
 app.use('/api/users', userRoutes)
 app.use('/api/games', gameRoutes)
 app.use('/api/templates', templateRoutes)
+app.use('/api/news', newRoutes)
+app.use('/api/upload', uploadRoutes)
 
 app.listen(PORT, () =>
   console.log(

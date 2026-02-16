@@ -1,11 +1,13 @@
 import { ModalButton } from '@/ui/ModalButton'
-import { UsersList } from '@/ui/UsersList'
+import { NewsList } from '@/ui/NewsList'
 import { TemplatesList } from '@/ui/TemplatesList'
 import { BaseForm } from '@/ui/BaseForm'
-import { Users, Volleyball, ClipboardList } from 'lucide-react'
+import { Users, Volleyball, ClipboardList, Megaphone } from 'lucide-react'
 import { AdminTabContainer } from '@/ui/AdminTabContainer'
 import { useGameActions } from '@/hooks/games'
 import { gameSchema } from '@/utils/validations'
+import { gameForm } from '@/utils/forms'
+import { UsersList } from '@/ui/UsersList'
 
 export const AdminTab = () => {
   const { createGame } = useGameActions()
@@ -16,6 +18,7 @@ export const AdminTab = () => {
       Icon: Volleyball,
       ModalContent: ({ onCancel }) => (
         <BaseForm
+          formConfig={gameForm}
           schema={gameSchema}
           onCancel={onCancel}
           onSubmit={async (formData) => {
@@ -34,6 +37,11 @@ export const AdminTab = () => {
       label: 'Игроки',
       Icon: Users,
       ModalContent: () => <UsersList statuses={['registered', 'approved']} />,
+    },
+    {
+      label: 'Новости',
+      Icon: Megaphone,
+      ModalContent: () => <NewsList />,
     },
   ]
 

@@ -7,6 +7,7 @@ import { ModalButton } from '@/ui/ModalButton'
 import { FilePenLine, Volleyball } from 'lucide-react'
 import { BaseForm } from './BaseForm'
 import { templateSchema, gameSchema } from '@/utils/validations'
+import { gameForm } from '@/utils/forms'
 import { templateToFormData } from '@/utils/formatters'
 
 const TemplateCardContainer = ({ children, className }) => (
@@ -50,6 +51,7 @@ export const TemplateCard = ({ template, className }) => {
           modalHeader="Создать игру"
           ModalContent={({ onCancel }) => (
             <BaseForm
+              formConfig={gameForm}
               onCancel={onCancel}
               schema={gameSchema}
               initialFormData={templateToFormData(template)}
@@ -67,6 +69,7 @@ export const TemplateCard = ({ template, className }) => {
           modalHeader="Изменить шаблон"
           ModalContent={({ onCancel }) => (
             <BaseForm
+              formConfig={gameForm}
               onCancel={onCancel}
               schema={templateSchema}
               initialFormData={templateToFormData(template)}

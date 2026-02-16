@@ -1,6 +1,10 @@
 import crypto from 'crypto'
 
 export const validateTelegramData = (req, res, next) => {
+  if (req.path.startsWith('/uploads/')) {
+    return next()
+  }
+
   if (process.env.NODE_ENV === 'development' && req.headers['x-debug-mode']) {
     req.user = { id: 12345, first_name: 'Лобанов Евгений' }
     return next()

@@ -180,4 +180,65 @@ Content-Type: application/json
     "max_players": 14
 }
 
-## TEMPLATES - end
+### TEMPLATES - end\
+
+### NEW - begin
+
+POST http://localhost:3000/api/news
+x-debug-mode: 1
+Content-Type: application/json
+
+{
+    "title": "Первая новость 2",
+    "content": "Ура! У нас теперь есть новости!"
+}
+
+###
+
+GET http://localhost:3000/api/news
+x-debug-mode: 1
+
+###
+
+GET http://localhost:3000/api/news/2
+x-debug-mode: 1
+
+###
+
+DELETE http://localhost:3000/api/news/2
+x-debug-mode: 1
+
+###
+
+PUT http://localhost:3000/api/news/1
+x-debug-mode: 1
+Content-Type: application/json
+
+{
+    "title": "Первая новость 2222",
+    "content": "Ура! У нас теперь есть новости!"
+}
+
+### NEW - end
+
+### Загрузка изображения
+POST http://localhost:3000/api/upload
+x-debug-mode: 1
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="image"; filename="volleyball.jpg"
+Content-Type: image/jpeg
+
+< c:\Users\User\Downloads\vvl_bot_logo_small.png
+--WebAppBoundary--
+
+###
+
+GET http://localhost:3000/uploads/volleyball.jpg
+x-debug-mode: 1
+
+###
+
+DELETE http://localhost:3000/api/upload/volleyball.jpg
+x-debug-mode: 1

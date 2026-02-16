@@ -10,6 +10,7 @@ import { gameToFormData } from '@/utils/formatters'
 import { tgVibro } from '@/utils/telegram'
 import { useGameActions } from '@/hooks/games'
 import { gameSchema } from '@/utils/validations'
+import { gameForm } from '@/utils/forms'
 
 export const GamesList = ({ isLoading, games }) => {
   const { updateGame } = useGameActions()
@@ -71,6 +72,7 @@ export const GamesList = ({ isLoading, games }) => {
           headerText={currentGame.name}
         >
           <BaseForm
+            formConfig={gameForm}
             schema={gameSchema}
             initialFormData={gameToFormData(currentGame)}
             onCancel={closeEdit}

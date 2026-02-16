@@ -22,3 +22,8 @@ export const gameSchema = z.object({
 export const templateSchema = z.object({
   name: z.string().min(3, 'Минимум 3 символа'),
 })
+
+export const newSchema = z.object({
+  title: z.string().min(3, 'Минимум 3 символа'),
+  content: z.string().min(10, 'Минимум 10 символов'),
+})

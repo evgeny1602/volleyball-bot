@@ -5,6 +5,7 @@ import { ModalButton } from '@/ui/ModalButton'
 import { ClipboardPlus } from 'lucide-react'
 import { BaseForm } from '@/ui/BaseForm'
 import { templateSchema } from '@/utils/validations'
+import { gameForm } from '@/utils/forms'
 
 export const TemplatesList = () => {
   const { data, isLoading } = useTemplates()
@@ -19,6 +20,7 @@ export const TemplatesList = () => {
         modalHeader="Создать шаблон"
         ModalContent={({ onCancel }) => (
           <BaseForm
+            formConfig={gameForm}
             schema={templateSchema}
             onCancel={onCancel}
             onSubmit={async (formData) => {

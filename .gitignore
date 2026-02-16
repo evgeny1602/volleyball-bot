@@ -28,3 +28,4 @@ dist-ssr
 main.db
 main.db-shm
 main.db-wal
+back/uploads/*

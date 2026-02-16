@@ -55,6 +55,15 @@ const initSqls = [
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `,
+  `
+    CREATE TABLE IF NOT EXISTS news (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      title TEXT,
+      content TEXT,
+      image_url TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
 ]
 
 export const initDatabase = () => {
