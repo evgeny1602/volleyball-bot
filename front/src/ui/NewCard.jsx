@@ -13,7 +13,7 @@ const NewCardContainer = ({ children, className, bgImage }) => (
     style={
       bgImage
         ? {
-            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0)), url(${bgImage})`,
+            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), url(${bgImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }
