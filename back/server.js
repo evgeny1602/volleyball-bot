@@ -4,6 +4,7 @@ import cors from 'cors'
 import { initDatabase } from './init-db.js'
 import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
+import templateRoutes from './routes/templateRoutes.js'
 import { validateTelegramData } from './middleware/auth.js'
 
 const app = express()
@@ -26,6 +27,7 @@ app.use(validateTelegramData)
 
 app.use('/api/users', userRoutes)
 app.use('/api/games', gameRoutes)
+app.use('/api/templates', templateRoutes)
 
 app.listen(PORT, () =>
   console.log(

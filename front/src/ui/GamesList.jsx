@@ -5,11 +5,14 @@ import { useState } from 'react'
 import { useModal } from '@/hooks/useModal'
 import { Modal } from '@/ui/Modal'
 import { GameCardExtForm } from '@/ui/GameCardExtForm'
-import { GameForm } from '@/ui/GameForm'
+import { BaseForm } from '@/ui/BaseForm'
 import { gameToFormData } from '@/utils/formatters'
 import { tgVibro } from '@/utils/telegram'
+import { useGameActions } from '@/hooks/games'
+import { gameSchema } from '@/utils/validations'
 
 export const GamesList = ({ isLoading, games }) => {
+  const { updateGame } = useGameActions()
   const [currentGame, setCurrentGame] = useState(null)
   const {
     isOpen: isViewOpen,
@@ -67,9 +70,14 @@ export const GamesList = ({ isLoading, games }) => {
           onClose={closeEdit}
           headerText={currentGame.name}
         >
-          <GameForm
+          <BaseForm
+            schema={gameSchema}
             initialFormData={gameToFormData(currentGame)}
             onCancel={closeEdit}
+            onSubmit={async (formData) => {
+              await updateGame({ id: currentGame.id, data: formData })
+              closeEdit?.()
+            }}
           />
         </Modal>
       )}

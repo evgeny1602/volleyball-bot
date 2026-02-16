@@ -34,6 +34,15 @@ export const dateTimeFormatGameCard = (date) => {
   return `${day}.${month}.${year} ${hours}:${minutes}`
 }
 
+export const templateToFormData = (template) => {
+  return {
+    ...template,
+    location: template.location_name,
+    address: template.location_address,
+    maxPlayers: template.max_players,
+  }
+}
+
 export const gameToFormData = (game) => {
   const dateParts = game.start_datetime.split(' ')
   const [y, m, d] = dateParts[0].split('-')

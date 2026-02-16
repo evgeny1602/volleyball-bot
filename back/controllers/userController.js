@@ -38,11 +38,11 @@ export const createGuestUser = (req, res) => {
     const info = stmt.run(
       randomTgId,
       'Guest', // tg_username
-      null, // tg_avatar_url
+      '', // tg_avatar_url
       fio, // fio
       'male', // gender
-      null, // phone
-      null, // birthday
+      '', // phone
+      '', // birthday
       'player', // role
       'approved' // status
     )
@@ -85,12 +85,12 @@ export const createUser = (req, res) => {
 
     const info = stmt.run(
       tg_id,
-      tg_username || null,
-      tg_avatar_url || null,
-      fio || null,
+      tg_username || '',
+      tg_avatar_url || '',
+      fio || '',
       gender || 'male',
-      phone || null,
-      birthday || null,
+      phone || '',
+      birthday || '',
       role || 'player',
       status || 'registered'
     )

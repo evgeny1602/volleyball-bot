@@ -1,3 +1,5 @@
+### USERS - begin
+
 GET http://localhost:3000/api/users
 x-debug-mode: 1
 
@@ -31,7 +33,9 @@ x-debug-mode: 1
 PATCH http://localhost:3000/api/users/approve/12345
 x-debug-mode: 1
 
-###
+### USERS - end
+
+### GAMES - begin
 
 POST http://localhost:3000/api/games
 x-debug-mode: 1
@@ -122,3 +126,58 @@ Content-Type: application/json
 {
     "fio": "Гость"
 }
+
+### GAMES - end
+
+### TEMPLATES - begin
+
+POST http://localhost:3000/api/templates
+x-debug-mode: 1
+Content-Type: application/json
+
+{
+    "name": "Тренировка в Юбилейном 14",
+    "location": "СП Юбилейный",
+    "address": "пр. Ленина 203",
+    "date": "",
+    "time": "20:00",
+    "duration": "120",
+    "description": "Низкий уровень сложности",
+    "price": "200",    
+    "maxPlayers": "14"      
+}
+
+###
+
+GET http://localhost:3000/api/templates
+x-debug-mode: 1
+
+###
+
+GET http://localhost:3000/api/templates/2
+x-debug-mode: 1
+
+###
+
+DELETE http://localhost:3000/api/templates/2
+x-debug-mode: 1
+
+###
+
+PUT http://localhost:3000/api/templates/3
+x-debug-mode: 1
+Content-Type: application/json
+
+{
+    "name": "Тренировка в Юбилейном 14",
+    "location_name": "СП Юбилейный",
+    "location_address": "пр. Ленина 203",
+    "date": "",
+    "time": "21:00",
+    "duration": 120,
+    "description": "Низкий уровень сложности",
+    "price": 200,
+    "max_players": 14
+}
+
+## TEMPLATES - end

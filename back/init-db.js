@@ -32,12 +32,13 @@ const initSqls = [
     )
   `,
   `
-    CREATE TABLE IF NOT EXISTS game_templates (
+    CREATE TABLE IF NOT EXISTS templates (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT,
       location_name TEXT,
       location_address TEXT,
-      start_datetime DATETIME,
+      date TEXT,
+      time TEXT,
       duration INTEGER,
       description TEXT,
       price FLOAT,

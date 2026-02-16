@@ -1,20 +1,7 @@
 import db from '../db.js'
+import { getDateFromStr } from './utils.js'
 
 const GMT = +7
-
-const getDateFromStr = (s, timeOffset) => {
-  const [datePart, timePart] = s.split(' ')
-  const [d, m, y] = datePart.split('.')
-  const [hh, mm] = timePart.split(':')
-  const dt = new Date(y, m - 1, d, hh, mm)
-  dt.setHours(dt.getHours() + timeOffset)
-  const _y = dt.getFullYear()
-  const _m = (dt.getMonth() + 1).toString().padStart(2, '0')
-  const _d = dt.getDate().toString().padStart(2, '0')
-  const _hh = dt.getHours().toString().padStart(2, '0')
-  const _mm = dt.getMinutes().toString().padStart(2, '0')
-  return `${_y}-${_m}-${_d} ${_hh}:${_mm}`
-}
 
 const getGamePlayers = (id) =>
   db
@@ -90,11 +77,11 @@ export const createGame = (req, res) => {
 
     const info = stmt.run(
       name,
-      location_name || null,
-      location_address || null,
+      location_name || '',
+      location_address || '',
       start_datetime,
       duration || 120,
-      description || null,
+      description || '',
       price || 0,
       max_players || 14,
       'main'
