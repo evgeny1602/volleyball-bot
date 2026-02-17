@@ -1,7 +1,7 @@
-export const NoGames = () => {
+export const NoGames = ({ children }) => {
   return (
-    <div className="flex items-center justify-center w-full text-bot-grey-500">
-      На выбранную дату тренировок нет
+    <div className="flex flex-1 flex-col text-center items-center justify-center w-full text-bot-grey-500 mt-auto">
+      {children}
     </div>
   )
 }

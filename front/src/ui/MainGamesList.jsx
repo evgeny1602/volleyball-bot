@@ -1,6 +1,7 @@
 import { GamesList } from '@/ui/GamesList'
 import { useGames } from '@/hooks/games'
 import { getWeekDates } from '@/utils/formatters'
+import { NoGames } from './NoGames'
 
 export const MainGamesList = () => {
   const { data, isLoading } = useGames()
@@ -16,11 +17,9 @@ export const MainGamesList = () => {
     ) || []
 
   return (
-    <div className="w-full p-4">
+    <div className="w-full p-4 flex-1 flex flex-col">
       {games.length == 0 && (
-        <div className="font-semibold flex flex-col text-center items-center justify-center w-full text-bot-grey-800">
-          На ближайшие 7 дней тренировок пока не запланировано
-        </div>
+        <NoGames>На ближайшие 7 дней тренировок пока не запланировано</NoGames>
       )}
 
       {games.length > 0 && (

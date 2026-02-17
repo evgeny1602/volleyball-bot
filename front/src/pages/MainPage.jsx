@@ -38,7 +38,7 @@ export function MainPage() {
   const ActiveTab = TABS[tabId]
 
   return (
-    <div className="flex flex-col items-center relative h-dvh w-full overflow-hidden">
+    <div className="flex flex-col items-center justify-start relative h-dvh w-full overflow-hidden">
       <ActiveTab />
 
       <MenuContainer>

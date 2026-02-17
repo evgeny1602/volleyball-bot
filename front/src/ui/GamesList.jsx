@@ -28,7 +28,8 @@ export const GamesList = ({ isLoading, games }) => {
 
   if (isLoading) return <Loader />
 
-  if (games.length == 0) return <NoGames />
+  if (games.length == 0)
+    return <NoGames>На выбранную дату тренировок нет</NoGames>
 
   const handleCardShortClick = (game) => {
     tgVibro('medium')

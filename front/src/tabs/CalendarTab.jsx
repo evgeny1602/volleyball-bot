@@ -14,7 +14,7 @@ export const CalendarTab = () => {
     ) || []
 
   return (
-    <div className="w-full flex flex-col gap-4 p-4">
+    <div className="w-full flex flex-col gap-4 p-4 flex-1">
       <WeeklyCalendar
         className="mb-4"
         onSelect={setSelectedDate}

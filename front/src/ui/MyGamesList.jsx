@@ -2,6 +2,7 @@ import { GamesList } from '@/ui/GamesList'
 import { useGames } from '@/hooks/games'
 import { useCurrentUser } from '@/hooks/users'
 import { getDateStr } from '@/utils/formatters'
+import { NoGames } from '@/ui/NoGames'
 
 export const MyGamesList = () => {
   const { data, isLoading: isGamesLoading } = useGames()
@@ -18,11 +19,9 @@ export const MyGamesList = () => {
     ) || []
 
   return (
-    <div className="w-full p-4 h-full">
+    <div className="w-full p-4 h-full flex-1 flex flex-col">
       {games.length == 0 && (
-        <div className="font-semibold flex  flex-col text-center items-center justify-center w-full text-bot-grey-800">
-          Самое время записаться на тренировку, чемпион!"
-        </div>
+        <NoGames>Самое время записаться на тренировку, чемпион!"</NoGames>
       )}
 
       {games.length > 0 && (
