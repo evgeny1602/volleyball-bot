@@ -11,8 +11,6 @@ export const ImageUploader = ({ value, onChange, label }) => {
   const { uploadFile, deleteFile, isLoading } = useUpload()
 
   const handleFileChange = async (e) => {
-    tgVibro('medium')
-
     const file = e.target.files[0]
 
     if (!file) return
@@ -39,12 +37,17 @@ export const ImageUploader = ({ value, onChange, label }) => {
     }
   }
 
+  const handleDownloadAreaClick = () => {
+    tgVibro('medium')
+    !isLoading && !preview && fileInputRef.current?.click()
+  }
+
   return (
     <div className="w-full">
       {label && <InputLabel>{label}</InputLabel>}
 
       <div
-        onClick={() => !isLoading && !preview && fileInputRef.current?.click()}
+        onClick={handleDownloadAreaClick}
         className={cn(
           'relative w-full h-48 rounded-3xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-all duration-200',
           preview
