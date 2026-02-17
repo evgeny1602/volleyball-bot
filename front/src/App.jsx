@@ -35,7 +35,7 @@ export const App = () => {
   }, [])
 
   return (
-    <div className="flex flex-col min-h-screen gap-2 select-none items-center bg-bot-page-bg text-bot-grey-800">
+    <div className="flex flex-col h-screen gap-2 select-none items-center bg-bot-page-bg text-bot-grey-800 scrollable-content overflow-y-auto">
       {isLoading && <Loader />}
       {!isLoading && !user && <RegisterPage />}
       {user?.status == 'registered' && <RegisteredPage />}
