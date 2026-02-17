@@ -1,4 +1,5 @@
 import db from '../db.js'
+import fs from 'fs'
 
 export const getAllNews = (req, res) => {
   try {
@@ -83,9 +84,31 @@ export const updateNew = (req, res) => {
   }
 }
 
+const deleteFileByUrl = (url) => {
+  if (!url || url == '') return
+
+  const imagePath = url.split('/')
+  const imageName = imagePath[imagePath.length - 1]
+  const filePath = `./uploads/${imageName}`
+
+  if (!fs.existsSync(filePath)) return
+
+  try {
+    fs.unlinkSync(filePath)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
 export const deleteNew = (req, res) => {
   try {
     const { id } = req.params
+
+    const imageData = db
+      .prepare(`SELECT image_url FROM news WHERE id = ?`)
+      .get(id)
+
+    deleteFileByUrl(imageData.image_url)
 
     const info = db.prepare('DELETE FROM news WHERE id = ?').run(id)
 
