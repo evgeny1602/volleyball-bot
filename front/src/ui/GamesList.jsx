@@ -43,8 +43,8 @@ export const GamesList = ({ isLoading, games }) => {
   }
 
   return (
-    <div className="h-screen overflow-y-auto scrollable-content pb-70">
-      <div className="w-full flex flex-col gap-4">
+    <div className="h-screen overflow-y-auto scrollable-content">
+      <div className="w-full flex flex-col gap-4  pb-120">
         {games.map((game, index) => (
           <GameCardShort
             key={index}
@@ -66,7 +66,6 @@ export const GamesList = ({ isLoading, games }) => {
           />
         </Modal>
       )}
-
       {isEditOpen && (
         <Modal
           onClose={closeEdit}
