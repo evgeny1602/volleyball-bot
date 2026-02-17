@@ -11,7 +11,10 @@ export const ImageUploader = ({ value, onChange, label }) => {
   const { uploadFile, deleteFile, isLoading } = useUpload()
 
   const handleFileChange = async (e) => {
+    tgVibro('medium')
+
     const file = e.target.files[0]
+
     if (!file) return
 
     const uploadedUrl = await uploadFile(file)
@@ -39,6 +42,7 @@ export const ImageUploader = ({ value, onChange, label }) => {
   return (
     <div className="w-full">
       {label && <InputLabel>{label}</InputLabel>}
+
       <div
         onClick={() => !isLoading && !preview && fileInputRef.current?.click()}
         className={cn(
