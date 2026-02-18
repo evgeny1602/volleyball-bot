@@ -1,4 +1,13 @@
+import { useConfetti } from '@/hooks/useConfetti'
+import { useEffect } from 'react'
+
 export const RegisteredPage = () => {
+  const { fireConfetti } = useConfetti()
+
+  useEffect(() => {
+    fireConfetti()
+  }, [])
+
   return (
     <div className="flex flex-col items-center h-screen justify-center">
       <div className="text-center w-[70%] flex flex-col gap-4 font-semibold">

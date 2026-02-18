@@ -35,6 +35,10 @@ export function MainPage() {
     )
   }, [user])
 
+  const handleMenuItemClick = (id) => {
+    setTabId(id)
+  }
+
   const ActiveTab = TABS[tabId]
 
   return (
@@ -47,7 +51,7 @@ export function MainPage() {
             key={item.id}
             {...item}
             isActive={tabId === item.id}
-            onClick={setTabId}
+            onClick={handleMenuItemClick}
           />
         ))}
       </MenuContainer>
