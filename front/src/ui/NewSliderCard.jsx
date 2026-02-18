@@ -1,8 +1,11 @@
 import { ModalButton } from '@/ui/ModalButton'
 import { Megaphone } from 'lucide-react'
 import { cn } from '@/utils/cn'
+import { ParagraphedText } from '@/ui/ParagraphedText'
 
 export const NewSliderCard = ({ data, className }) => {
+  console.log(data.content)
+
   return (
     <div
       className={cn(
@@ -17,12 +20,16 @@ export const NewSliderCard = ({ data, className }) => {
         modalHeader={data.title}
         Icon={Megaphone}
         ModalContent={() => (
-          <div className="text-bot-grey-800 text-center">
+          <div className="flex flex-col gap-3">
             <img
               src={data.image_url}
-              className="rounded-3xl mb-2"
+              className="rounded-3xl"
             />
-            {data.content}
+
+            <ParagraphedText
+              className="flex flex-col gap-2 text-sm indent-4"
+              text={data.content}
+            />
           </div>
         )}
       />

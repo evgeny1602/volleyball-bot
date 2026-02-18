@@ -16,7 +16,7 @@ export const RegisterForm = ({ onSubmit, onError, isLoading }) => {
   const handleAction = () => {
     const result = registerSchema.safeParse({ fio, gender, birthday, phone })
 
-    console.log({ fio, gender, birthday, phone })
+    // console.log({ fio, gender, birthday, phone })
 
     if (result.success) {
       tgVibro('success')
@@ -28,7 +28,7 @@ export const RegisterForm = ({ onSubmit, onError, isLoading }) => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-10">
+    <div className="flex flex-col items-center gap-3">
       <Input
         label="Фамилия, имя"
         onChange={(val) => setFio(val)}
@@ -55,7 +55,7 @@ export const RegisterForm = ({ onSubmit, onError, isLoading }) => {
 
       <RegisterButton
         isLoading={isLoading}
-        className="mt-10 mb-10"
+        className="mt-5 mb-5"
         onClick={handleAction}
       >
         Подать заявку

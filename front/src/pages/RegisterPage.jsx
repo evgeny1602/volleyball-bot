@@ -25,7 +25,7 @@ export const RegisterPage = () => {
   }
 
   return (
-    <div className="flex flex-col items-center gap-20 pt-5 relative">
+    <div className="flex flex-col items-center gap-5 pt-5 relative">
       <RegisterWelcome />
 
       <RegisterForm

@@ -9,7 +9,7 @@ export const GameInfoRow = ({ Icon, children, className = '' }) => (
   >
     <Icon
       strokeWidth={2}
-      className="text-bot-primary/75 w-3.5 h-3.5"
+      className="text-bot-primary/75 w-3.5 h-3.5 shrink-0"
     />
     {children}
   </div>

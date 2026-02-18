@@ -29,16 +29,20 @@ import { useCurrentUser, useUserMutations } from '@/hooks/users'
 import { LoaderFullScreen } from '@/ui/LoaderFullscreen'
 import { tgConfirm } from '@/utils/telegram'
 import { safariDateFix } from '@/utils/formatters'
+import { AdminBadge } from './AdminBadge'
+import { ParagraphedText } from '@/ui/ParagraphedText'
 
 const GameCardExtContainer = ({ children }) => (
   <div className="mt-4 flex flex-col gap-6 scrollable-content">{children}</div>
 )
 
-const PlayerCard = ({ player, onPromote, onRemove, canPromote }) => {
+const PlayerCard = ({ player, onPromote, onRemove, canPromote, isAdmin }) => {
   const formattedDate = useMemo(
     () => dateTimeFormatGameCard(new Date(safariDateFix(player.login_date))),
     [player.login_date]
   )
+
+  console.log({ player })
 
   return (
     <div className="flex items-center gap-3 bg-bot-grey-100 p-2 rounded-2xl">
@@ -47,34 +51,39 @@ const PlayerCard = ({ player, onPromote, onRemove, canPromote }) => {
         url={player.tg_avatar_url}
       />
 
-      <div className="flex flex-col flex-1 min-w-0">
+      <div className="flex flex-col flex-1 min-w-0 gap-1">
         <span className="text-black truncate text-sm">{player.fio}</span>
+
         <span className="text-xs text-bot-grey-500 leading-none mt-0.5">
           {formattedDate}
         </span>
+
+        {player.role == 'admin' && <AdminBadge className="self-start mt-1" />}
       </div>
 
-      <div className="flex flex-col gap-2 shrink-0">
-        {player.status === 'reserve' && canPromote && (
+      {isAdmin && (
+        <div className="flex flex-col gap-2 shrink-0">
+          {player.status === 'reserve' && canPromote && (
+            <Button
+              variant="success"
+              className="h-7 px-2 text-xs gap-1"
+              onClick={() => onPromote(player.id)}
+            >
+              <ArrowUpCircle size={12} />
+              <span>В основу</span>
+            </Button>
+          )}
+
           <Button
-            variant="success"
+            variant="danger"
             className="h-7 px-2 text-xs gap-1"
-            onClick={() => onPromote(player.id)}
+            onClick={() => onRemove(player.id)}
           >
-            <ArrowUpCircle size={12} />
-            <span>В основу</span>
+            <MinusCircle size={12} />
+            <span>Убрать</span>
           </Button>
-        )}
-
-        <Button
-          variant="danger"
-          className="h-7 px-2 text-xs gap-1"
-          onClick={() => onRemove(player.id)}
-        >
-          <MinusCircle size={12} />
-          <span>Убрать</span>
-        </Button>
-      </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -85,6 +94,7 @@ const PlayersList = ({
   onRemove,
   onPromote,
   canPromote,
+  isAdmin,
 }) => {
   if (!players.length) return null
 
@@ -97,6 +107,7 @@ const PlayersList = ({
           onRemove={onRemove}
           onPromote={onPromote}
           canPromote={canPromote}
+          isAdmin={isAdmin}
         />
       ))}
     </div>
@@ -110,6 +121,7 @@ const PlayersSection = ({
   canPromote,
   mainCount,
   reserveCount,
+  isAdmin,
 }) => {
   if (!players) return null
 
@@ -139,6 +151,7 @@ const PlayersSection = ({
         <PlayersList
           players={players.filter((p) => p.status === 'main')}
           onRemove={onRemove}
+          isAdmin={isAdmin}
         />
 
         {players.filter((p) => p.status === 'reserve').length > 0 && (
@@ -155,6 +168,7 @@ const PlayersSection = ({
           onRemove={onRemove}
           onPromote={onPromote}
           canPromote={canPromote}
+          isAdmin={isAdmin}
         />
       </div>
     </div>
@@ -182,6 +196,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
   const isAdmin = user.role == 'admin'
   const game = data.game
   const signInText = game.mode === 'main' ? 'Записаться' : 'Записаться в резерв'
+  const checkInButtonVariant = game.mode == 'main' ? 'success' : 'secondary'
   const isJoined = game.players.some((p) => p.tg_id === user.tg_id)
   const gameDate = new Date(safariDateFix(game.start_datetime))
   const mainCount = game.players.filter((p) => p.status === 'main').length
@@ -231,7 +246,12 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
         <StatusBadge game={game} />
       </div>
 
-      <GameInfoRow Icon={Info}>{game.description}</GameInfoRow>
+      <GameInfoRow Icon={Info}>
+        <ParagraphedText
+          text={game.description}
+          className="flex flex-col gap-1 text-xs indent-3"
+        />
+      </GameInfoRow>
 
       <div className="flex justify-between items-start">
         <GameInfoRow Icon={Clock}>
@@ -249,7 +269,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
       <div className="flex flex-col gap-3">
         {!isJoined && (
           <Button
-            variant="success"
+            variant={checkInButtonVariant}
             onClick={handleSignIn}
           >
             <ClipboardCheck size={18} />
@@ -275,6 +295,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
         canPromote={canPromote}
         mainCount={mainCount}
         reserveCount={reserveCount}
+        isAdmin={isAdmin}
       />
 
       {isAdmin && (

@@ -21,7 +21,7 @@ export const MyGamesList = () => {
   return (
     <div className="w-full p-4 h-full flex-1 flex flex-col">
       {games.length == 0 && (
-        <NoGames>Самое время записаться на тренировку, чемпион!"</NoGames>
+        <NoGames>Самое время записаться на тренировку, чемпион! 🏆</NoGames>
       )}
 
       {games.length > 0 && (

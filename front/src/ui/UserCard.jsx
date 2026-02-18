@@ -5,6 +5,10 @@ import { RejectButton } from '@/ui/buttons/RejectButton'
 import { ApproveButton } from '@/ui/buttons/ApproveButton'
 import { useUserMutations } from '@/hooks/users'
 import { Loader } from '@/ui/Loader'
+import { TelegramIcon } from '@/icons/TelegramIcon'
+import { CalendarDays, Phone, Cake } from 'lucide-react'
+import { formatPhone } from '@/utils/formatters'
+import { AdminBadge } from '@/ui/AdminBadge'
 
 const formatDate = (dateString) => {
   if (!dateString) return ''
@@ -56,17 +60,48 @@ export const UserCard = ({ user, className }) => {
     )
   }
 
+  // console.log({ user })
+
   return (
     <UserCardContainer className={className}>
       <div className="flex flex-row items-center gap-2">
         <UserAvatar url={user.tg_avatar_url} />
-        <div>
-          <p className="font-medium">
-            {user.tg_username || `ID: ${user.tg_id}`}
-          </p>
-          <p className="text-sm text-bot-grey-500">
-            {formatDate(user.created_at)}
-          </p>
+
+        <div className="w-full flex flex-col gap-1">
+          <div className="font-medium flex justify-start gap-2 flex-wrap items-center">
+            <span>{user.fio}</span>
+
+            {user.role == 'admin' && <AdminBadge className="self-center" />}
+          </div>
+
+          <div className="text-xs text-bot-grey-500 flex flex-wrap gap-2 justify-between w-full">
+            <div className="flex flex-col gap-1">
+              <span className="flex items-center gap-1">
+                <TelegramIcon
+                  className="mt-0.5"
+                  size={14}
+                />
+                {user.tg_username || `ID: {user.tg_id}`}
+              </span>
+
+              <span className="text-xs text-bot-grey-500 flex items-center gap-1">
+                <CalendarDays size={14} />
+                {formatDate(user.created_at)}
+              </span>
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <span className="text-xs text-bot-grey-500 flex gap-1">
+                <Phone size={14} />
+                {formatPhone(user.phone)}
+              </span>
+
+              <span className="text-xs text-bot-grey-500 flex items-center gap-1">
+                <Cake size={14} />
+                {formatDate(user.birthday)}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
