@@ -7,9 +7,9 @@ export const Modal = ({ onClose, children, headerText, Icon }) => {
     <ModalOverlay>
       <ModalWrapper>
         <ModalHeader onClose={onClose}>
-          <div className="flex flex-row items-center gap-2 justify-start">
-            {Icon && <Icon className="w-4 h-4 text-current" />}
-            {headerText}
+          <div className="flex flex-row items-start gap-2 justify-start">
+            {Icon && <Icon className="w-4 h-4 text-current shrink-0" />}
+            <div className="leading-tight">{headerText}</div>
           </div>
         </ModalHeader>
 
