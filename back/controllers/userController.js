@@ -1,4 +1,5 @@
 import db from '../db.js'
+import { GMT } from './utils.js'
 
 export const getAllUsers = (req, res) => {
   try {
@@ -31,8 +32,8 @@ export const createGuestUser = (req, res) => {
     const randomTgId = -Math.floor(Date.now() + Math.random() * 1000)
 
     const stmt = db.prepare(`
-        INSERT INTO users (tg_id, tg_username, tg_avatar_url, fio, gender, phone, birthday, role, status)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO users (tg_id, tg_username, tg_avatar_url, fio, gender, phone, birthday, role, status, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
     `)
 
     const info = stmt.run(
@@ -79,8 +80,8 @@ export const createUser = (req, res) => {
     if (!tg_id) return res.status(400).json({ error: 'tg_id is required' })
 
     const stmt = db.prepare(`
-            INSERT INTO users (tg_id, tg_username, tg_avatar_url, fio, gender, phone, birthday, role, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO users (tg_id, tg_username, tg_avatar_url, fio, gender, phone, birthday, role, status, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
         `)
 
     const info = stmt.run(

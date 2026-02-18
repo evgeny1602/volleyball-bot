@@ -1,7 +1,5 @@
 import db from '../db.js'
-import { getDateFromStr } from './utils.js'
-
-const GMT = +7
+import { getDateFromStr, GMT } from './utils.js'
 
 const getGamePlayers = (id) =>
   db
@@ -71,8 +69,8 @@ export const createGame = (req, res) => {
     }
 
     const stmt = db.prepare(`
-      INSERT INTO games (name, location_name, location_address, start_datetime, duration, description, price, max_players, mode)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO games (name, location_name, location_address, start_datetime, duration, description, price, max_players, mode, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
     `)
 
     const info = stmt.run(

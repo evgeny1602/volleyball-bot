@@ -11,3 +11,5 @@ export const getDateFromStr = (s, timeOffset) => {
   const _mm = dt.getMinutes().toString().padStart(2, '0')
   return `${_y}-${_m}-${_d} ${_hh}:${_mm}`
 }
+
+export const GMT = +7

@@ -1,4 +1,5 @@
 import db from '../db.js'
+import { GMT } from './utils.js'
 
 export const getAllTemplates = (req, res) => {
   try {
@@ -50,8 +51,8 @@ export const createTemplate = (req, res) => {
     }
 
     const stmt = db.prepare(`
-      INSERT INTO templates (name, location_name, location_address, date, time, duration, description, price, max_players)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO templates (name, location_name, location_address, date, time, duration, description, price, max_players, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
     `)
 
     const info = stmt.run(

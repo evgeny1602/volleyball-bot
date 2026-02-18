@@ -1,5 +1,6 @@
 import db from '../db.js'
 import fs from 'fs'
+import { GMT } from './utils.js'
 
 export const getAllNews = (req, res) => {
   try {
@@ -43,8 +44,8 @@ export const createNew = (req, res) => {
     }
 
     const stmt = db.prepare(`
-      INSERT INTO news (title, content, image_url, enabled)
-      VALUES (?, ?, ?, ?)
+      INSERT INTO news (title, content, image_url, enabled, created_at)
+      VALUES (?, ?, ?, ?, datetime('now', '+${GMT} hours'))
     `)
 
     const info = stmt.run(title, content, image_url || '', enabled || 0)
