@@ -24,7 +24,7 @@ export const MainGamesList = () => {
 
       {games.length > 0 && (
         <>
-          <div className="text-md font-semibold text-bot-grey-800 mb-2">
+          <div className="text-md font-bold text-black mb-3">
             Ближайшие игры:
           </div>
 
