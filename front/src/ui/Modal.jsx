@@ -8,7 +8,7 @@ export const Modal = ({ onClose, children, headerText, Icon }) => {
       <ModalWrapper>
         <ModalHeader onClose={onClose}>
           <div className="flex flex-row items-start gap-2 justify-start">
-            {Icon && <Icon className="w-4 h-4 text-current shrink-0" />}
+            {Icon && <Icon className="w-4 h-4 text-current shrink-0 mt-0.5" />}
             <div className="leading-tight">{headerText}</div>
           </div>
         </ModalHeader>
