@@ -57,11 +57,18 @@ export const useNewMutations = (newId) => {
     },
   })
 
+  const statusMutation = useMutation({
+    mutationFn: ({ id, enabled }) => newsApi.setStatus(id, enabled),
+    onSuccess: (_, variables) => refresh(variables.id),
+  })
+
   return {
     createNew: createMutation.mutateAsync,
     updateNew: updateMutation.mutateAsync,
     deleteNew: deleteMutation.mutateAsync,
+    setNewStatus: statusMutation.mutateAsync,
     isPending:
+      statusMutation.isPending ||
       createMutation.isPending ||
       updateMutation.isPending ||
       deleteMutation.isPending,

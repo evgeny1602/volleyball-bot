@@ -34,7 +34,7 @@ export const getNewById = (req, res) => {
 
 export const createNew = (req, res) => {
   try {
-    const { title, content, image_url } = req.body
+    const { title, content, image_url, enabled } = req.body
 
     if (!title || !content) {
       return res
@@ -43,11 +43,11 @@ export const createNew = (req, res) => {
     }
 
     const stmt = db.prepare(`
-      INSERT INTO news (title, content, image_url)
-      VALUES (?, ?, ?)
+      INSERT INTO news (title, content, image_url, enabled)
+      VALUES (?, ?, ?, ?)
     `)
 
-    const info = stmt.run(title, content, image_url || '')
+    const info = stmt.run(title, content, image_url || '', enabled || 0)
 
     res.status(201).json({
       success: true,
@@ -63,15 +63,15 @@ export const createNew = (req, res) => {
 export const updateNew = (req, res) => {
   try {
     const { id } = req.params
-    const { title, content, image_url } = req.body
+    const { title, content, image_url, enabled } = req.body
 
     const stmt = db.prepare(`
       UPDATE news 
-      SET title = ?, content = ?, image_url = ?
+      SET title = ?, content = ?, image_url = ?, enabled = ?
       WHERE id = ?
     `)
 
-    const info = stmt.run(title, content, image_url || '', id)
+    const info = stmt.run(title, content, image_url || '', enabled || 0, id)
 
     if (info.changes > 0) {
       res.json({ success: true, message: 'New updated successfully' })
@@ -114,6 +114,26 @@ export const deleteNew = (req, res) => {
 
     if (info.changes > 0) {
       res.json({ success: true, message: `New ${id} deleted` })
+    } else {
+      res.status(404).json({ success: false, error: 'New not found' })
+    }
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ success: false, error: 'Internal server error' })
+  }
+}
+
+export const setNewStatus = (req, res) => {
+  try {
+    const { id } = req.params
+    const { enabled } = req.body
+
+    const info = db
+      .prepare('UPDATE news SET enabled = ? WHERE id = ?')
+      .run(enabled, id)
+
+    if (info.changes > 0) {
+      res.json({ success: true, message: `Status set to ${enabled}` })
     } else {
       res.status(404).json({ success: false, error: 'New not found' })
     }

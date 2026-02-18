@@ -3,10 +3,11 @@ import { DeleteButton } from '@/ui/buttons/DeleteButton'
 import { useNewMutations } from '@/hooks/news'
 import { Loader } from '@/ui/Loader'
 import { ModalButton } from '@/ui/ModalButton'
-import { FilePenLine, Volleyball } from 'lucide-react'
+import { FilePenLine, EyeOff, Eye } from 'lucide-react'
 import { BaseForm } from './BaseForm'
 import { newSchema } from '@/utils/validations'
 import { newForm } from '@/utils/forms'
+import { Button } from '@/ui/Button'
 
 const NewCardContainer = ({ children, className, bgImage }) => (
   <div
@@ -29,7 +30,21 @@ const NewCardContainer = ({ children, className, bgImage }) => (
 )
 
 export const NewCard = ({ new_, className }) => {
-  const { deleteNew, updateNew, isPending } = useNewMutations()
+  const { deleteNew, updateNew, setNewStatus, isPending } = useNewMutations()
+
+  const isEnabled = new_.enabled || false
+
+  const handleEnableClick = async () =>
+    await setNewStatus({
+      id: new_.id,
+      enabled: 1,
+    })
+
+  const handleDisableClick = async () =>
+    await setNewStatus({
+      id: new_.id,
+      enabled: 0,
+    })
 
   if (isPending) {
     return (
@@ -52,6 +67,24 @@ export const NewCard = ({ new_, className }) => {
       </div>
 
       <div className="flex flex-col gap-2">
+        {isEnabled ? (
+          <Button
+            variant="danger"
+            onClick={handleDisableClick}
+          >
+            <EyeOff size={14} />
+            Выключить новость
+          </Button>
+        ) : (
+          <Button
+            variant="success"
+            onClick={handleEnableClick}
+          >
+            <Eye size={14} />
+            Включить новость
+          </Button>
+        )}
+
         <ModalButton
           variant="secondary"
           Icon={FilePenLine}
@@ -63,7 +96,7 @@ export const NewCard = ({ new_, className }) => {
               schema={newSchema}
               initialFormData={new_}
               onSubmit={(formData) => {
-                console.log(formData)
+                // console.log(formData)
                 updateNew({ id: new_.id, data: formData })
                 onCancel?.()
               }}

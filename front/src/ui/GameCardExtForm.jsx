@@ -42,7 +42,7 @@ const PlayerCard = ({ player, onPromote, onRemove, canPromote, isAdmin }) => {
     [player.login_date]
   )
 
-  console.log({ player })
+  // console.log({ player })
 
   return (
     <div className="flex items-center gap-3 bg-bot-grey-100 p-2 rounded-2xl">

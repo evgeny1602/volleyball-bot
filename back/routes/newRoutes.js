@@ -8,5 +8,6 @@ router.get('/', newController.getAllNews)
 router.get('/:id', newController.getNewById)
 router.put('/:id', newController.updateNew)
 router.delete('/:id', newController.deleteNew)
+router.patch('/:id/status', newController.setNewStatus)
 
 export default router

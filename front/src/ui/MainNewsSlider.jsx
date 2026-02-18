@@ -30,6 +30,12 @@ export const MainNewsSlider = () => {
 
   if (isLoading) return <Loader />
 
+  // console.log(data.data)
+
+  const newToDisplay = data.data.filter((item) => item.enabled == 1)
+
+  if (newToDisplay.length == 0) return null
+
   return (
     <div className="w-full relative">
       <div
@@ -44,14 +50,16 @@ export const MainNewsSlider = () => {
           '[&::-webkit-scrollbar]:hidden scrollable-content'
         )}
       >
-        {data.data.map((item) => (
-          <div
-            key={item.id}
-            className="min-w-full snap-center shrink-0"
-          >
-            <NewSliderCard data={item} />
-          </div>
-        ))}
+        {data.data
+          .filter((item) => item.enabled == 1)
+          .map((item) => (
+            <div
+              key={item.id}
+              className="min-w-full snap-center shrink-0"
+            >
+              <NewSliderCard data={item} />
+            </div>
+          ))}
       </div>
     </div>
   )

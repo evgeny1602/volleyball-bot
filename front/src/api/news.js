@@ -27,4 +27,11 @@ export const newsApi = {
     const { data } = await api.delete(`${BASE_PATH}/${id}`)
     return data
   },
+
+  setStatus: async (id, isEnabled) => {
+    const { data } = await api.patch(`${BASE_PATH}/${id}/status`, {
+      enabled: isEnabled ? 1 : 0,
+    })
+    return data
+  },
 }

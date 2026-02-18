@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn'
 import { ParagraphedText } from '@/ui/ParagraphedText'
 
 export const NewSliderCard = ({ data, className }) => {
-  console.log(data.content)
+  // console.log(data.content)
 
   return (
     <div
