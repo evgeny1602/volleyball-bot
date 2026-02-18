@@ -81,7 +81,7 @@ export const UserCard = ({ user, className }) => {
                   className="mt-0.5"
                   size={14}
                 />
-                {user.tg_username || `ID: {user.tg_id}`}
+                {user.tg_username || `ID: ${user.tg_id}`}
               </span>
 
               <span className="text-xs text-bot-grey-500 flex items-center gap-1">
