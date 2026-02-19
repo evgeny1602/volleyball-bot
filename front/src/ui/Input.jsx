@@ -33,7 +33,7 @@ export const Input = ({ label, onChange, className, value, ...props }) => {
           onFocus={() => tgVibro('medium')}
           type="text"
           className={cn(
-            'w-full py-2.5 rounded-full border border-bot-grey-300 text-bot-grey-800 transition-all text-center',
+            'w-full py-2.5 rounded-full border border-gray-300 text-gray-600 transition-all text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
             // Стандартный горизонтальный паддинг px-4 заменяем на динамический:
             // Если текст есть, добавляем по 48px (12 ед.) с каждой стороны для симметрии

@@ -8,7 +8,7 @@ export const UsersList = ({ statuses }) => {
   if (isLoading) return <Loader variant="small" />
 
   return (
-    <div className="divide-y divide-bot-grey-300">
+    <div className="divide-y divide-gray-300">
       {data?.data
         .filter((user) => statuses.includes(user.status))
         .map((user) => (

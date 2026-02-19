@@ -53,7 +53,7 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
         className
       )}
     >
-      <div className="text-md font-light text-bot-grey-800 uppercase tracking-tight">
+      <div className="text-md font-light text-gray-600 uppercase tracking-tight">
         {monthYear}
       </div>
 
@@ -123,7 +123,7 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
                           ? 'text-white'
                           : isToday
                           ? 'text-bot-primary'
-                          : 'text-bot-grey-800'
+                          : 'text-gray-600'
                       )}
                     >
                       {date.getDate()}
@@ -135,7 +135,7 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
                           ? 'text-white'
                           : isToday
                           ? 'text-bot-primary'
-                          : 'text-bot-grey-800'
+                          : 'text-gray-600'
                       )}
                     >
                       {date.toLocaleString('ru-RU', { weekday: 'short' })}

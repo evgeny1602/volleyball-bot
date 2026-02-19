@@ -52,7 +52,7 @@ export const ImageUploader = ({ value, onChange, label }) => {
           'relative w-full h-48 rounded-3xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-all duration-200',
           preview
             ? 'border-transparent'
-            : 'border-bot-grey-200 bg-bot-grey-50 active:bg-bot-grey-100',
+            : 'border-gray-200 bg-gray-100 active:bg-gray-100',
           isLoading && 'opacity-60 cursor-not-allowed'
         )}
       >
@@ -66,7 +66,7 @@ export const ImageUploader = ({ value, onChange, label }) => {
             <button
               type="button"
               onClick={handleDelete}
-              className="absolute p-2 bg-bot-danger/90 backdrop-blur-md rounded-full text-white shadow-lg active:scale-90 transition-transform"
+              className="absolute p-2 bg-bot-danger/90 backdrop-blur-md rounded-full text-white shadow-sm active:scale-90 transition-transform"
             >
               <X size={20} />
             </button>
@@ -81,10 +81,10 @@ export const ImageUploader = ({ value, onChange, label }) => {
             ) : (
               <ImagePlus
                 size={32}
-                className="text-bot-grey-300"
+                className="text-gray-300"
               />
             )}
-            <span className="text-xs font-medium text-bot-grey-500">
+            <span className="text-xs font-medium text-gray-400">
               {isLoading
                 ? 'Загрузка...'
                 : 'Нажмите, чтобы добавить изображение'}

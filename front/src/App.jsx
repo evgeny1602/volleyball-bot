@@ -6,7 +6,6 @@ import { Loader } from '@/ui/Loader'
 import { useCurrentUser } from '@/hooks/users'
 import { useEffect } from 'react'
 import { cn } from '@/utils/cn'
-import { colors } from './utils/colors'
 
 export const App = () => {
   const { user, isLoading } = useCurrentUser()
@@ -39,7 +38,7 @@ export const App = () => {
   return (
     <div
       className={cn(
-        'bg-bot-page-bg text-bot-grey-800',
+        'text-gray-600 bg-gray-100',
         'flex flex-col h-screen gap-2 select-none items-center  scrollable-content overflow-y-auto'
       )}
     >

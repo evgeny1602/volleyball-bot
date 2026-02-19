@@ -21,7 +21,7 @@ const NewCardContainer = ({ children, className, bgImage }) => (
         : {}
     }
     className={cn(
-      'text-bot-grey-800 flex flex-col gap-2 w-full bg-bot-grey-100 rounded-3xl p-4 transition-all',
+      'text-gray-600 flex flex-col gap-2 w-full bg-gray-100 rounded-3xl p-4 transition-all',
       className
     )}
   >
@@ -61,7 +61,7 @@ export const NewCard = ({ new_, className }) => {
     >
       <div className="flex flex-col items-center gap-1 w-full p-4 bg-white/90 rounded-3xl">
         <div className="font-medium text-center">{new_.title}</div>
-        <div className="text-sm text-bot-grey-500 text-center truncate w-full">
+        <div className="text-sm text-gray-400 text-center truncate w-full">
           {new_.content}
         </div>
       </div>

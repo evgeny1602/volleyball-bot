@@ -19,9 +19,7 @@ const formatDate = (dateString) => {
 }
 
 const UserCardContainer = ({ children, className }) => (
-  <div
-    className={cn('text-bot-grey-800 flex flex-col gap-4 w-full', className)}
-  >
+  <div className={cn('text-gray-600 flex flex-col gap-4 w-full', className)}>
     {children}
   </div>
 )
@@ -74,7 +72,7 @@ export const UserCard = ({ user, className }) => {
             {user.role == 'admin' && <AdminBadge className="self-center" />}
           </div>
 
-          <div className="text-xs text-bot-grey-500 flex flex-wrap gap-2 justify-between w-full">
+          <div className="text-xs text-gray-400 flex flex-wrap gap-2 justify-between w-full">
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1">
                 <TelegramIcon
@@ -84,19 +82,19 @@ export const UserCard = ({ user, className }) => {
                 {user.tg_username || `ID: ${user.tg_id}`}
               </span>
 
-              <span className="text-xs text-bot-grey-500 flex items-center gap-1">
+              <span className="text-xs text-gray-400 flex items-center gap-1">
                 <CalendarDays size={14} />
                 {formatDate(user.created_at)}
               </span>
             </div>
 
             <div className="flex flex-col gap-1">
-              <span className="text-xs text-bot-grey-500 flex gap-1">
+              <span className="text-xs text-gray-400 flex gap-1">
                 <Phone size={14} />
                 {formatPhone(user.phone)}
               </span>
 
-              <span className="text-xs text-bot-grey-500 flex items-center gap-1">
+              <span className="text-xs text-gray-400 flex items-center gap-1">
                 <Cake size={14} />
                 {formatDate(user.birthday)}
               </span>

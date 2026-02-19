@@ -40,7 +40,7 @@ export const TextInput = ({
           onFocus={() => tgVibro('medium')}
           rows={rows}
           className={cn(
-            'w-full px-4 py-3 rounded-2xl border border-bot-grey-300 text-bot-grey-800 transition-all resize-none',
+            'w-full px-4 py-3 rounded-2xl border border-gray-300 text-gray-600 transition-all resize-none',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
             'scrollbar-none',
             hasValue && 'pr-10'

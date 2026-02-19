@@ -13,7 +13,7 @@ export const UserAvatar = ({ url, variant = 'default', className }) => {
     return (
       <div
         className={cn(
-          'bg-bot-grey-200 rounded-full flex items-center justify-center shrink-0',
+          'bg-gray-200 rounded-full flex items-center justify-center shrink-0',
           sizeClass,
           className
         )}

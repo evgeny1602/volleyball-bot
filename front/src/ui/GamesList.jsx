@@ -44,7 +44,7 @@ export const GamesList = ({ isLoading, games }) => {
 
   return (
     <div className="h-screen overflow-y-auto scrollable-content">
-      <div className="w-full flex flex-col gap-4  pb-120">
+      <div className="w-full flex flex-col gap-4 pb-120 p-0.5">
         {games.map((game, index) => (
           <GameCardShort
             key={index}

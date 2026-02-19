@@ -13,7 +13,7 @@ import { templateToFormData } from '@/utils/formatters'
 const TemplateCardContainer = ({ children, className }) => (
   <div
     className={cn(
-      'text-bot-grey-800 flex flex-col gap-4 w-full bg-bot-grey-100 rounded-3xl p-4',
+      'text-gray-600 flex flex-col gap-4 w-full bg-gray-100 rounded-3xl p-4',
       className
     )}
   >
@@ -38,7 +38,7 @@ export const TemplateCard = ({ template, className }) => {
       <div className="flex flex-row items-center gap-2">
         <div className="w-full">
           <div className="font-medium text-center">{template.name}</div>
-          <div className="text-sm text-bot-grey-500 text-center">
+          <div className="text-sm text-gray-400 text-center">
             {template.location_name}
           </div>
         </div>

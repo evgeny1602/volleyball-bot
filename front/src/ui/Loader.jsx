@@ -14,9 +14,9 @@ export const Loader = ({ variant = 'large' }) => {
         VARIANTS[variant]
       )}
     >
-      <SpinLoaderIcon className="text-bot-grey-500" />
+      <SpinLoaderIcon className="text-gray-400" />
 
-      <div className="text-bot-grey-500">Загрузка...</div>
+      <div className="text-gray-400">Загрузка...</div>
     </div>
   )
 }

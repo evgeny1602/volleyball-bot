@@ -24,7 +24,7 @@ export const ErrorBubble = ({ children, onClose, durationMs = 5000 }) => {
   return (
     <div
       className={cn(
-        'fixed bottom-3 bg-bot-danger shadow-md rounded-3xl text-white p-4 text-center transition-all duration-500 ease-in-out',
+        'fixed bottom-3 bg-bot-danger shadow-sm rounded-3xl text-white p-4 text-center transition-all duration-500 ease-in-out',
         isShowing ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
       )}
     >

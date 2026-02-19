@@ -41,7 +41,7 @@ export const MoneyInput = ({ label, value, onChange, className, ...props }) => {
           placeholder="0.00"
           onAccept={(val) => onChange?.(val)}
           className={cn(
-            'w-full py-2.5 rounded-full border border-bot-grey-300 text-bot-grey-800 transition-all text-center',
+            'w-full py-2.5 rounded-full border border-gray-300 text-gray-600 transition-all text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
             // Используем симметричный padding px-12, когда есть значение,
             // чтобы скомпенсировать кнопку очистки справа

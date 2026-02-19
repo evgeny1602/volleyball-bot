@@ -28,7 +28,7 @@ export const BaseMenuIcon = ({
       <div
         className={cn(
           'w-6 h-6 transition-colors duration-100',
-          isActive ? 'bg-bot-primary' : 'bg-bot-grey-500'
+          isActive ? 'bg-bot-primary' : 'bg-gray-400'
         )}
         style={{
           maskImage: `url(${icon})`,
@@ -42,7 +42,7 @@ export const BaseMenuIcon = ({
       <div
         className={cn(
           'text-xs transition-colors duration-300',
-          isActive ? 'text-bot-primary font-medium' : 'text-bot-grey-500'
+          isActive ? 'text-bot-primary font-medium' : 'text-gray-400'
         )}
       >
         {text}
