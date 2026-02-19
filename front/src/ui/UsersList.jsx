@@ -15,9 +15,8 @@ export const UsersList = ({ statuses }) => {
     <>
       <div className="w-full flex flex-col items-center -mt-1 mb-4">
         <span className="bg-white dark:bg-gray-800 px-2 text-center text-gray-600 dark:text-gray-400 text-xs -mb-2 z-1">
-          Всего [{usersToDisplay.length}]
+          Количество: {usersToDisplay.length}
         </span>
-        <div className="w-full border-b border-dashed border-gray-300 dark:border-gray-500"></div>
       </div>
 
       <div className="divide-y divide-gray-300">
