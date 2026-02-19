@@ -49,11 +49,11 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
   return (
     <div
       className={cn(
-        'flex flex-col items-center bg-white rounded-4xl shadow-sm overflow-hidden w-full pt-2 pb-4 touch-none',
+        'flex flex-col items-center bg-white dark:bg-gray-700 rounded-4xl shadow-sm dark:shadow-sm-dark overflow-hidden w-full pt-2 pb-4 touch-none border border-gray-200 dark:border-gray-800',
         className
       )}
     >
-      <div className="text-md font-light text-gray-600 uppercase tracking-tight">
+      <div className="text-md font-light text-gray-600 dark:text-gray-200 uppercase tracking-tight">
         {monthYear}
       </div>
 
@@ -123,7 +123,7 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
                           ? 'text-white'
                           : isToday
                           ? 'text-bot-primary'
-                          : 'text-gray-600'
+                          : 'dark:text-gray-300 text-gray-600'
                       )}
                     >
                       {date.getDate()}
@@ -135,7 +135,7 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
                           ? 'text-white'
                           : isToday
                           ? 'text-bot-primary'
-                          : 'text-gray-600'
+                          : 'dark:text-gray-400 text-gray-500'
                       )}
                     >
                       {date.toLocaleString('ru-RU', { weekday: 'short' })}

@@ -1,12 +1,19 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-bot-primary: #0088ff;
+  --color-bot-primary-dark: #66b8ff;
+
   --color-bot-secondary: #ff8d28;
+
   --color-bot-success: #27c840;
+
   --color-bot-danger: #ff5f57;
 
   --shadow-sm: 0 0px 3px 0 rgba(153, 161, 175, 0.4);
+  --shadow-sm-dark: 0 0px 3px 0 rgba(0, 0, 0, 0.4);
 }
 
 :root {

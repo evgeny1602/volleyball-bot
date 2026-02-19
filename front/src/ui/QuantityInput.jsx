@@ -86,7 +86,7 @@ export const QuantityInput = ({
           onAccept={(val) => onChange?.(val)}
           className={cn(
             'text-center w-full rounded-full border transition-all px-12 py-2.5 outline-0',
-            'border-gray-300 text-gray-600 focus:border-bot-primary focus:bg-bot-primary/5',
+            'border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 focus:border-bot-primary focus:bg-bot-primary/5',
             isError &&
               'border-red-500 bg-red-50 text-red-600 focus:border-red-500'
           )}

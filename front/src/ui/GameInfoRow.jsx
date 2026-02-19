@@ -3,13 +3,13 @@ import { cn } from '@/utils/cn'
 export const GameInfoRow = ({ Icon, children, className = '' }) => (
   <div
     className={cn(
-      'flex flex-row items-start gap-1 text-xs text-gray-600',
+      'flex flex-row items-start gap-1 text-xs text-gray-600 dark:text-gray-400',
       className
     )}
   >
     <Icon
       strokeWidth={2}
-      className="text-bot-primary/75 w-3.5 h-3.5 shrink-0"
+      className="text-bot-primary/75  w-3.5 h-3.5 shrink-0"
     />
     {children}
   </div>

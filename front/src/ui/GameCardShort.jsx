@@ -18,7 +18,7 @@ export const GameCardShort = ({ game, onClick }) => {
       />
 
       <div className="flex flex-col flex-1 pt-2 pl-3 pr-6 pb-2 gap-1">
-        <div className="text-black font-bold border-b border-dashed border-gray-400 pb-2.5 mb-0.5 truncate text-sm">
+        <div className="text-black dark:text-white font-bold border-b border-dashed border-gray-400 dark:border-gray-300 pb-2.5 mb-0.5 truncate text-sm">
           {game.name}
         </div>
 

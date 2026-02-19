@@ -33,7 +33,7 @@ export const Input = ({ label, onChange, className, value, ...props }) => {
           onFocus={() => tgVibro('medium')}
           type="text"
           className={cn(
-            'w-full py-2.5 rounded-full border border-gray-300 text-gray-600 transition-all text-center',
+            'w-full py-2.5 rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 transition-all text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
             // Стандартный горизонтальный паддинг px-4 заменяем на динамический:
             // Если текст есть, добавляем по 48px (12 ед.) с каждой стороны для симметрии
@@ -55,7 +55,7 @@ export const Input = ({ label, onChange, className, value, ...props }) => {
                 damping: 30,
               }}
               onClick={handleClear}
-              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none active:scale-90"
+              className="absolute right-1 p-1 text-gray-400 hover:text-gray-600 outline-none active:scale-90"
             >
               <CloseIcon className="w-8 h-8" />
             </motion.button>

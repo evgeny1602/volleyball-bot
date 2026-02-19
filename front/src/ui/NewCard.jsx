@@ -8,20 +8,26 @@ import { BaseForm } from './BaseForm'
 import { newSchema } from '@/utils/validations'
 import { newForm } from '@/utils/forms'
 import { Button } from '@/ui/Button'
+import WebApp from '@twa-dev/sdk'
+
+const isDark = WebApp.colorScheme === 'dark'
+// const isDark = true
+const gradientColor = isDark ? '0, 0, 0' : '255, 255, 255'
+const gradientOpacity = isDark ? [0.7, 0.5] : [0.9, 0.7]
 
 const NewCardContainer = ({ children, className, bgImage }) => (
   <div
     style={
       bgImage
         ? {
-            backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)), url(${bgImage})`,
+            backgroundImage: `linear-gradient(rgba(${gradientColor}, ${gradientOpacity[0]}), rgba(${gradientColor}, ${gradientOpacity[1]})), url(${bgImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }
         : {}
     }
     className={cn(
-      'text-gray-600 flex flex-col gap-2 w-full bg-gray-100 rounded-3xl p-4 transition-all',
+      'text-gray-600 dark:text-gray-700 flex flex-col gap-2 w-full bg-gray-100 dark:bg-gray-700 rounded-3xl p-4 transition-all border border-gray-200 dark:border-gray-800',
       className
     )}
   >
@@ -59,9 +65,12 @@ export const NewCard = ({ new_, className }) => {
       className={className}
       bgImage={new_.image_url}
     >
-      <div className="flex flex-col items-center gap-1 w-full p-4 bg-white/90 rounded-3xl">
-        <div className="font-medium text-center">{new_.title}</div>
-        <div className="text-sm text-gray-400 text-center truncate w-full">
+      <div className="flex flex-col items-center gap-1 w-full p-4 bg-white/80 dark:bg-black/80 rounded-3xl">
+        <div className="font-medium text-center dark:text-gray-200">
+          {new_.title}
+        </div>
+
+        <div className="text-sm text-gray-400 dark:text-gray-400 text-center truncate w-full">
           {new_.content}
         </div>
       </div>

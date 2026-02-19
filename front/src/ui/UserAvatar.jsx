@@ -13,12 +13,12 @@ export const UserAvatar = ({ url, variant = 'default', className }) => {
     return (
       <div
         className={cn(
-          'bg-gray-200 rounded-full flex items-center justify-center shrink-0',
+          'bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center shrink-0',
           sizeClass,
           className
         )}
       >
-        <CircleUser className="text-bot-grey-400 w-2/3 h-2/3" />
+        <CircleUser className="text-gray-400 w-2/3 h-2/3" />
       </div>
     )
   }

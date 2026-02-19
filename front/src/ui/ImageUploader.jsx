@@ -52,7 +52,7 @@ export const ImageUploader = ({ value, onChange, label }) => {
           'relative w-full h-48 rounded-3xl border-2 border-dashed flex flex-col items-center justify-center overflow-hidden transition-all duration-200',
           preview
             ? 'border-transparent'
-            : 'border-gray-200 bg-gray-100 active:bg-gray-100',
+            : 'border-gray-200 dark:border-gray-600 dark:bg-gray-700 bg-gray-100 active:bg-gray-100 active:dark:bg-gray-600',
           isLoading && 'opacity-60 cursor-not-allowed'
         )}
       >
@@ -81,10 +81,10 @@ export const ImageUploader = ({ value, onChange, label }) => {
             ) : (
               <ImagePlus
                 size={32}
-                className="text-gray-300"
+                className="text-gray-300 dark:text-gray-500"
               />
             )}
-            <span className="text-xs font-medium text-gray-400">
+            <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
               {isLoading
                 ? 'Загрузка...'
                 : 'Нажмите, чтобы добавить изображение'}

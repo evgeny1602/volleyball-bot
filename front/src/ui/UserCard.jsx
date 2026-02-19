@@ -19,7 +19,12 @@ const formatDate = (dateString) => {
 }
 
 const UserCardContainer = ({ children, className }) => (
-  <div className={cn('text-gray-600 flex flex-col gap-4 w-full', className)}>
+  <div
+    className={cn(
+      'text-gray-600 dark:text-gray-200 flex flex-col gap-4 w-full',
+      className
+    )}
+  >
     {children}
   </div>
 )

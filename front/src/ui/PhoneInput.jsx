@@ -34,7 +34,7 @@ export const PhoneInput = ({ label, value, onChange, className, ...props }) => {
           onFocus={() => tgVibro('medium')}
           // placeholder="+7 (___) ___-__-__"
           className={cn(
-            'w-full py-2.5 rounded-full border border-gray-300 text-gray-600 transition-all text-center',
+            'w-full py-2.5 rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 transition-all text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
             // Добавляем симметричный padding px-12, чтобы уравновесить кнопку очистки справа
             hasValue ? 'px-12' : 'px-4'

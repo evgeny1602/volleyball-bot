@@ -45,14 +45,16 @@ const PlayerCard = ({ player, onPromote, onRemove, canPromote, isAdmin }) => {
   // console.log({ player })
 
   return (
-    <div className="flex items-center gap-3 bg-gray-100 p-2 rounded-2xl">
+    <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 p-2 rounded-2xl">
       <UserAvatar
         variant="small"
         url={player.tg_avatar_url}
       />
 
       <div className="flex flex-col flex-1 min-w-0 gap-1">
-        <span className="text-black truncate text-sm">{player.fio}</span>
+        <span className="text-black dark:text-white truncate text-sm">
+          {player.fio}
+        </span>
 
         <span className="text-xs text-gray-400 leading-none mt-0.5">
           {formattedDate}
@@ -129,7 +131,7 @@ const PlayersSection = ({
 
   return (
     <div className="flex flex-col rounded-3xl overflow-hidden">
-      <div className="bg-gray-200 bg-gray- border-b-3 border-bot-primary p-2 text-center font-semibold flex items-center justify-center gap-2">
+      <div className="bg-gray-200 dark:bg-gray-700 border-b-3 border-bot-primary dark:border-bot-primary-dark p-2 text-center font-semibold flex items-center justify-center gap-2 dark:text-gray-300">
         Участники
         <span className="text-xs font-regular opacity-70">
           <span className="mr-0.5">[</span>
@@ -138,13 +140,13 @@ const PlayersSection = ({
         </span>
       </div>
 
-      <div className="bg-white p-3 border-gray-200 rounded-b-3xl border">
+      <div className="bg-white dark:bg-gray-800 p-3 border-gray-200 dark:border-gray-700 rounded-b-3xl border">
         {players.filter((p) => p.status === 'main').length > 0 && (
           <div className="w-full flex flex-col items-center -mt-1 mb-4">
-            <span className="bg-white px-2 text-center text-bot-grey-400 text-xs -mb-2 z-1">
+            <span className="bg-white dark:bg-gray-800 px-2 text-center text-gray-600 dark:text-gray-400 text-xs -mb-2 z-1">
               Основа [{mainCount}]
             </span>
-            <div className="w-full border-b border-dashed border-gray-300"></div>
+            <div className="w-full border-b border-dashed border-gray-300 dark:border-gray-500"></div>
           </div>
         )}
 
@@ -156,10 +158,10 @@ const PlayersSection = ({
 
         {players.filter((p) => p.status === 'reserve').length > 0 && (
           <div className="w-full flex flex-col items-center mt-3 mb-5">
-            <span className="bg-white px-2 text-center text-bot-grey-400 text-xs -mb-1.5 z-1">
+            <span className="bg-white dark:bg-gray-800 px-2 text-center text-gray-600 dark:text-gray-400 text-xs -mb-2 z-1">
               Резерв [{reserveCount}]
             </span>
-            <div className="w-full border-b border-dashed border-gray-300"></div>
+            <div className="w-full border-b border-dashed border-gray-300 dark:border-gray-500"></div>
           </div>
         )}
 

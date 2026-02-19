@@ -19,7 +19,7 @@ export const GenderInput = ({ label, onChange, className, value }) => {
     <div className={cn('flex flex-col gap-1.5', className)}>
       {label && <InputLabel>{label}</InputLabel>}
 
-      <div className="flex w-full bg-gray-100 rounded-full p-1 border border-gray-300 relative overflow-hidden">
+      <div className="flex w-full bg-gray-100 dark:bg-gray-800 rounded-full p-1 border border-gray-300 dark:border-gray-900 relative overflow-hidden">
         {OPTIONS.map(({ id, label, Icon }) => {
           const isActive = value === id
 

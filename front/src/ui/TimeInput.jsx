@@ -70,7 +70,7 @@ export const TimeInput = ({ value = '', onChange, label, className }) => {
           unmask={false}
           onAccept={(val) => handleChange(val)}
           className={cn(
-            'border rounded-full border-gray-300 transition-all w-full py-2.5 text-gray-600 text-center',
+            'border rounded-full border-gray-300 dark:border-gray-600 transition-all w-full py-2.5 text-gray-600 dark:text-gray-300 text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
             'px-12'
           )}
@@ -86,7 +86,7 @@ export const TimeInput = ({ value = '', onChange, label, className }) => {
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               onClick={handleClearClick}
-              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none active:scale-90 z-10"
+              className="absolute right-1 p-1 text-gray-400 hover:text-gray-600 outline-none active:scale-90 z-10"
             >
               <CloseIcon className="w-8 h-8" />
             </motion.button>

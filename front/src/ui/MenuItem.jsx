@@ -8,7 +8,7 @@ export const MenuItem = ({ id, Icon, isActive, onClick }) => (
     {isActive && (
       <motion.div
         layoutId="menu-active"
-        className="absolute inset-0 bg-bot-primary/10 rounded-full"
+        className="absolute inset-0 bg-bot-primary/10 dark:bg-bot-primary/30 rounded-full"
         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
       />
     )}

@@ -27,7 +27,7 @@ export const NewSliderCard = ({ data, className }) => {
             />
 
             <ParagraphedText
-              className="flex flex-col gap-2 text-sm indent-4"
+              className="flex flex-col gap-2 text-sm indent-4 dark:text-gray-400"
               text={data.content}
             />
           </div>

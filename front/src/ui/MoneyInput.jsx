@@ -41,10 +41,8 @@ export const MoneyInput = ({ label, value, onChange, className, ...props }) => {
           placeholder="0.00"
           onAccept={(val) => onChange?.(val)}
           className={cn(
-            'w-full py-2.5 rounded-full border border-gray-300 text-gray-600 transition-all text-center',
+            'w-full py-2.5 rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 transition-all text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
-            // Используем симметричный padding px-12, когда есть значение,
-            // чтобы скомпенсировать кнопку очистки справа
             hasValue ? 'px-12' : 'px-4'
           )}
         />
@@ -63,7 +61,7 @@ export const MoneyInput = ({ label, value, onChange, className, ...props }) => {
                 damping: 30,
               }}
               onClick={handleClear}
-              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none active:scale-90"
+              className="absolute right-1 p-1 text-gray-400 hover:text-gray-600 outline-none active:scale-90"
             >
               <CloseIcon className="w-8 h-8" />
             </motion.button>

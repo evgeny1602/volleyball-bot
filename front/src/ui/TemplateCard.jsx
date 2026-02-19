@@ -13,7 +13,7 @@ import { templateToFormData } from '@/utils/formatters'
 const TemplateCardContainer = ({ children, className }) => (
   <div
     className={cn(
-      'text-gray-600 flex flex-col gap-4 w-full bg-gray-100 rounded-3xl p-4',
+      'text-gray-600 dark:text-gray-300 flex flex-col gap-4 w-full bg-gray-100 dark:bg-gray-700 rounded-3xl p-4',
       className
     )}
   >
