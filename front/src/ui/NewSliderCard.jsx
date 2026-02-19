@@ -13,7 +13,7 @@ export const NewSliderCard = ({ data, className }) => {
         className
       )}
       style={{
-        backgroundImage: `url(${data.image_url})`,
+        backgroundImage: `url("${data.image_url}")`,
       }}
     >
       <ModalButton
