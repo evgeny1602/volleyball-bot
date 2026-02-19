@@ -5,6 +5,8 @@ import { MainPage } from '@/pages/MainPage'
 import { Loader } from '@/ui/Loader'
 import { useCurrentUser } from '@/hooks/users'
 import { useEffect } from 'react'
+import { cn } from '@/utils/cn'
+import { colors } from './utils/colors'
 
 export const App = () => {
   const { user, isLoading } = useCurrentUser()
@@ -35,7 +37,12 @@ export const App = () => {
   }, [])
 
   return (
-    <div className="flex flex-col h-screen gap-2 select-none items-center bg-bot-page-bg text-bot-grey-800 scrollable-content overflow-y-auto">
+    <div
+      className={cn(
+        'bg-bot-page-bg text-bot-grey-800',
+        'flex flex-col h-screen gap-2 select-none items-center  scrollable-content overflow-y-auto'
+      )}
+    >
       {isLoading && <Loader />}
       {!isLoading && !user && <RegisterPage />}
       {user?.status == 'registered' && <RegisteredPage />}

@@ -41,7 +41,9 @@ export const BaseForm = ({
           validation={validation}
           onClick={() => onSubmit(formData)}
         />
+
         <ClearButton onClick={() => setFormData(formConfig.emptyFormData)} />
+
         <CancelButton onClick={onCancel} />
       </div>
     </div>

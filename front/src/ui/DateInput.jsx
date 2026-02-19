@@ -72,9 +72,10 @@ export const DateInput = ({ value = '', onChange, label, className }) => {
           unmask={false}
           onAccept={(val) => handleChange(val)}
           className={cn(
-            'border rounded-full border-bot-grey-300 transition-all w-full py-2.5 text-bot-grey-800 text-center',
-            'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
-            'px-12'
+            'text-bot-grey-800',
+            'border-bot-grey-300',
+            'border rounded-full transition-all w-full py-2.5 text-center px-12',
+            'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5'
           )}
         />
 

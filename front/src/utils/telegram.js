@@ -101,3 +101,5 @@ export const tgPopUp = async (params) => {
     WebApp.showPopup(params, (buttonId) => resolve(buttonId))
   )
 }
+
+export const colorScheme = WebApp.colorScheme
