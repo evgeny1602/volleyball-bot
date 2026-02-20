@@ -1,5 +1,5 @@
 import db from '../db.js'
-import { getDateFromStr, GMT } from './utils.js'
+import { getDateFromStr, GMT, notifyUsers } from './utils.js'
 
 const getGamePlayers = (id) =>
   db
@@ -84,6 +84,8 @@ export const createGame = (req, res) => {
       max_players || 14,
       'main'
     )
+
+    notifyUsers(`Новая игра: "${name}"`)
 
     res.status(201).json({
       success: true,
