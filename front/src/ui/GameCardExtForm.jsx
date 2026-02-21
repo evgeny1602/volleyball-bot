@@ -204,6 +204,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
   const mainCount = game.players.filter((p) => p.status === 'main').length
   const reserveCount = game.players.filter((p) => p.status === 'reserve').length
   const canPromote = mainCount < game.max_players
+  const isPastGame = new Date() > gameDate
 
   const handleSignIn = async () =>
     await join({ gameId: game.id, userId: user.id })
@@ -269,7 +270,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
       </div>
 
       <div className="flex flex-col gap-3">
-        {!isJoined && (
+        {!isPastGame && !isJoined && (
           <Button
             variant={checkInButtonVariant}
             onClick={handleSignIn}
@@ -279,7 +280,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
           </Button>
         )}
 
-        {isJoined && (
+        {!isPastGame && isJoined && (
           <Button
             variant="danger"
             onClick={handleSignOut}
@@ -302,21 +303,25 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
 
       {isAdmin && (
         <div className="flex flex-col gap-3">
-          <Button
-            variant="success"
-            onClick={handleAddGuest}
-          >
-            <UserPlus size={18} />
-            Добавить гостя
-          </Button>
+          {!isPastGame && (
+            <Button
+              variant="success"
+              onClick={handleAddGuest}
+            >
+              <UserPlus size={18} />
+              Добавить гостя
+            </Button>
+          )}
 
-          <Button
-            variant="secondary"
-            onClick={handleEditGame}
-          >
-            <FilePenLine size={18} />
-            Изменить игру
-          </Button>
+          {!isPastGame && (
+            <Button
+              variant="secondary"
+              onClick={handleEditGame}
+            >
+              <FilePenLine size={18} />
+              Изменить игру
+            </Button>
+          )}
 
           <Button
             variant="danger"
