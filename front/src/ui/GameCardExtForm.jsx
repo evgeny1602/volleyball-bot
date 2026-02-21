@@ -313,15 +313,13 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
             </Button>
           )}
 
-          {!isPastGame && (
-            <Button
-              variant="secondary"
-              onClick={handleEditGame}
-            >
-              <FilePenLine size={18} />
-              Изменить игру
-            </Button>
-          )}
+          <Button
+            variant="secondary"
+            onClick={handleEditGame}
+          >
+            <FilePenLine size={18} />
+            Изменить игру
+          </Button>
 
           <Button
             variant="danger"
