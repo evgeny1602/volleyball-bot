@@ -61,11 +61,3 @@ const sendMessage = async (chatId, text) => {
     console.error('Ошибка при отправке сообщения:', error)
   }
 }
-
-const main = async () => {
-  const chatId = 450980607
-  //   const chatIds = await getChatIds()
-  await sendMessage(chatId, 'Тест2')
-}
-
-main()
