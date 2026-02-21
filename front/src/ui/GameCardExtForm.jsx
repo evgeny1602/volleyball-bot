@@ -36,7 +36,14 @@ const GameCardExtContainer = ({ children }) => (
   <div className="mt-4 flex flex-col gap-6 scrollable-content">{children}</div>
 )
 
-const PlayerCard = ({ player, onPromote, onRemove, canPromote, isAdmin }) => {
+const PlayerCard = ({
+  player,
+  onPromote,
+  onRemove,
+  canPromote,
+  isAdmin,
+  isPastGame,
+}) => {
   const formattedDate = useMemo(
     () => dateTimeFormatGameCard(new Date(safariDateFix(player.login_date))),
     [player.login_date]
@@ -63,7 +70,7 @@ const PlayerCard = ({ player, onPromote, onRemove, canPromote, isAdmin }) => {
         {player.role == 'admin' && <AdminBadge className="self-start mt-1" />}
       </div>
 
-      {isAdmin && (
+      {!isPastGame && isAdmin && (
         <div className="flex flex-col gap-2 shrink-0">
           {player.status === 'reserve' && canPromote && (
             <Button
@@ -97,6 +104,7 @@ const PlayersList = ({
   onPromote,
   canPromote,
   isAdmin,
+  isPastGame,
 }) => {
   if (!players.length) return null
 
@@ -110,6 +118,7 @@ const PlayersList = ({
           onPromote={onPromote}
           canPromote={canPromote}
           isAdmin={isAdmin}
+          isPastGame={isPastGame}
         />
       ))}
     </div>
@@ -124,6 +133,7 @@ const PlayersSection = ({
   mainCount,
   reserveCount,
   isAdmin,
+  isPastGame,
 }) => {
   if (!players) return null
 
@@ -154,6 +164,7 @@ const PlayersSection = ({
           players={players.filter((p) => p.status === 'main')}
           onRemove={onRemove}
           isAdmin={isAdmin}
+          isPastGame={isPastGame}
         />
 
         {players.filter((p) => p.status === 'reserve').length > 0 && (
@@ -171,6 +182,7 @@ const PlayersSection = ({
           onPromote={onPromote}
           canPromote={canPromote}
           isAdmin={isAdmin}
+          isPastGame={isPastGame}
         />
       </div>
     </div>
@@ -299,6 +311,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
         mainCount={mainCount}
         reserveCount={reserveCount}
         isAdmin={isAdmin}
+        isPastGame={isPastGame}
       />
 
       {isAdmin && (
