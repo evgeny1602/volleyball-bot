@@ -8,6 +8,7 @@ import templateRoutes from './routes/templateRoutes.js'
 import newRoutes from './routes/newRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 import { validateTelegramData } from './middleware/auth.js'
+import { dbLogger } from './middleware/logger.js'
 
 const app = express()
 const PORT = 3000
@@ -25,6 +26,9 @@ app.use(
 )
 app.use(express.json())
 app.use(validateTelegramData)
+
+app.use(dbLogger)
+
 app.use('/uploads', express.static('uploads'))
 
 app.use('/api/users', userRoutes)
