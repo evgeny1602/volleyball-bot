@@ -205,17 +205,22 @@ export const joinGame = (req, res) => {
       return res.status(400).json({ error: 'Player already joined this game' })
     }
 
+    // Считаем сколько игроков сейчас в "основе"
     const { current_count } = db
       .prepare(
         "SELECT COUNT(*) as current_count FROM users_to_games WHERE game_id = ? AND status = 'main'"
       )
       .get(game_id)
 
+    // Вычисляем сколько мест осталось в "основе"
     const restCount = game.max_players - current_count
 
+    // Если режим игры = reserve, то статус нового участника = reserve
+    // Если режим игры = main и в "основе" есть места - статус нового участника = main
     const status =
       game.mode == 'reserve' ? 'reserve' : restCount > 0 ? 'main' : 'reserve'
 
+    // Если участник занял последнее место, то новый режим игры будет reserve, иначе - main
     const gameNewMode = restCount <= 1 ? 'reserve' : 'main'
 
     const stmt = db.prepare(`
@@ -225,10 +230,9 @@ export const joinGame = (req, res) => {
 
     stmt.run(game_id, user_id, status)
 
+    // Если режим игры был main, а стал reserve - переключаем на новый режим
     if (game.mode == 'main' && gameNewMode == 'reserve') {
-      const stmt = db.prepare(`
-        UPDATE games SET mode = ? WHERE id = ?
-      `)
+      const stmt = db.prepare(`UPDATE games SET mode = ? WHERE id = ?`)
       stmt.run(gameNewMode, game_id)
     }
 
@@ -248,10 +252,21 @@ export const leaveGame = (req, res) => {
     const { id: game_id } = req.params
     const { user_id } = req.body
 
+    // Проверяем, что игрок существует
     if (!user_id) {
       return res.status(400).json({ error: 'User ID is required' })
     }
 
+    // Проверяем, что игра существует
+    const game = db
+      .prepare('SELECT max_players, mode FROM games WHERE id = ?')
+      .get(game_id)
+
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' })
+    }
+
+    // Проверяем, что игрок записан на эту игру
     const playerRecord = db
       .prepare(
         'SELECT status FROM users_to_games WHERE game_id = ? AND user_id = ?'
@@ -262,12 +277,35 @@ export const leaveGame = (req, res) => {
       return res.status(404).json({ error: 'Player record not found' })
     }
 
+    // Убираем игрока из игры
     db.prepare(
       'DELETE FROM users_to_games WHERE game_id = ? AND user_id = ?'
     ).run(game_id, user_id)
 
-    const tgId = db.prepare('SELECT tg_id FROM users WHERE id = ?').get(user_id)
+    // Считаем сколько игроков сейчас в "основе"
+    const { current_count } = db
+      .prepare(
+        "SELECT COUNT(*) as current_count FROM users_to_games WHERE game_id = ? AND status = 'main'"
+      )
+      .get(game_id)
 
+    // Вычисляем сколько мест осталось в "основе"
+    const restCount = game.max_players - current_count
+
+    // Считаем сколько игроков сейчас в "резерве"
+    const { current_count_reserve } = db
+      .prepare(
+        "SELECT COUNT(*) as current_count_reserve FROM users_to_games WHERE game_id = ? AND status = 'reserve'"
+      )
+      .get(game_id)
+
+    // Если в "основе" есть места и в "резерве" никого нет и режим игры = "В резерв" - включаем режим игры "В основу"
+    if (restCount > 0 && current_count_reserve == 0 && game.mode == 'reserve') {
+      db.prepare('UPDATE games SET mode = ? WHERE id = ?').run('main', game_id)
+    }
+
+    // Если убрали из игры Гостя, то еще удалеям его из пользователей
+    const tgId = db.prepare('SELECT tg_id FROM users WHERE id = ?').get(user_id)
     if (tgId && parseInt(tgId.tg_id) < 0) {
       db.prepare('DELETE FROM users WHERE tg_id = ?').run(tgId.tg_id)
     }
