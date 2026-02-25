@@ -1,6 +1,6 @@
 import { notifyUsers } from '../services/notifier.js'
 
-const TARGET_METHODS = ['POST', 'PATCH', 'DELETE', 'PUT']
+const TARGET_METHODS = ['POST']
 
 const getNotifyMessage = (req) => {
   const body = Object.keys(req.body || {})
