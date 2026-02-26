@@ -32,7 +32,8 @@ const tgSendMessage = async (chatId, text) => {
 }
 
 export const notifyUsers = async (text) => {
-  console.log({ text })
+  // console.log({ text })
+
   for (const chatId of CHAT_IDS) {
     await tgSendMessage(chatId, text)
   }

@@ -1,7 +1,7 @@
 import { cn } from '@/utils/cn'
 import { useCurrentUser } from '@/hooks/users'
 
-const STATUS_MAP = {
+const statusMap = {
   out: {
     label: 'Я не участвую',
     classes: 'border-bot-danger text-bot-danger',
@@ -14,16 +14,42 @@ const STATUS_MAP = {
     label: 'Я в резерве',
     classes: 'border-bot-secondary text-bot-secondary',
   },
+  played: {
+    label: 'Я отыграл',
+    classes: 'border-gray-400 text-gray-400',
+  },
+  ended: {
+    label: 'Завершена',
+    classes: 'border-gray-400 text-gray-400',
+  },
+}
+
+const getStatus = (user, game) => {
+  let gameEnd = new Date(game.start_datetime)
+  gameEnd.setMinutes(gameEnd.getMinutes() + game.duration)
+
+  const now = new Date()
+
+  const statuses = {
+    out: gameEnd > now ? 'out' : 'ended',
+    main: gameEnd > now ? 'main' : 'played',
+    reserve: gameEnd > now ? 'reserve' : 'ended',
+  }
+
+  if (!user || !game?.players) return statuses.out
+
+  const status =
+    game.players.find((p) => p.tg_id === user.tg_id)?.status || 'out'
+
+  return statuses[status]
 }
 
 export const StatusBadge = ({ game }) => {
   const { user } = useCurrentUser()
+  const status = getStatus(user, game)
+  const { label, classes } = statusMap[status] || statusMap.out
 
-  const status =
-    !user || !game?.players
-      ? 'out'
-      : game.players.find((p) => p.tg_id === user.tg_id)?.status || 'out'
-  const { label, classes } = STATUS_MAP[status] || STATUS_MAP.out
+  // console.log({ game, dt: new Date(game.start_datetime) })
 
   return (
     <span

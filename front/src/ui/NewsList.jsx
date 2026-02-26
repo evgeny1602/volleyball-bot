@@ -24,7 +24,8 @@ export const NewsList = () => {
             schema={newSchema}
             onCancel={onCancel}
             onSubmit={async (formData) => {
-              console.log(formData)
+              // console.log(formData)
+
               await createNew(formData)
               onCancel?.()
             }}

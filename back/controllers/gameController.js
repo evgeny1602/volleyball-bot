@@ -113,7 +113,7 @@ export const updateGame = (req, res) => {
 
     const start_datetime = getDateFromStr(`${date} ${time}`, 0)
 
-    console.log({ date, time, start_datetime })
+    // console.log({ date, time, start_datetime })
 
     const stmt = db.prepare(`
       UPDATE games 

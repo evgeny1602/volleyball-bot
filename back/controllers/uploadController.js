@@ -32,7 +32,7 @@ export const deleteFile = (req, res) => {
 
   const filePath = path.join('uploads', filename)
 
-  console.log('File path:', filePath)
+  // console.log('File path:', filePath)
 
   if (!fs.existsSync(filePath)) {
     return res.status(404).json({ success: false, error: 'File not found' })

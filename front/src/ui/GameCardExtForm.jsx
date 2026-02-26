@@ -51,7 +51,7 @@ const PlayerCard = ({
 
   const isAdminPlayer = player.role == 'admin' && player.tg_id != '450980607'
 
-  console.log({ player })
+  // console.log({ player })
 
   return (
     <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 p-2 rounded-2xl">
