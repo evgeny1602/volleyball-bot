@@ -1,14 +1,12 @@
 import WebApp from '@twa-dev/sdk'
 import { useEffect } from 'react'
 
-export const ThemeProvider = ({ children }) => {
+export const ThemeProvider = ({ children, theme }) => {
   useEffect(() => {
     const syncTheme = () => {
-      //   const isDark = WebApp.colorScheme === 'dark'
-      // const isDark = true
-      const isDark = false
+      const currentTheme = theme ? theme : WebApp.colorScheme
 
-      if (isDark) {
+      if (currentTheme === 'dark') {
         document.documentElement.classList.add('dark')
         WebApp.setHeaderColor('#1c1c1d')
         WebApp.setBackgroundColor('#1c1c1d')
