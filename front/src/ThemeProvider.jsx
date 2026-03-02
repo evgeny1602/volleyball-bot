@@ -1,12 +1,23 @@
 import WebApp from '@twa-dev/sdk'
-import { useEffect } from 'react'
+import { useEffect, useState, createContext, useContext } from 'react'
 
-export const ThemeProvider = ({ children, theme }) => {
+const ThemeContext = createContext({
+  theme: 'light',
+  isDark: false,
+})
+
+export const ThemeProvider = ({ children, theme: manualTheme }) => {
+  const [currentTheme, setCurrentTheme] = useState(
+    manualTheme || WebApp.colorScheme
+  )
+
   useEffect(() => {
     const syncTheme = () => {
-      const currentTheme = theme ? theme : WebApp.colorScheme
+      const newTheme = manualTheme ? manualTheme : WebApp.colorScheme || 'light'
 
-      if (currentTheme === 'dark') {
+      setCurrentTheme(newTheme)
+
+      if (newTheme === 'dark') {
         document.documentElement.classList.add('dark')
         WebApp.setHeaderColor('#1c1c1d')
         WebApp.setBackgroundColor('#1c1c1d')
@@ -21,11 +32,15 @@ export const ThemeProvider = ({ children, theme }) => {
     syncTheme()
 
     WebApp.onEvent('themeChanged', syncTheme)
+    return () => WebApp.offEvent('themeChanged', syncTheme)
+  }, [manualTheme])
 
-    return () => {
-      WebApp.offEvent('themeChanged', syncTheme)
-    }
-  }, [])
+  const value = {
+    theme: currentTheme,
+    isDark: currentTheme === 'dark',
+  }
 
-  return <>{children}</>
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
 }
+
+export const useTheme = () => useContext(ThemeContext)

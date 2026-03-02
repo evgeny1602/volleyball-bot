@@ -8,32 +8,34 @@ import { BaseForm } from './BaseForm'
 import { newSchema } from '@/utils/validations'
 import { newForm } from '@/utils/forms'
 import { Button } from '@/ui/Button'
-import WebApp from '@twa-dev/sdk'
+import { useTheme } from '@/ThemeProvider'
 
-const isDark = WebApp.colorScheme === 'dark'
-// const isDark = true
-const gradientColor = isDark ? '0, 0, 0' : '255, 255, 255'
-const gradientOpacity = isDark ? [0.7, 0.5] : [0.9, 0.7]
+const NewCardContainer = ({ children, className, bgImage }) => {
+  const { isDark } = useTheme()
 
-const NewCardContainer = ({ children, className, bgImage }) => (
-  <div
-    style={
-      bgImage
-        ? {
-            backgroundImage: `linear-gradient(rgba(${gradientColor}, ${gradientOpacity[0]}), rgba(${gradientColor}, ${gradientOpacity[1]})), url(${bgImage})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }
-        : {}
-    }
-    className={cn(
-      'text-gray-600 dark:text-gray-700 flex flex-col gap-2 w-full bg-gray-100 dark:bg-gray-700 rounded-3xl p-4 transition-all border border-gray-200 dark:border-gray-800',
-      className
-    )}
-  >
-    {children}
-  </div>
-)
+  const gradientColor = isDark ? '0, 0, 0' : '255, 255, 255'
+  const gradientOpacity = isDark ? [0.7, 0.5] : [0.9, 0.7]
+
+  return (
+    <div
+      style={
+        bgImage
+          ? {
+              backgroundImage: `linear-gradient(rgba(${gradientColor}, ${gradientOpacity[0]}), rgba(${gradientColor}, ${gradientOpacity[1]})), url(${bgImage})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }
+          : {}
+      }
+      className={cn(
+        'text-gray-600 dark:text-gray-700 flex flex-col gap-2 w-full bg-gray-100 dark:bg-gray-700 rounded-3xl p-4 transition-all border border-gray-200 dark:border-gray-800',
+        className
+      )}
+    >
+      {children}
+    </div>
+  )
+}
 
 export const NewCard = ({ new_, className }) => {
   const { deleteNew, updateNew, setNewStatus, isPending } = useNewMutations()

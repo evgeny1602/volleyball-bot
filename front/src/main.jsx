@@ -9,7 +9,7 @@ const queryClient = new QueryClient()
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeProvider theme="dark">
+    <ThemeProvider>
       <QueryClientProvider client={queryClient}>
         <App />
       </QueryClientProvider>
