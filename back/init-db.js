@@ -64,6 +64,32 @@ const initSqls = [
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `,
+  `
+    CREATE TABLE IF NOT EXISTS thank_types (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
+  `
+    CREATE TABLE IF NOT EXISTS user_ranks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      number INTEGER,
+      name TEXT,
+      min_xp INTEGER,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
+  `
+    CREATE TABLE IF NOT EXISTS thanks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type_id INTEGER,
+      from_user_id INTEGER,
+      to_user_id INTEGER,
+      is_anonymous INTEGER,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
 ]
 
 export const initDatabase = () => {
