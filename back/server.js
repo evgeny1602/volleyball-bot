@@ -1,12 +1,17 @@
 import 'dotenv/config'
 import express from 'express'
 import cors from 'cors'
+
 import { initDatabase } from './init-db.js'
+
 import userRoutes from './routes/userRoutes.js'
 import gameRoutes from './routes/gameRoutes.js'
 import templateRoutes from './routes/templateRoutes.js'
+import thankRoutes from './routes/thankRoutes.js'
 import newRoutes from './routes/newRoutes.js'
+import xpRoutes from './routes/xpRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
+
 import { validateTelegramData } from './middleware/auth.js'
 import { dbLogger } from './middleware/logger.js'
 
@@ -35,6 +40,8 @@ app.use('/api/users', userRoutes)
 app.use('/api/games', gameRoutes)
 app.use('/api/templates', templateRoutes)
 app.use('/api/news', newRoutes)
+app.use('/api/thanks', thankRoutes)
+app.use('/api/xp', xpRoutes)
 app.use('/api/upload', uploadRoutes)
 
 app.listen(PORT, () =>

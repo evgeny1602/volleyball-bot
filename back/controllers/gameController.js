@@ -1,25 +1,42 @@
 import db from '../db.js'
 import { getDateFromStr, GMT } from './utils.js'
+import { getPlayerThanks } from './thankController.js'
 
-const getGamePlayers = (id) =>
+const getGamePlayers = (gameId) =>
   db
     .prepare(
-      `select users.*, users_to_games.status, users_to_games.created_at as login_date from users_to_games LEFT JOIN users ON users_to_games.user_id=users.id where users_to_games.game_id=? ORDER BY users_to_games.created_at ASC`
+      `
+        SELECT 
+          u.*, ug.status, ug.created_at AS login_date
+        FROM 
+          users_to_games ug 
+        LEFT JOIN 
+          users u ON ug.user_id=u.id 
+        WHERE 
+          ug.game_id=? 
+        ORDER BY 
+          ug.created_at ASC
+      `
     )
-    .all(id)
+    .all(gameId)
+    .map((player) => ({
+      ...player,
+      thanks: getPlayerThanks(gameId, player.id),
+    }))
 
 export const getAllGames = (req, res) => {
-  try {
-    const stmt = db.prepare('SELECT * FROM games ORDER BY start_datetime ASC')
-    const games = stmt.all()
-    const data = games.map((game) => ({
+  // try {
+  const games = db
+    .prepare(`SELECT * FROM games ORDER BY start_datetime ASC`)
+    .all()
+    .map((game) => ({
       ...game,
       players: getGamePlayers(game.id),
     }))
-    res.json({ success: true, count: games.length, data })
-  } catch (err) {
-    res.status(500).json({ error: 'Internal server error' })
-  }
+  res.json({ success: true, count: games.length, data: games })
+  // } catch (err) {
+  //   res.status(500).json({ error: 'Internal server error' })
+  // }
 }
 
 export const getGameById = (req, res) => {

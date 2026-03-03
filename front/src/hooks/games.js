@@ -31,6 +31,16 @@ export const useGameActions = (gameId) => {
     }
   }
 
+  const invalidateGame = (id) => {
+    queryClient.invalidateQueries({ queryKey: GAME_KEYS.all })
+
+    if (id || gameId) {
+      queryClient.invalidateQueries({
+        queryKey: GAME_KEYS.detail(id || gameId),
+      })
+    }
+  }
+
   const joinMutation = useMutation({
     mutationFn: gamesApi.join,
     onSuccess: refresh,
@@ -77,6 +87,7 @@ export const useGameActions = (gameId) => {
     promote: promoteMutation.mutateAsync,
     updateGame: updateMutation.mutateAsync,
     deleteGame: deleteMutation.mutateAsync,
+    invalidateGame,
     isPending:
       createMutation.isPending ||
       joinMutation.isPending ||

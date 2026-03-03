@@ -83,6 +83,7 @@ const initSqls = [
   `
     CREATE TABLE IF NOT EXISTS thanks (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
+      game_id INTEGER,
       type_id INTEGER,
       from_user_id INTEGER,
       to_user_id INTEGER,

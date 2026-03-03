@@ -9,6 +9,7 @@ import {
   Trash2,
   MinusCircle,
   ArrowUpCircle,
+  Star,
 } from 'lucide-react'
 import { GameInfoRow } from '@/ui/GameInfoRow'
 import { StatusBadge } from './StatusBadge'
@@ -31,10 +32,29 @@ import { tgConfirm } from '@/utils/telegram'
 import { safariDateFix } from '@/utils/formatters'
 import { AdminBadge } from './AdminBadge'
 import { ParagraphedText } from '@/ui/ParagraphedText'
+import { ModalButton } from '@/ui/ModalButton'
+import { ThanksModal } from '@/ui/ThanksModal'
+import { useXp } from '@/hooks/xp'
 
 const GameCardExtContainer = ({ children }) => (
   <div className="mt-4 flex flex-col gap-6 scrollable-content">{children}</div>
 )
+
+const RespectBadge = ({ respect }) => {
+  if (!respect) {
+    return null
+  }
+
+  return (
+    <div className="text-purple-600 dark:text-purple-500 text-xs flex gap-1 items-center font-semibold uppercase">
+      <Star
+        className="text-current"
+        size={16}
+      />
+      {respect.name}
+    </div>
+  )
+}
 
 const PlayerCard = ({
   player,
@@ -43,15 +63,26 @@ const PlayerCard = ({
   canPromote,
   isAdmin,
   isPastGame,
+  isThankTime,
+  gameId,
+  onRespect,
 }) => {
+  const { user } = useCurrentUser()
+  const { isEnoughXp } = useXp(user?.id)
+
   const formattedDate = useMemo(
     () => dateTimeFormatGameCard(new Date(safariDateFix(player.login_date))),
     [player.login_date]
   )
 
   const isAdminPlayer = player.role == 'admin' && player.tg_id != '450980607'
-
-  // console.log({ player })
+  const isMain = player.status === 'main'
+  const isReserve = player.status === 'reserve'
+  const isMe = player.id == user.id
+  const myRespect = player.thanks.find(
+    ({ from_user_id }) => from_user_id == user.id
+  )
+  const hasMyRespect = myRespect || false
 
   return (
     <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 p-2 rounded-2xl">
@@ -70,11 +101,13 @@ const PlayerCard = ({
         </span>
 
         {isAdminPlayer && <AdminBadge className="self-start mt-1" />}
+
+        <RespectBadge respect={myRespect} />
       </div>
 
       {!isPastGame && isAdmin && (
         <div className="flex flex-col gap-2 shrink-0">
-          {player.status === 'reserve' && canPromote && (
+          {isReserve && canPromote && (
             <Button
               variant="success"
               className="h-7 px-2 text-xs gap-1"
@@ -95,6 +128,28 @@ const PlayerCard = ({
           </Button>
         </div>
       )}
+
+      {isPastGame &&
+        isThankTime &&
+        !isMe &&
+        isMain &&
+        !hasMyRespect &&
+        isEnoughXp && (
+          <ModalButton
+            className="h-7 text-xs pl-2 pr-3 bg-linear-to-br from-indigo-600 via-purple-600 to-pink-500"
+            Icon={Star}
+            modalHeader="Респект"
+            ModalContent={({ onCancel }) => (
+              <ThanksModal
+                onCancel={onCancel}
+                toUserId={player.id}
+                toFio={player.fio}
+                gameId={gameId}
+                onSubmit={onRespect}
+              />
+            )}
+          />
+        )}
     </div>
   )
 }
@@ -107,6 +162,9 @@ const PlayersList = ({
   canPromote,
   isAdmin,
   isPastGame,
+  isThankTime,
+  gameId,
+  onRespect,
 }) => {
   if (!players.length) return null
 
@@ -121,6 +179,9 @@ const PlayersList = ({
           canPromote={canPromote}
           isAdmin={isAdmin}
           isPastGame={isPastGame}
+          isThankTime={isThankTime}
+          gameId={gameId}
+          onRespect={onRespect}
         />
       ))}
     </div>
@@ -136,10 +197,15 @@ const PlayersSection = ({
   reserveCount,
   isAdmin,
   isPastGame,
+  isThankTime,
+  gameId,
+  onRespect,
 }) => {
   if (!players) return null
 
-  if (players.length === 0) return null
+  if (players.length === 0) {
+    return null
+  }
 
   return (
     <div className="flex flex-col rounded-3xl overflow-hidden">
@@ -167,6 +233,9 @@ const PlayersSection = ({
           onRemove={onRemove}
           isAdmin={isAdmin}
           isPastGame={isPastGame}
+          isThankTime={isThankTime}
+          gameId={gameId}
+          onRespect={onRespect}
         />
 
         {players.filter((p) => p.status === 'reserve').length > 0 && (
@@ -201,13 +270,23 @@ const getNewGuestFio = (players) => {
   return `${guestFio} ${newGuestNumber}`
 }
 
-export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
+export const GameCardExtForm = ({
+  gameId,
+  onCancel,
+  onEdit,
+  thanksPeriodHours = 24,
+}) => {
   const { user, isLoading } = useCurrentUser()
   const { data, isLoading: isGameLoading } = useGame(gameId)
-  const { join, leave, promote, deleteGame, isPending } = useGameActions(gameId)
+  const { join, leave, promote, deleteGame, invalidateGame, isPending } =
+    useGameActions(gameId)
   const { createGuest } = useUserMutations()
 
-  if (isLoading || isPending || isGameLoading) return <LoaderFullScreen />
+  if (isLoading || isPending || isGameLoading) {
+    return <LoaderFullScreen />
+  }
+
+  const now = new Date()
 
   const isAdmin = user.role == 'admin'
   const game = data.game
@@ -215,10 +294,15 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
   const checkInButtonVariant = game.mode == 'main' ? 'success' : 'secondary'
   const isJoined = game.players.some((p) => p.tg_id === user.tg_id)
   const gameDate = new Date(safariDateFix(game.start_datetime))
+  const gameEnd = new Date(gameDate.getTime() + game.duration * 60 * 1000)
+  const thanksEnd = new Date(
+    gameEnd.getTime() + thanksPeriodHours * 60 * 60 * 1000
+  )
   const mainCount = game.players.filter((p) => p.status === 'main').length
   const reserveCount = game.players.filter((p) => p.status === 'reserve').length
   const canPromote = mainCount < game.max_players
-  const isPastGame = new Date() > gameDate
+  const isPastGame = now >= gameDate
+  const isThankTime = now > gameEnd && now <= thanksEnd
 
   const handleSignIn = async () =>
     await join({ gameId: game.id, userId: user.id })
@@ -253,6 +337,11 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
     }
   }
 
+  const handleRespect = () => {
+    console.log('Respect')
+    invalidateGame()
+  }
+
   return (
     <GameCardExtContainer>
       <div className="flex justify-between items-start gap-4">
@@ -266,7 +355,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
       <GameInfoRow Icon={Info}>
         <ParagraphedText
           text={game.description}
-          className="flex flex-col gap-1 text-xs indent-3"
+          className="flex flex-col gap-1 text-xs"
         />
       </GameInfoRow>
 
@@ -314,6 +403,9 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
         reserveCount={reserveCount}
         isAdmin={isAdmin}
         isPastGame={isPastGame}
+        isThankTime={isThankTime}
+        gameId={game.id}
+        onRespect={handleRespect}
       />
 
       {isAdmin && (
