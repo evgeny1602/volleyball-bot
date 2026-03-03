@@ -83,6 +83,7 @@ const PlayerCard = ({
     ({ from_user_id }) => from_user_id == user.id
   )
   const hasMyRespect = myRespect || false
+  const isGuest = player.tg_id < 0
 
   return (
     <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 p-2 rounded-2xl">
@@ -134,7 +135,8 @@ const PlayerCard = ({
         !isMe &&
         isMain &&
         !hasMyRespect &&
-        isEnoughXp && (
+        isEnoughXp &&
+        !isGuest && (
           <ModalButton
             className="h-7 text-xs pl-2 pr-3 bg-linear-to-br from-indigo-600 via-purple-600 to-pink-500"
             Icon={Star}
