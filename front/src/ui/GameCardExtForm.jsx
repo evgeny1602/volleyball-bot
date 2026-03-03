@@ -66,6 +66,7 @@ const PlayerCard = ({
   isThankTime,
   gameId,
   onRespect,
+  isJoined,
 }) => {
   const { user } = useCurrentUser()
   const { isEnoughXp } = useXp(user?.id)
@@ -136,7 +137,8 @@ const PlayerCard = ({
         isMain &&
         !hasMyRespect &&
         isEnoughXp &&
-        !isGuest && (
+        !isGuest &&
+        isJoined && (
           <ModalButton
             className="h-7 text-xs pl-2 pr-3 bg-linear-to-br from-indigo-600 via-purple-600 to-pink-500"
             Icon={Star}
@@ -167,6 +169,7 @@ const PlayersList = ({
   isThankTime,
   gameId,
   onRespect,
+  isJoined,
 }) => {
   if (!players.length) return null
 
@@ -184,6 +187,7 @@ const PlayersList = ({
           isThankTime={isThankTime}
           gameId={gameId}
           onRespect={onRespect}
+          isJoined={isJoined}
         />
       ))}
     </div>
@@ -202,6 +206,7 @@ const PlayersSection = ({
   isThankTime,
   gameId,
   onRespect,
+  isJoined,
 }) => {
   if (!players) return null
 
@@ -238,6 +243,7 @@ const PlayersSection = ({
           isThankTime={isThankTime}
           gameId={gameId}
           onRespect={onRespect}
+          isJoined={isJoined}
         />
 
         {players.filter((p) => p.status === 'reserve').length > 0 && (
@@ -408,6 +414,7 @@ export const GameCardExtForm = ({
         isThankTime={isThankTime}
         gameId={game.id}
         onRespect={handleRespect}
+        isJoined={isJoined}
       />
 
       {isAdmin && (
