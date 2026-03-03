@@ -3,7 +3,7 @@ import { GMT } from './utils.js'
 
 const xpForGame = 100
 const xpForReceivedThank = 15
-const xpForSentThank = -25
+const xpForSentThank = 25
 
 export const getUserXp = (req, res) => {
   try {
