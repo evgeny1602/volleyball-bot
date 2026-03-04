@@ -7,7 +7,7 @@ const ThankCardContainer = ({ children, className }) => {
   return (
     <div
       className={cn(
-        'w-full rounded-2xl py-2 px-2',
+        'w-full rounded-3xl py-3 px-3',
         'bg-white dark:bg-gray-700',
         'border border-gray-300 dark:border-gray-700',
         'text-gray-500',
@@ -24,10 +24,10 @@ const ThankCard = ({ thank, className }) => {
 
   return (
     <ThankCardContainer className={className}>
-      <div className="flex flex-wrap text-xs gap-x-2 gap-y-1">
+      <div className="flex flex-wrap text-xs gap-2">
         <span>{dateTimeFormatGameCard(new Date(thank.thank_datetime))}</span>
 
-        <span className="uppercase  font-semibold bg-linear-to-br rounded-full px-1 text-white from-indigo-600 via-purple-600 to-pink-500">
+        <span className="uppercase  font-semibold bg-linear-to-br rounded-full py-0.5 px-2 text-white from-indigo-600 via-purple-600 to-pink-500">
           {thank.thank_name}
         </span>
 
@@ -38,7 +38,7 @@ const ThankCard = ({ thank, className }) => {
           </span>
         </span>
 
-        <span className="border border-gray-400 text-gray-400 px-1 rounded-full lowercase ">
+        <span className="border border-gray-400 text-gray-400 px-1 rounded-full lowercase">
           {thank.is_anonymous == 1 ? 'Анононимно' : 'Лично'}
         </span>
 
