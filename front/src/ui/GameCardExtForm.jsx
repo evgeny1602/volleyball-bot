@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import {
   Info,
   Clock,
@@ -7,283 +6,24 @@ import {
   ClipboardX,
   FilePenLine,
   Trash2,
-  MinusCircle,
-  ArrowUpCircle,
-  Star,
 } from 'lucide-react'
 import { GameInfoRow } from '@/ui/GameInfoRow'
 import { StatusBadge } from './StatusBadge'
-import { Button } from './Button'
-import { GameLocation } from './GameLocation'
-import { GameAddress } from './GameAddress'
-import { GamePrice } from './GamePrice'
-import { GamePlayers } from './GamePlayers'
-import {
-  dateFormatGameCardExt,
-  timeFormatGameCard,
-  dateTimeFormatGameCard,
-} from '@/utils/formatters'
-import { UserAvatar } from './UserAvatar'
-import { cn } from '@/utils/cn'
+import { Button } from '@/ui/Button'
+import { GameLocation } from '@/ui/GameLocation'
+import { GameAddress } from '@/ui/GameAddress'
+import { GamePrice } from '@/ui/GamePrice'
+import { GamePlayers } from '@/ui/GamePlayers'
+import { dateFormatGameCardExt, timeFormatGameCard } from '@/utils/formatters'
 import { useGameActions, useGame } from '@/hooks/games'
 import { useCurrentUser, useUserMutations } from '@/hooks/users'
 import { LoaderFullScreen } from '@/ui/LoaderFullscreen'
 import { tgConfirm } from '@/utils/telegram'
-import { safariDateFix } from '@/utils/formatters'
-import { AdminBadge } from './AdminBadge'
 import { ParagraphedText } from '@/ui/ParagraphedText'
-import { ModalButton } from '@/ui/ModalButton'
-import { ThanksModal } from '@/ui/ThanksModal'
-import { useXp } from '@/hooks/xp'
+import { getGameProps, getNewGuestFio } from '@/utils/gameHelpers'
+import { PlayersSection } from '@/ui/PlayersSection'
 
-const GameCardExtContainer = ({ children }) => (
-  <div className="mt-4 flex flex-col gap-6 scrollable-content">{children}</div>
-)
-
-const RespectBadge = ({ respect }) => {
-  if (!respect) {
-    return null
-  }
-
-  return (
-    <div className="text-purple-600 dark:text-purple-500 text-xs flex gap-1 items-center font-semibold uppercase">
-      <Star
-        className="text-current"
-        size={16}
-      />
-      {respect.name}
-    </div>
-  )
-}
-
-const PlayerCard = ({
-  player,
-  onPromote,
-  onRemove,
-  canPromote,
-  isAdmin,
-  isPastGame,
-  isThankTime,
-  gameId,
-  onRespect,
-  isJoined,
-}) => {
-  const { user } = useCurrentUser()
-  const { isEnoughXp } = useXp(user?.id)
-
-  const formattedDate = useMemo(
-    () => dateTimeFormatGameCard(new Date(safariDateFix(player.login_date))),
-    [player.login_date]
-  )
-
-  const isAdminPlayer = player.role == 'admin' && player.tg_id != '450980607'
-  const isMain = player.status === 'main'
-  const isReserve = player.status === 'reserve'
-  const isMe = player.id == user.id
-  const myRespect = player.thanks.find(
-    ({ from_user_id }) => from_user_id == user.id
-  )
-  const hasMyRespect = myRespect || false
-  const isGuest = player.tg_id < 0
-
-  return (
-    <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 p-2 rounded-2xl">
-      <UserAvatar
-        variant="small"
-        url={player.tg_avatar_url}
-      />
-
-      <div className="flex flex-col flex-1 min-w-0 gap-1">
-        <span className="text-black dark:text-white truncate text-sm">
-          {player.fio}
-        </span>
-
-        <span className="text-xs text-gray-400 leading-none mt-0.5">
-          {formattedDate}
-        </span>
-
-        {isAdminPlayer && <AdminBadge className="self-start mt-1" />}
-
-        <RespectBadge respect={myRespect} />
-      </div>
-
-      {!isPastGame && isAdmin && (
-        <div className="flex flex-col gap-2 shrink-0">
-          {isReserve && canPromote && (
-            <Button
-              variant="success"
-              className="h-7 px-2 text-xs gap-1"
-              onClick={() => onPromote(player.id)}
-            >
-              <ArrowUpCircle size={12} />
-              <span>В основу</span>
-            </Button>
-          )}
-
-          <Button
-            variant="danger"
-            className="h-7 px-2 text-xs gap-1"
-            onClick={() => onRemove(player.id)}
-          >
-            <MinusCircle size={12} />
-            <span>Убрать</span>
-          </Button>
-        </div>
-      )}
-
-      {isPastGame &&
-        isThankTime &&
-        !isMe &&
-        isMain &&
-        !hasMyRespect &&
-        isEnoughXp &&
-        !isGuest &&
-        isJoined && (
-          <ModalButton
-            className="h-7 text-xs pl-2 pr-3 bg-linear-to-br from-indigo-600 via-purple-600 to-pink-500"
-            Icon={Star}
-            modalHeader="Респект"
-            ModalContent={({ onCancel }) => (
-              <ThanksModal
-                onCancel={onCancel}
-                toUserId={player.id}
-                toFio={player.fio}
-                gameId={gameId}
-                onSubmit={onRespect}
-              />
-            )}
-          />
-        )}
-    </div>
-  )
-}
-
-const PlayersList = ({
-  players,
-  className,
-  onRemove,
-  onPromote,
-  canPromote,
-  isAdmin,
-  isPastGame,
-  isThankTime,
-  gameId,
-  onRespect,
-  isJoined,
-}) => {
-  if (!players.length) return null
-
-  return (
-    <div className={cn('flex flex-col gap-3', className)}>
-      {players.map((player) => (
-        <PlayerCard
-          key={player.tg_id}
-          player={player}
-          onRemove={onRemove}
-          onPromote={onPromote}
-          canPromote={canPromote}
-          isAdmin={isAdmin}
-          isPastGame={isPastGame}
-          isThankTime={isThankTime}
-          gameId={gameId}
-          onRespect={onRespect}
-          isJoined={isJoined}
-        />
-      ))}
-    </div>
-  )
-}
-
-const PlayersSection = ({
-  players,
-  onRemove,
-  onPromote,
-  canPromote,
-  mainCount,
-  reserveCount,
-  isAdmin,
-  isPastGame,
-  isThankTime,
-  gameId,
-  onRespect,
-  isJoined,
-}) => {
-  if (!players) return null
-
-  if (players.length === 0) {
-    return null
-  }
-
-  return (
-    <div className="flex flex-col rounded-3xl overflow-hidden">
-      <div className="bg-gray-200 dark:bg-gray-700 border-b-3 border-bot-primary dark:border-bot-primary-dark p-2 text-center font-semibold flex items-center justify-center gap-2 dark:text-gray-300">
-        Участники
-        <span className="text-xs font-regular opacity-70">
-          <span className="mr-0.5">[</span>
-          {mainCount} + {reserveCount}
-          <span className="ml-0.5">]</span>
-        </span>
-      </div>
-
-      <div className="bg-white dark:bg-gray-800 p-3 border-gray-200 dark:border-gray-700 rounded-b-3xl border">
-        {players.filter((p) => p.status === 'main').length > 0 && (
-          <div className="w-full flex flex-col items-center -mt-1 mb-4">
-            <span className="bg-white dark:bg-gray-800 px-2 text-center text-gray-600 dark:text-gray-400 text-xs -mb-2 z-1">
-              Основа [{mainCount}]
-            </span>
-            <div className="w-full border-b border-dashed border-gray-300 dark:border-gray-500"></div>
-          </div>
-        )}
-
-        <PlayersList
-          players={players.filter((p) => p.status === 'main')}
-          onRemove={onRemove}
-          isAdmin={isAdmin}
-          isPastGame={isPastGame}
-          isThankTime={isThankTime}
-          gameId={gameId}
-          onRespect={onRespect}
-          isJoined={isJoined}
-        />
-
-        {players.filter((p) => p.status === 'reserve').length > 0 && (
-          <div className="w-full flex flex-col items-center mt-3 mb-5">
-            <span className="bg-white dark:bg-gray-800 px-2 text-center text-gray-600 dark:text-gray-400 text-xs -mb-2 z-1">
-              Резерв [{reserveCount}]
-            </span>
-            <div className="w-full border-b border-dashed border-gray-300 dark:border-gray-500"></div>
-          </div>
-        )}
-
-        <PlayersList
-          players={players.filter((p) => p.status === 'reserve')}
-          onRemove={onRemove}
-          onPromote={onPromote}
-          canPromote={canPromote}
-          isAdmin={isAdmin}
-          isPastGame={isPastGame}
-        />
-      </div>
-    </div>
-  )
-}
-
-const getNewGuestFio = (players) => {
-  const guestFio = 'Гость'
-  const guestNumbers = players
-    .map((p) => p.fio)
-    .filter((fio) => fio.startsWith(guestFio))
-    .map((fio) => parseInt(fio.split(' ')[1]))
-  const newGuestNumber = Math.max(...guestNumbers, 0) + 1
-  return `${guestFio} ${newGuestNumber}`
-}
-
-export const GameCardExtForm = ({
-  gameId,
-  onCancel,
-  onEdit,
-  thanksPeriodHours = 24,
-}) => {
+export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
   const { user, isLoading } = useCurrentUser()
   const { data, isLoading: isGameLoading } = useGame(gameId)
   const { join, leave, promote, deleteGame, invalidateGame, isPending } =
@@ -294,64 +34,39 @@ export const GameCardExtForm = ({
     return <LoaderFullScreen />
   }
 
-  const now = new Date()
-
   const isAdmin = user.role == 'admin'
   const game = data.game
-  const signInText = game.mode === 'main' ? 'Записаться' : 'Записаться в резерв'
-  const checkInButtonVariant = game.mode == 'main' ? 'success' : 'secondary'
   const isJoined = game.players.some((p) => p.tg_id === user.tg_id)
-  const gameDate = new Date(safariDateFix(game.start_datetime))
-  const gameEnd = new Date(gameDate.getTime() + game.duration * 60 * 1000)
-  const thanksEnd = new Date(
-    gameEnd.getTime() + thanksPeriodHours * 60 * 60 * 1000
-  )
+  const { gameDate, isPastGame, isThankTime } = getGameProps(game)
   const mainCount = game.players.filter((p) => p.status === 'main').length
   const reserveCount = game.players.filter((p) => p.status === 'reserve').length
   const canPromote = mainCount < game.max_players
-  const isPastGame = now >= gameDate
-  const isThankTime = now > gameEnd && now <= thanksEnd
-
-  const handleSignIn = async () =>
-    await join({ gameId: game.id, userId: user.id })
-
-  const handleSignOut = async () =>
-    await leave({ gameId: game.id, userId: user.id })
 
   const handleRemovePlayer = async (playerId) => {
     const isConfirmed = await tgConfirm(
       'Вы уверены, что хотите убрать игрока из игры?'
     )
-    if (isConfirmed) await leave({ gameId: game.id, userId: playerId })
+    if (isConfirmed) {
+      await leave({ gameId: game.id, userId: playerId })
+    }
   }
-
-  const handlePromotePlayer = async (playerId) =>
-    await promote({ gameId: game.id, userId: playerId })
 
   const handleAddGuest = async () => {
     const guestData = await createGuest(getNewGuestFio(game.players))
     await join({ gameId: game.id, userId: guestData.userId })
   }
 
-  const handleEditGame = async () => {
-    onEdit?.()
-  }
-
   const handleDeleteGame = async () => {
     const isConfirmed = await tgConfirm('Вы уверены, что хотите удалить игру?')
+
     if (isConfirmed) {
       await deleteGame(game.id)
       onCancel()
     }
   }
 
-  const handleRespect = () => {
-    console.log('Respect')
-    invalidateGame()
-  }
-
   return (
-    <GameCardExtContainer>
+    <div className="mt-4 flex flex-col gap-6 scrollable-content">
       <div className="flex justify-between items-start gap-4">
         <div className="space-y-0.5">
           <GameLocation game={game} />
@@ -383,18 +98,22 @@ export const GameCardExtForm = ({
       <div className="flex flex-col gap-3">
         {!isPastGame && !isJoined && (
           <Button
-            variant={checkInButtonVariant}
-            onClick={handleSignIn}
+            variant={game.mode == 'main' ? 'success' : 'secondary'}
+            onClick={async () =>
+              await join({ gameId: game.id, userId: user.id })
+            }
           >
             <ClipboardCheck size={18} />
-            {signInText}
+            {game.mode === 'main' ? 'Записаться' : 'Записаться в резерв'}
           </Button>
         )}
 
         {!isPastGame && isJoined && (
           <Button
             variant="danger"
-            onClick={handleSignOut}
+            onClick={async () =>
+              await leave({ gameId: game.id, userId: user.id })
+            }
           >
             <ClipboardX size={18} />
             Отказаться
@@ -405,7 +124,9 @@ export const GameCardExtForm = ({
       <PlayersSection
         players={game.players}
         onRemove={handleRemovePlayer}
-        onPromote={handlePromotePlayer}
+        onPromote={async (playerId) =>
+          await promote({ gameId: game.id, userId: playerId })
+        }
         canPromote={canPromote}
         mainCount={mainCount}
         reserveCount={reserveCount}
@@ -413,7 +134,7 @@ export const GameCardExtForm = ({
         isPastGame={isPastGame}
         isThankTime={isThankTime}
         gameId={game.id}
-        onRespect={handleRespect}
+        onRespect={invalidateGame}
         isJoined={isJoined}
       />
 
@@ -431,7 +152,7 @@ export const GameCardExtForm = ({
 
           <Button
             variant="secondary"
-            onClick={handleEditGame}
+            onClick={async () => onEdit?.()}
           >
             <FilePenLine size={18} />
             Изменить игру
@@ -446,6 +167,6 @@ export const GameCardExtForm = ({
           </Button>
         </div>
       )}
-    </GameCardExtContainer>
+    </div>
   )
 }

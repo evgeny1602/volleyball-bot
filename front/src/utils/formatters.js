@@ -1,4 +1,4 @@
-export const safariDateFix = (dateStr) => dateStr.replace(/-/g, '/')
+export const safariDateFix = (dateStr) => (dateStr || '').replace(/-/g, '/')
 
 export const dateFormatGameCard = (date) => {
   const day = date.getDate().toString().padStart(2, '0')
