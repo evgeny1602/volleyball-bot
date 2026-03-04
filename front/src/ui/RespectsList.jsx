@@ -38,15 +38,15 @@ const ThankCard = ({ thank, className }) => {
           </span>
         </span>
 
+        <span className="bg-gray-400 text-white px-1 rounded-full lowercase">
+          {thank.is_anonymous == 1 ? 'Анононимно' : 'Лично'}
+        </span>
+
         <div>
           <span className="font-semibold">{thank.from_user_fio}</span>
           <span className="px-1">&rarr;</span>
           <span className="font-semibold">{thank.to_user_fio}</span>
         </div>
-
-        <span className="bg-gray-400 text-white px-1 rounded-full lowercase">
-          {thank.is_anonymous == 1 ? 'Анононимно' : 'Лично'}
-        </span>
       </div>
     </ThankCardContainer>
   )
