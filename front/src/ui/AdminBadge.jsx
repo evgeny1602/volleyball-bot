@@ -1,12 +1,11 @@
 import { cn } from '@/utils/cn'
 
-const ADMINS_EXCLUDE_TG_IDS = ['450980607']
+const ADMINS_EXCLUDE_TG_IDS = [450980607]
 
 export const AdminBadge = ({ player, className }) => {
-  const isAdminPlayer =
-    player.role == 'admin' && !ADMINS_EXCLUDE_TG_IDS.includes(player.tg_id)
+  console.log(player)
 
-  if (!isAdminPlayer) {
+  if (player.role != 'admin' || ADMINS_EXCLUDE_TG_IDS.includes(player.tg_id)) {
     return null
   }
 
