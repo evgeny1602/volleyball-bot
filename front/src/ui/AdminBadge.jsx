@@ -3,8 +3,6 @@ import { cn } from '@/utils/cn'
 const ADMINS_EXCLUDE_TG_IDS = [450980607]
 
 export const AdminBadge = ({ player, className }) => {
-  console.log(player)
-
   if (player.role != 'admin' || ADMINS_EXCLUDE_TG_IDS.includes(player.tg_id)) {
     return null
   }
