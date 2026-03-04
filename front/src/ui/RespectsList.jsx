@@ -10,7 +10,7 @@ const ThankCardContainer = ({ children, className }) => {
         'w-full rounded-3xl p-4',
         'bg-white dark:bg-gray-700',
         'border border-gray-300 dark:border-gray-700',
-        'text-gray-500',
+        'text-gray-500 dark:text-gray-400',
         className
       )}
     >
@@ -23,7 +23,7 @@ const ThankCard = ({ thank, className }) => {
   return (
     <ThankCardContainer className={className}>
       <div className="flex flex-wrap text-xs gap-2">
-        <span className="inline-flex items-center">
+        <span className="inline-flex items-center text-gray-600 dark:text-gray-400">
           {dateTimeFormatGameCard(new Date(thank.thank_datetime))}
         </span>
 
@@ -33,7 +33,7 @@ const ThankCard = ({ thank, className }) => {
 
         <span className="inline-flex items-center gap-x-0.5">
           <span className="inline-flex items-center">Игра:</span>
-          <span className="font-semibold inline-flex items-center">
+          <span className="font-semibold inline-flex items-center dark:text-gray-300 text-gray-600">
             {dateTimeFormatGameCard(new Date(thank.game_datetime))}
           </span>
         </span>
@@ -43,11 +43,11 @@ const ThankCard = ({ thank, className }) => {
         </span>
 
         <div>
-          <span className="font-semibold inline-flex items-center">
+          <span className="font-semibold inline-flex items-center dark:text-gray-300 text-gray-600">
             {thank.from_user_fio}
           </span>
           <span className="px-1 inline-flex items-center">&rarr;</span>
-          <span className="font-semibold inline-flex items-center">
+          <span className="font-semibold inline-flex items-center dark:text-gray-300 text-gray-600">
             {thank.to_user_fio}
           </span>
         </div>
