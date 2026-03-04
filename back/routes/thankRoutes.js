@@ -9,6 +9,7 @@ router.get(
   thankController.getGivenThank
 )
 router.get('/rest/:gameId/:fromUserId/:toUserId', thankController.getRestThanks)
+router.get('/all', thankController.getAllGivenThanks)
 router.get('/:toUserId', thankController.getUserThanks)
 
 export default router

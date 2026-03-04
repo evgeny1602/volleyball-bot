@@ -272,6 +272,11 @@ x-debug-mode: 1
 GET http://localhost:3000/api/thanks/218
 x-debug-mode: 1
 
+###
+
+GET http://localhost:3000/api/thanks/all
+x-debug-mode: 1
+
 ### thanks - end
 
 ### xp - start

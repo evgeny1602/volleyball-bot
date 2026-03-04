@@ -100,3 +100,33 @@ export const getGivenThank = (req, res) => {
     res.status(500).json({ error: 'Internal server error' })
   }
 }
+
+export const getAllGivenThanks = (req, res) => {
+  try {
+    let thanks = db
+      .prepare(
+        `
+        SELECT 
+          t.id AS thank_id,
+          t.created_at AS thank_datetime,
+          t.is_anonymous,
+          tt.name AS thank_name,
+          u_from.fio AS from_user_fio,
+          u_to.fio AS to_user_fio,
+          g.start_datetime AS game_datetime
+        FROM thanks t
+        JOIN thank_types tt ON t.type_id = tt.id
+        JOIN users u_from ON t.from_user_id = u_from.id
+        JOIN users u_to ON t.to_user_id = u_to.id
+        JOIN games g ON t.game_id = g.id
+        ORDER BY t.created_at DESC
+        `
+      )
+      .all()
+
+    res.json({ success: true, thanks })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}

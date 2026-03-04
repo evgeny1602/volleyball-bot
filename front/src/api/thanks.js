@@ -3,6 +3,10 @@ import { api } from './init'
 const BASE_PATH = '/thanks'
 
 export const thanksApi = {
+  getAll: async () => {
+    const { data } = await api.get(`${BASE_PATH}/all`)
+    return data
+  },
   /**
    * Получить типы благодарностей, которые пользователь еще НЕ отправлял в этой игре конкретному игроку
    */

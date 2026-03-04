@@ -3,7 +3,7 @@ import { thanksApi } from '@/api/thanks'
 import { XP_KEYS } from '@/hooks/xp'
 
 export const THANKS_KEYS = {
-  all: ['thanks'],
+  all: () => ['thanks', 'feed'],
   rest: (gameId, fromUserId, toUserId) => [
     'thanks',
     'rest',
@@ -19,6 +19,14 @@ export const THANKS_KEYS = {
     fromUserId,
     toUserId,
   ],
+}
+
+export const useAllThanks = () => {
+  return useQuery({
+    queryKey: THANKS_KEYS.all(),
+    queryFn: () => thanksApi.getAll(),
+    select: (data) => data?.thanks || [],
+  })
 }
 
 export const useRestThanks = (gameId, fromUserId, toUserId) => {
@@ -60,6 +68,8 @@ export const useThanksMutations = () => {
       queryClient.invalidateQueries({
         queryKey: THANKS_KEYS.given(gameId, fromUserId, toUserId),
       })
+
+      queryClient.invalidateQueries({ queryKey: THANKS_KEYS.all() })
 
       queryClient.invalidateQueries({ queryKey: XP_KEYS.detail(fromUserId) })
 
