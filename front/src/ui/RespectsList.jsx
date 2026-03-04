@@ -27,7 +27,7 @@ const ThankCard = ({ thank, className }) => {
       <div className="flex flex-wrap text-xs gap-x-2 gap-y-1">
         <span>{dateTimeFormatGameCard(new Date(thank.thank_datetime))}</span>
 
-        <span className="uppercase font-semibold text-purple-600 dark:text-purple-400">
+        <span className="uppercase  font-semibold bg-linear-to-br rounded-full px-1 text-white from-indigo-600 via-purple-600 to-pink-500">
           {thank.thank_name}
         </span>
 
@@ -38,7 +38,7 @@ const ThankCard = ({ thank, className }) => {
           </span>
         </span>
 
-        <span className="bg-gray-400 text-white px-1 rounded-full lowercase">
+        <span className="border border-gray-400 text-gray-400 px-1 rounded-full lowercase ">
           {thank.is_anonymous == 1 ? 'Анононимно' : 'Лично'}
         </span>
 
