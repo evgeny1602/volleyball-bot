@@ -47,7 +47,7 @@ export const getRestThanks = (req, res) => {
 
     const thanks = getRestGameThanks(gameId, fromUserId)
 
-    console.log({ thanks })
+    // console.log({ thanks })
 
     res.json({ success: true, thanks })
   } catch (err) {

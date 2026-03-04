@@ -20,8 +20,6 @@ const ThankCardContainer = ({ children, className }) => {
 }
 
 const ThankCard = ({ thank, className }) => {
-  console.log(thank)
-
   return (
     <ThankCardContainer className={className}>
       <div className="flex flex-wrap text-xs gap-2">
@@ -69,9 +67,7 @@ const RespectsListContainer = ({ children, className }) => {
 export const RespectsList = () => {
   const { data: thanks, isLoading, isError, refetch } = useAllThanks()
 
-  if (isLoading) {
-    return <LoaderFullScreen />
-  }
+  if (isLoading) return <LoaderFullScreen />
 
   if (thanks.length == 0) {
     return (
