@@ -7,7 +7,7 @@ const ThankCardContainer = ({ children, className }) => {
   return (
     <div
       className={cn(
-        'w-full rounded-3xl py-3 px-3',
+        'w-full rounded-3xl p-4',
         'bg-white dark:bg-gray-700',
         'border border-gray-300 dark:border-gray-700',
         'text-gray-500',
