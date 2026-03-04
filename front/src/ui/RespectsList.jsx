@@ -25,27 +25,33 @@ const ThankCard = ({ thank, className }) => {
   return (
     <ThankCardContainer className={className}>
       <div className="flex flex-wrap text-xs gap-2">
-        <span>{dateTimeFormatGameCard(new Date(thank.thank_datetime))}</span>
+        <span className="inline-flex items-center">
+          {dateTimeFormatGameCard(new Date(thank.thank_datetime))}
+        </span>
 
-        <span className="uppercase  font-semibold bg-linear-to-br rounded-full py-0.5 px-2 text-white from-indigo-600 via-purple-600 to-pink-500">
+        <span className="uppercase inline-flex items-center font-semibold bg-linear-to-br rounded-full py-0.5 px-2 text-white from-indigo-600 via-purple-600 to-pink-500">
           {thank.thank_name}
         </span>
 
-        <span>
-          Игра:{' '}
-          <span className="font-semibold">
+        <span className="inline-flex items-center gap-x-0.5">
+          <span className="inline-flex items-center">Игра:</span>
+          <span className="font-semibold inline-flex items-center">
             {dateTimeFormatGameCard(new Date(thank.game_datetime))}
           </span>
         </span>
 
-        <span className="border border-gray-400 text-gray-400 px-1 rounded-full lowercase">
+        <span className="border inline-flex items-center border-gray-400 text-gray-400 px-1 rounded-full lowercase">
           {thank.is_anonymous == 1 ? 'Анононимно' : 'Лично'}
         </span>
 
         <div>
-          <span className="font-semibold">{thank.from_user_fio}</span>
-          <span className="px-1">&rarr;</span>
-          <span className="font-semibold">{thank.to_user_fio}</span>
+          <span className="font-semibold inline-flex items-center">
+            {thank.from_user_fio}
+          </span>
+          <span className="px-1 inline-flex items-center">&rarr;</span>
+          <span className="font-semibold inline-flex items-center">
+            {thank.to_user_fio}
+          </span>
         </div>
       </div>
     </ThankCardContainer>
