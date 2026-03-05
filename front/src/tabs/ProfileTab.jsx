@@ -39,7 +39,7 @@ export const ProfileTab = () => {
   if (isXpLoading || isThanksLoading || !user) return <LoaderFullScreen />
 
   return (
-    <div className="w-full h-dvh p-4 pt-8 flex flex-col items-center gap-4 text-lg text-gray-600 dark:text-white">
+    <div className="scrollable-content overflow-y-auto w-full p-4 pt-8 pb-30 flex flex-col items-center gap-4 text-lg text-gray-600 dark:text-white">
       <UserAvatar
         url={tgUser?.photo_url || ''}
         variant="big"
