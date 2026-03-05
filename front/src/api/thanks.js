@@ -30,7 +30,7 @@ export const thanksApi = {
    * Получить список всех благодарностей, полученных пользователем (история)
    */
   getUserThanks: async (toUserId) => {
-    const { data } = await api.get(`${BASE_PATH}/user/${toUserId}`)
+    const { data } = await api.get(`${BASE_PATH}/${toUserId}`)
     return data
   },
 

@@ -8,20 +8,24 @@ import { HomeMenuIcon } from '@/icons/HomeMenuIcon'
 import { CalendarMenuIcon } from '@/icons/CalendarMenuIcon'
 import { GamesMenuIcon } from '@/icons/GamesMenuIcon'
 import { AdminMenuIcon } from '@/icons/AdminMenuIcon'
+import { ProfileMenuIcon } from '@/icons/ProfileMenuIcon'
 import { useCurrentUser } from '@/hooks/users'
 import { MenuItem } from '@/ui/MenuItem'
+import { ProfileTab } from '@/tabs/ProfileTab'
 
 const TABS = {
   home: MainTab,
   admin: AdminTab,
   games: MyGamesTab,
   calendar: CalendarTab,
+  profile: ProfileTab,
 }
 
 const MENU_ITEMS_CONFIG = [
   { id: 'home', Icon: HomeMenuIcon },
   { id: 'games', Icon: GamesMenuIcon },
   { id: 'calendar', Icon: CalendarMenuIcon },
+  // { id: 'profile', Icon: ProfileMenuIcon },
   { id: 'admin', adminsOnly: true, Icon: AdminMenuIcon },
 ]
 
@@ -35,10 +39,6 @@ export function MainPage() {
     )
   }, [user])
 
-  const handleMenuItemClick = (id) => {
-    setTabId(id)
-  }
-
   const ActiveTab = TABS[tabId]
 
   return (
@@ -51,7 +51,7 @@ export function MainPage() {
             key={item.id}
             {...item}
             isActive={tabId === item.id}
-            onClick={handleMenuItemClick}
+            onClick={(id) => setTabId(id)}
           />
         ))}
       </MenuContainer>

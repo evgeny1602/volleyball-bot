@@ -5,6 +5,19 @@ const xpForGame = 100
 const xpForReceivedThank = 15
 const xpForSentThank = 25
 
+const calcUserXpBalance = (
+  playedGamesCount,
+  receivedThanksCount,
+  sentThanksCount
+) => {
+  const xpBalance =
+    xpForGame * playedGamesCount +
+    xpForReceivedThank * receivedThanksCount +
+    xpForSentThank * sentThanksCount
+
+  return xpBalance
+}
+
 export const getUserXp = (req, res) => {
   try {
     const { userId } = req.params
@@ -27,14 +40,41 @@ export const getUserXp = (req, res) => {
       .prepare(`SELECT COUNT(*) as count FROM thanks WHERE from_user_id = ?;`)
       .get(userId).count
 
-    const xpBalance =
-      xpForGame * playedGamesCount +
-      xpForReceivedThank * receivedThanksCount +
-      xpForSentThank * sentThanksCount
+    const xpBalance = calcUserXpBalance(
+      playedGamesCount,
+      receivedThanksCount,
+      sentThanksCount
+    )
+
+    const rank = db
+      .prepare(
+        `
+          SELECT number, name
+          FROM user_ranks
+          WHERE min_xp <= ?
+          ORDER BY min_xp DESC
+          LIMIT 1
+        `
+      )
+      .get(xpBalance)
+
+    const nextRank = db
+      .prepare(
+        `
+          SELECT number, name, min_xp
+          FROM user_ranks
+          WHERE min_xp > ?
+          ORDER BY min_xp ASC
+          LIMIT 1
+        `
+      )
+      .get(xpBalance)
 
     res.json({
       success: true,
       xpBalance,
+      rank,
+      nextRank,
       stats: {
         games: playedGamesCount,
         received: receivedThanksCount,

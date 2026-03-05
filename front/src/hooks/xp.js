@@ -25,6 +25,8 @@ export const useXp = (userId) => {
     xpBalance: query.data?.xpBalance || 0,
     stats: query.data?.stats || null,
     isEnoughXp: (query.data?.xpBalance || 0) >= MIN_XP_FOR_RESPECT,
+    rank: query.data?.rank || null,
+    nextRank: query.data?.nextRank || null,
   }
 }
 

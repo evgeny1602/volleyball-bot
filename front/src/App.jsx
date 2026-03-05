@@ -11,7 +11,6 @@ export const App = () => {
   const { user, isLoading } = useCurrentUser()
 
   useEffect(() => {
-    const overflow = 100
     document.body.style.overflow = 'hidden'
     document.body.style.position = 'fixed'
     document.body.style.top = '0'
@@ -20,8 +19,6 @@ export const App = () => {
     document.body.style.bottom = '0'
 
     const handleTouchMove = (e) => {
-      // Разрешаем скролл только внутри определенных контейнеров,
-      // если у вас есть списки. Если всё приложение статично — просто:
       if (e.target.closest('.scrollable-content')) {
         return
       }

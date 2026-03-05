@@ -76,7 +76,18 @@ export const getUserThanks = (req, res) => {
 
     const thanks = db
       .prepare(
-        'SELECT t.created_at AS created_at, tt.name AS name, u.fio AS from_fio, t.is_anonymous AS is_anonymous FROM thanks t JOIN thank_types tt ON t.type_id = tt.id JOIN users u ON t.from_user_id = u.id WHERE t.to_user_id = ? ORDER BY t.created_at DESC'
+        `SELECT
+          t.created_at AS created_at,
+          tt.name AS name,
+          u.fio AS from_fio,
+          t.is_anonymous AS is_anonymous
+        FROM thanks t
+          JOIN thank_types tt ON t.type_id = tt.id
+          JOIN users u ON t.from_user_id = u.id
+        WHERE
+          t.to_user_id = ?
+        ORDER BY
+          t.created_at DESC`
       )
       .all(toUserId)
     res.json({ success: true, thanks })

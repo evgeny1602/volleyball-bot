@@ -5,7 +5,7 @@ export const MenuContainer = ({ children }) => {
     <div
       className={cn(
         'fixed bottom-5 flex flex-row flex-nowrap overflow-x-auto scroll-smooth snap-x',
-        'w-auto max-w-[95%] py-1 px-1 rounded-full shadow-sm dark:shadow-sm-dark',
+        'w-auto max-w-[92%] py-1 px-1 rounded-full shadow-sm dark:shadow-sm-dark',
         'bg-white/70 dark:bg-black/70',
         'backdrop-blur-md backdrop-saturate-150',
         'border border-white/20 dark:border-white/20',

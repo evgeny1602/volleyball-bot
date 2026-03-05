@@ -4,6 +4,7 @@ import { CircleUser } from 'lucide-react'
 const SIZES = {
   default: 'w-16 h-16',
   small: 'w-10 h-10',
+  big: 'w-34 h-34',
 }
 
 export const UserAvatar = ({ url, variant = 'default', className }) => {
