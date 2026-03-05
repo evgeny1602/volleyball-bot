@@ -8,6 +8,7 @@ import { ModalButton } from '@/ui/ModalButton'
 import { Star, Handshake, Medal, Volleyball } from 'lucide-react'
 import { RespectTotals } from '@/ui/RespectTotals'
 import { ThankUsers } from '@/ui/ThankUsers'
+import { useMemo } from 'react'
 
 export const ProfileTab = () => {
   const { tgUser, user } = useCurrentUser()
@@ -23,34 +24,39 @@ export const ProfileTab = () => {
   )
 
   const thanks = thanksData?.thanks || []
-  const namedThanks = thanks.filter((thank) => thank.is_anonymous == 0)
-  const games = stats?.games || 0
-  const photoUrl = tgUser?.photo_url || ''
-  const [lastName, ...otherParts] = (user?.fio || '').trim().split(/\s+/)
-  const nameRest = otherParts.join(' ')
+  const namedThanks = useMemo(
+    () => thanks.filter((thank) => !thank.is_anonymous),
+    [thanks]
+  )
+  const displayName = useMemo(() => {
+    if (!user?.fio) return { first: '', last: '' }
+    const parts = user.fio.trim().split(/\s+/)
+    if (parts.length === 1) return { first: parts[0], last: '' }
+    const [lastName, ...other] = parts
+    return { first: other.join(' '), last: lastName }
+  }, [user?.fio])
 
-  //   console.log({ thanks })
-
-  if (isXpLoading || isThanksLoading) return <LoaderFullScreen />
+  if (isXpLoading || isThanksLoading || !user) return <LoaderFullScreen />
 
   return (
     <div className="w-full h-dvh p-4 pt-8 flex flex-col items-center gap-4 text-lg text-gray-600 dark:text-white">
       <UserAvatar
-        url={photoUrl}
+        url={tgUser?.photo_url || ''}
         variant="big"
       />
 
       <div className="flex flex-col items-center">
         <div className="font-semibold">
-          {nameRest} {lastName}
+          {displayName.first} {displayName.last}
         </div>
+
         <div className="text-sm text-gray-400 -mt-1">{rank.name}</div>
       </div>
 
       <div className="text-xs mt-8 font-mono font-semibold bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 text-white px-3 py-1 rounded-full">
         <span className="flex items-center gap-1">
           <Medal size={15} />
-          Уровень: {rank.number}
+          Уровень: {rank?.number}
         </span>
       </div>
 
@@ -65,7 +71,8 @@ export const ProfileTab = () => {
         <div className="flex items-center justify-center gap-2 text-gray-500 dark:text-white text-sm px-4 py-2 bg-gray-200 dark:bg-gray-600 rounded-full font-semibold">
           <Volleyball size={16} />
           <span>
-            Игры <span className="font-normal opacity-80">{games}</span>
+            Игры{' '}
+            <span className="font-normal opacity-80">{stats?.games || 0}</span>
           </span>
         </div>
 
