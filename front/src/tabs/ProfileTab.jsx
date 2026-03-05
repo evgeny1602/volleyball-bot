@@ -5,7 +5,9 @@ import { LoaderFullScreen } from '@/ui/LoaderFullscreen'
 import { UserAvatar } from '@/ui/UserAvatar'
 import { XpBar } from '@/ui/XpBar'
 import { ModalButton } from '@/ui/ModalButton'
-import { Star, Handshake } from 'lucide-react'
+import { Star, Handshake, Medal, Volleyball } from 'lucide-react'
+import { RespectTotals } from '@/ui/RespectTotals'
+import { ThankUsers } from '@/ui/ThankUsers'
 
 export const ProfileTab = () => {
   const { tgUser, user } = useCurrentUser()
@@ -26,17 +28,13 @@ export const ProfileTab = () => {
   const photoUrl = tgUser?.photo_url || ''
   const [lastName, ...otherParts] = (user?.fio || '').trim().split(/\s+/)
   const nameRest = otherParts.join(' ')
-  const thankTotals = thanks.reduce((acc, item) => {
-    acc[item.name] = (acc[item.name] || 0) + 1
-    return acc
-  }, {})
 
-  console.log({ thanks })
+  //   console.log({ thanks })
 
   if (isXpLoading || isThanksLoading) return <LoaderFullScreen />
 
   return (
-    <div className="w-full h-dvh p-4 pt-16 flex flex-col items-center gap-4 text-lg text-gray-600">
+    <div className="w-full h-dvh p-4 pt-8 flex flex-col items-center gap-4 text-lg text-gray-600 dark:text-white">
       <UserAvatar
         url={photoUrl}
         variant="big"
@@ -49,46 +47,54 @@ export const ProfileTab = () => {
         <div className="text-sm text-gray-400 -mt-1">{rank.name}</div>
       </div>
 
-      <div className="my-4 font-mono bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 text-white px-4 py-1 rounded-full">
-        Уровень {rank.number}
+      <div className="text-xs mt-8 font-mono font-semibold bg-linear-to-r from-indigo-500 via-purple-500 to-pink-500 text-white px-3 py-1 rounded-full">
+        <span className="flex items-center gap-1">
+          <Medal size={15} />
+          Уровень: {rank.number}
+        </span>
       </div>
 
       <XpBar
         xpBalance={xpBalance}
         rank={rank}
         nextRank={nextRank}
+        className="mb-8"
       />
 
-      <div className="flex flex-col items-center text-gray-400 text-sm">
-        <div>
-          <span className="mr-1">Игр сыграно:</span>
-          <span className="font-semibold text-gray-600">{games}</span>
+      <div className="flex flex-col gap-3 items-center w-full">
+        <div className="flex items-center justify-center gap-2 text-gray-500 dark:text-white text-sm px-4 py-2 bg-gray-200 dark:bg-gray-600 rounded-full font-semibold">
+          <Volleyball size={16} />
+          <span>
+            Игры <span className="font-normal opacity-80">{games}</span>
+          </span>
         </div>
+
+        <ModalButton
+          modalHeader={
+            <span className="text-sm">
+              Респекты{' '}
+              <span className="text-xs font-normal opacity-80">
+                {thanks.length}
+              </span>
+            </span>
+          }
+          Icon={Star}
+          ModalContent={() => <RespectTotals thanks={thanks} />}
+        />
+
+        <ModalButton
+          modalHeader={
+            <span className="text-sm">
+              Поблагодарили{' '}
+              <span className="text-xs font-normal opacity-80">
+                {namedThanks.length}
+              </span>
+            </span>
+          }
+          ModalContent={() => <ThankUsers thanks={namedThanks} />}
+          Icon={Handshake}
+        />
       </div>
-
-      <ModalButton
-        modalHeader={
-          <span className="text-sm">
-            Респекты{' '}
-            <span className="text-xs font-normal opacity-70">
-              {thanks.length}
-            </span>
-          </span>
-        }
-        Icon={Star}
-      />
-
-      <ModalButton
-        modalHeader={
-          <span className="text-sm">
-            Поблагодарили{' '}
-            <span className="text-xs font-normal opacity-70">
-              {namedThanks.length}
-            </span>
-          </span>
-        }
-        Icon={Handshake}
-      />
     </div>
   )
 }

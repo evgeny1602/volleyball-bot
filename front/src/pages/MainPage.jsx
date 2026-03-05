@@ -25,7 +25,7 @@ const MENU_ITEMS_CONFIG = [
   { id: 'home', Icon: HomeMenuIcon },
   { id: 'games', Icon: GamesMenuIcon },
   { id: 'calendar', Icon: CalendarMenuIcon },
-  // { id: 'profile', Icon: ProfileMenuIcon },
+  { id: 'profile', Icon: ProfileMenuIcon },
   { id: 'admin', adminsOnly: true, Icon: AdminMenuIcon },
 ]
 
