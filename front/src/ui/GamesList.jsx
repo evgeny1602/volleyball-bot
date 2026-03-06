@@ -26,10 +26,13 @@ export const GamesList = ({ isLoading, games }) => {
     close: closeEdit,
   } = useModal(false)
 
-  if (isLoading) return <Loader />
+  if (isLoading) {
+    return <Loader />
+  }
 
-  if (games.length == 0)
+  if (games.length == 0) {
     return <NoGames>На выбранную дату тренировок нет</NoGames>
+  }
 
   const handleCardShortClick = (game) => {
     tgVibro('medium')

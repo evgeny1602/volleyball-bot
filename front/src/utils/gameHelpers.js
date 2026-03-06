@@ -49,9 +49,12 @@ export const getFilteredGames = ({
       const isRecent = getGameDate(game) >= minGameDate
       const isParticipant = game.players.some((p) => p.id === userId)
 
-      if (!isRecent || !isParticipant) return false
+      if (!isRecent || !isParticipant) {
+        return false
+      }
 
       const { isGameEnded } = getGameProps(game)
+
       return mode === 'past' ? isGameEnded : !isGameEnded
     })
     .toSorted((a, b) => {

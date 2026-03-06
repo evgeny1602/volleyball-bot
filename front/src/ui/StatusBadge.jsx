@@ -1,5 +1,6 @@
 import { cn } from '@/utils/cn'
 import { useCurrentUser } from '@/hooks/users'
+import { safariDateFix } from '@/utils/formatters'
 
 const statusMap = {
   out: {
@@ -25,7 +26,7 @@ const statusMap = {
 }
 
 const getStatus = (user, game) => {
-  let gameEnd = new Date(game.start_datetime)
+  let gameEnd = new Date(safariDateFix(game.start_datetime))
   gameEnd.setMinutes(gameEnd.getMinutes() + game.duration)
 
   const now = new Date()
@@ -48,8 +49,6 @@ export const StatusBadge = ({ game }) => {
   const { user } = useCurrentUser()
   const status = getStatus(user, game)
   const { label, classes } = statusMap[status] || statusMap.out
-
-  // console.log({ game, dt: new Date(game.start_datetime) })
 
   return (
     <span

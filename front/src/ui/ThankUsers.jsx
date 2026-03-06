@@ -1,6 +1,7 @@
 import { dateTimeFormatGameCard } from '@/utils/formatters'
 import { Star } from 'lucide-react'
 import { NoRespects } from '@/ui/NoRespects'
+import { safariDateFix } from '@/utils/formatters'
 
 export const ThankUsers = ({ thanks = [] }) => {
   if (!thanks || thanks.length == 0) return <NoRespects />
@@ -14,7 +15,11 @@ export const ThankUsers = ({ thanks = [] }) => {
         >
           <div className="flex gap-1 items-center">
             <span className="text-gray-500 dark:text-gray-400">
-              {dateTimeFormatGameCard(new Date(created_at)).split(' ')[0]}
+              {
+                dateTimeFormatGameCard(
+                  new Date(safariDateFix(created_at))
+                ).split(' ')[0]
+              }
             </span>
 
             <span className="font-semibold text-gray-700 dark:text-gray-200">
