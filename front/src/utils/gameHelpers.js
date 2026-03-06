@@ -36,7 +36,9 @@ export const getFilteredGames = ({
   mode,
   lookBackDays,
 }) => {
-  if (!userId) return []
+  if (!userId) {
+    return []
+  }
 
   const minGameDate = getDateStr(
     new Date(Date.now() - lookBackDays * MS_PER_DAY)

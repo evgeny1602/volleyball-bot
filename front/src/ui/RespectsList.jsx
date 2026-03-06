@@ -1,9 +1,9 @@
 import { useAllThanks } from '@/hooks/thanks'
 import { LoaderFullScreen } from '@/ui/LoaderFullscreen'
 import { cn } from '@/utils/cn'
-import { dateTimeFormatGameCard } from '@/utils/formatters'
+import { dateTimeFormatGameCard, safariDateFix } from '@/utils/formatters'
 
-const ThankCardContainer = ({ children, className }) => {
+const ThankCard = ({ thank, className }) => {
   return (
     <div
       className={cn(
@@ -14,17 +14,11 @@ const ThankCardContainer = ({ children, className }) => {
         className
       )}
     >
-      {children}
-    </div>
-  )
-}
-
-const ThankCard = ({ thank, className }) => {
-  return (
-    <ThankCardContainer className={className}>
       <div className="flex flex-wrap text-xs gap-2">
         <span className="inline-flex items-center text-gray-600 dark:text-gray-400">
-          {dateTimeFormatGameCard(new Date(thank.thank_datetime))}
+          {dateTimeFormatGameCard(
+            new Date(safariDateFix(thank.thank_datetime))
+          )}
         </span>
 
         <span className="uppercase inline-flex items-center font-semibold bg-linear-to-br rounded-full py-0.5 px-2 text-white from-indigo-600 via-purple-600 to-pink-500">
@@ -34,7 +28,9 @@ const ThankCard = ({ thank, className }) => {
         <span className="inline-flex items-center gap-x-0.5">
           <span className="inline-flex items-center">Игра:</span>
           <span className="font-semibold inline-flex items-center dark:text-gray-300 text-gray-600">
-            {dateTimeFormatGameCard(new Date(thank.game_datetime))}
+            {dateTimeFormatGameCard(
+              new Date(safariDateFix(thank.game_datetime))
+            )}
           </span>
         </span>
 
@@ -52,7 +48,7 @@ const ThankCard = ({ thank, className }) => {
           </span>
         </div>
       </div>
-    </ThankCardContainer>
+    </div>
   )
 }
 
@@ -67,7 +63,9 @@ const RespectsListContainer = ({ children, className }) => {
 export const RespectsList = () => {
   const { data: thanks, isLoading, isError, refetch } = useAllThanks()
 
-  if (isLoading) return <LoaderFullScreen />
+  if (isLoading) {
+    return <LoaderFullScreen />
+  }
 
   if (thanks.length == 0) {
     return (
