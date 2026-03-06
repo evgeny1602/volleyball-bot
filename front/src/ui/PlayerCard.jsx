@@ -7,6 +7,7 @@ import { ModalButton } from '@/ui/ModalButton'
 import { ThanksModal } from '@/ui/ThanksModal'
 import { RespectBadge } from '@/ui/RespectBadge'
 import { useCurrentUser } from '@/hooks/users'
+import { useRestThanks } from '@/hooks/thanks'
 import { Button } from '@/ui/Button'
 
 export const PlayerCard = ({
@@ -22,7 +23,13 @@ export const PlayerCard = ({
   isJoined,
 }) => {
   const { user } = useCurrentUser()
-
+  const { data, isLoading: isThanksLoading } = useRestThanks(
+    gameId,
+    user?.id,
+    player.id
+  )
+  const restThanks = data?.thanks || []
+  const haveThanks = restThanks.length > 0
   const isMain = player.status === 'main'
   const isReserve = player.status === 'reserve'
   const isMe = player.id == user.id
@@ -32,6 +39,7 @@ export const PlayerCard = ({
   const hasMyRespect = myRespect || false
   const isGuest = player.tg_id < 0
   const canSendRespect =
+    haveThanks &&
     isPastGame &&
     isThankTime &&
     !isMe &&
