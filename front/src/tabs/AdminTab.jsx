@@ -3,12 +3,12 @@ import { NewsList } from '@/ui/NewsList'
 import { TemplatesList } from '@/ui/TemplatesList'
 import { BaseForm } from '@/ui/BaseForm'
 import { Users, Volleyball, ClipboardList, Megaphone, Star } from 'lucide-react'
-import { AdminTabContainer } from '@/ui/AdminTabContainer'
 import { useGameActions } from '@/hooks/games'
 import { gameSchema } from '@/utils/validations'
 import { gameForm } from '@/utils/forms'
 import { UsersList } from '@/ui/UsersList'
 import { RespectsList } from '@/ui/RespectsList'
+import { cn } from '@/utils/cn'
 
 export const AdminTab = () => {
   const { createGame } = useGameActions()
@@ -52,7 +52,14 @@ export const AdminTab = () => {
   ]
 
   return (
-    <AdminTabContainer>
+    <div
+      className={cn(
+        'w-full flex flex-col items-center justify-center gap-4',
+        'h-dvh',
+        'p-8',
+        'overflow-hidden'
+      )}
+    >
       {ADMIN_ACTIONS.map(({ label, Icon, ModalContent }) => (
         <ModalButton
           className="w-full"
@@ -62,6 +69,6 @@ export const AdminTab = () => {
           ModalContent={ModalContent}
         />
       ))}
-    </AdminTabContainer>
+    </div>
   )
 }

@@ -8,6 +8,7 @@ export const ModalButton = ({
   ModalContent,
   Icon,
   variant = 'primary',
+  modalProps,
 }) => {
   const [isOpen, setIsOpen] = useState(false)
 
@@ -28,7 +29,10 @@ export const ModalButton = ({
           headerText={modalHeader}
           Icon={Icon}
         >
-          <ModalContent onCancel={() => setIsOpen(false)} />
+          <ModalContent
+            onCancel={() => setIsOpen(false)}
+            {...modalProps}
+          />
         </Modal>
       )}
     </>

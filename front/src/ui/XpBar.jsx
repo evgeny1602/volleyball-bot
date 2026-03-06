@@ -1,7 +1,6 @@
 import { cn } from '@/utils/cn'
 
-export const XpBar = ({ xpBalance, nextRank, className }) => {
-  const nextXp = nextRank?.min_xp || xpBalance
+export const XpBar = ({ xpBalance, nextXp, className }) => {
   const progress = Math.min(Math.max((xpBalance / nextXp) * 100, 0), 100)
 
   return (

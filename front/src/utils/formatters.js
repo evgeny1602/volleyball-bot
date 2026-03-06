@@ -100,3 +100,25 @@ export const getWeekDates = () => {
 
 export const formatPhone = (phone) =>
   `+${phone[0]} (${phone[1]}${phone[2]}${phone[3]}) ${phone[4]}${phone[5]}${phone[6]}-${phone[7]}${phone[8]}-${phone[9]}${phone[10]}`
+
+export const fioFormat = (input = '') => {
+  const filteredInput = input.trim().replace(/\s+/g, ' ').replaceAll(',', '')
+
+  if (!filteredInput) {
+    return { first: '', last: '' }
+  }
+
+  if (!filteredInput.includes(' ')) {
+    return { first: filteredInput, last: '' }
+  }
+
+  const parts = filteredInput.trim().split(/\s+/)
+
+  if (parts.length === 1) {
+    return { first: parts[0], last: '' }
+  }
+
+  const [lastName, ...other] = parts
+
+  return { first: other.join(' '), last: lastName }
+}
