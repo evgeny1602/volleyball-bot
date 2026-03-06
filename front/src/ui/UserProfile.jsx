@@ -6,11 +6,10 @@ import { ProfileHeader } from '@/ui/ProfileHeader'
 import { ProfileXp } from '@/ui/ProfileXp'
 import { ProfileStats } from '@/ui/ProfileStats'
 import { LoaderFullScreen } from '@/ui/LoaderFullscreen'
-import { tgGetUser } from '@/utils/telegram'
+import { cn } from '@/utils/cn'
 
-export const UserProfile = ({ tgUserId, variant = 'full' }) => {
-  const tgUser = tgGetUser(tgUserId)
-  const { data, isLoading: isUserLoading } = useUser(tgUser?.id)
+export const UserProfile = ({ tgUserId, variant = 'full', className }) => {
+  const { data, isLoading: isUserLoading } = useUser(tgUserId)
   const user = data?.user
   const {
     xpBalance = 0,
@@ -28,8 +27,8 @@ export const UserProfile = ({ tgUserId, variant = 'full' }) => {
     [thanks]
   )
 
-  if (!tgUser) {
-    return <p className="text-sm font-mono">ОШИБКА: Не получен tgUser</p>
+  if (!tgUserId) {
+    return <p className="text-sm font-mono">ОШИБКА: Не получен tgUserId</p>
   }
 
   if (isXpLoading || isThanksLoading || isUserLoading) {
@@ -37,9 +36,17 @@ export const UserProfile = ({ tgUserId, variant = 'full' }) => {
   }
 
   return (
-    <>
+    <div
+      className={cn(
+        'w-full',
+        'px-4 py-8',
+        'flex flex-col items-center gap-14',
+        'text-lg text-gray-600 dark:text-white',
+        className
+      )}
+    >
       <ProfileHeader
-        avatarUrl={tgUser?.photo_url}
+        avatarUrl={user?.tg_avatar_url}
         userFio={user?.fio}
         rankName={rank?.name}
       />
@@ -56,6 +63,6 @@ export const UserProfile = ({ tgUserId, variant = 'full' }) => {
         namedThanks={namedThanks}
         variant={variant}
       />
-    </>
+    </div>
   )
 }

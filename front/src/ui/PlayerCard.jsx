@@ -1,6 +1,6 @@
 import { MinusCircle, ArrowUpCircle, Star } from 'lucide-react'
 import { dateTimeFormatGameCard } from '@/utils/formatters'
-import { UserAvatar } from '@/ui/UserAvatar'
+import { UserAvatarModal } from '@/ui/UserAvatarModal'
 import { safariDateFix } from '@/utils/formatters'
 import { AdminBadge } from '@/ui/AdminBadge'
 import { ModalButton } from '@/ui/ModalButton'
@@ -43,9 +43,10 @@ export const PlayerCard = ({
 
   return (
     <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 p-2 rounded-2xl">
-      <UserAvatar
+      <UserAvatarModal
         variant="small"
         url={player.tg_avatar_url}
+        tgUserId={player.tg_id}
       />
 
       <div className="flex flex-col flex-1 min-w-0 gap-1">

@@ -7,12 +7,18 @@ const SIZES = {
   big: 'w-34 h-34',
 }
 
-export const UserAvatar = ({ url, variant = 'default', className }) => {
+export const UserAvatar = ({
+  url,
+  variant = 'default',
+  className,
+  onClick,
+}) => {
   const sizeClass = SIZES[variant] || SIZES.default
 
   if (!url) {
     return (
       <div
+        onClick={onClick}
         className={cn(
           'bg-gray-200 dark:bg-gray-600 rounded-full flex items-center justify-center shrink-0',
           sizeClass,
@@ -26,6 +32,7 @@ export const UserAvatar = ({ url, variant = 'default', className }) => {
 
   return (
     <img
+      onClick={onClick}
       src={url}
       className={cn('rounded-full object-cover shrink-0', sizeClass, className)}
     />
