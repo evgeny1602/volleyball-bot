@@ -2,6 +2,9 @@ import crypto from 'crypto'
 import db from '../db.js'
 import { GMT } from './utils.js'
 
+const generatePassword = () =>
+  crypto.randomBytes(4).toString('hex').toLowerCase()
+
 export const getAllUsers = (req, res) => {
   try {
     const stmt = db.prepare(
@@ -168,8 +171,6 @@ export const deleteUser = (req, res) => {
 export const genPsws = (req, res) => {
   try {
     const users = db.prepare('SELECT id FROM users').all()
-    const generatePassword = () =>
-      crypto.randomBytes(4).toString('hex').toLocaleLowerCase()
     const updateStmt = db.prepare('UPDATE users SET psw = ? WHERE id = ?')
     const transaction = db.transaction((userList) => {
       for (const user of userList) {
@@ -184,6 +185,22 @@ export const genPsws = (req, res) => {
     })
   } catch (err) {
     console.error('GenPsws error:', err)
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export const genPsw = (req, res) => {
+  try {
+    const { tgId } = req.params
+    const updateStmt = db.prepare('UPDATE users SET psw = ? WHERE tg_id = ?')
+    const newPassword = generatePassword()
+    updateStmt.run(newPassword, tgId)
+    res.json({
+      success: true,
+      message: `Password generated for users with tg_id ${tgId}`,
+    })
+  } catch (err) {
+    console.error('GenPsw error:', err)
     res.status(500).json({ error: 'Internal server error' })
   }
 }

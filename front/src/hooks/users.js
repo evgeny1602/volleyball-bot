@@ -70,6 +70,11 @@ export const useUserMutations = () => {
     onSuccess: invalidate,
   })
 
+  const generatePasswordMutation = useMutation({
+    mutationFn: usersApi.generatePassword,
+    onSuccess: invalidate,
+  })
+
   const createGuestMutation = useMutation({
     mutationFn: usersApi.createGuest,
     onSuccess: invalidate,
@@ -81,9 +86,11 @@ export const useUserMutations = () => {
     rejectUser: rejectMutation.mutateAsync,
     deleteUser: deleteMutation.mutateAsync,
     createGuest: createGuestMutation.mutateAsync,
+    generatePassword: generatePasswordMutation.mutateAsync,
     isPending:
       createMutation.isPending ||
       approveMutation.isPending ||
-      deleteMutation.isPending,
+      deleteMutation.isPending ||
+      generatePasswordMutation.isPending,
   }
 }

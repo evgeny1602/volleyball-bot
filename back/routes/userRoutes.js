@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.post('/', userController.createUser)
 
+router.get('/gen_psw/:tgId', userController.genPsw)
 router.get('/gen_psws', userController.genPsws)
 router.get('/:tgId', userController.getUserByTgId)
 router.get('/', userController.getAllUsers)

@@ -1,14 +1,17 @@
 import { UserAvatar } from '@/ui/UserAvatar'
 import { cn } from '@/utils/cn'
+import { GenPswButton } from '@/ui/buttons/GenPswButton'
+import { CopyPswButton } from '@/ui/buttons/CopyPswButton'
 import { DeleteButton } from '@/ui/buttons/DeleteButton'
 import { RejectButton } from '@/ui/buttons/RejectButton'
 import { ApproveButton } from '@/ui/buttons/ApproveButton'
 import { useUserMutations } from '@/hooks/users'
 import { Loader } from '@/ui/Loader'
 import { TelegramIcon } from '@/icons/TelegramIcon'
-import { CalendarDays, Phone, Cake } from 'lucide-react'
+import { CalendarDays, Phone, Cake, KeyRound } from 'lucide-react'
 import { formatPhone } from '@/utils/formatters'
 import { AdminBadge } from '@/ui/AdminBadge'
+import { tgAlert } from '@/utils/telegram'
 
 const formatDate = (dateString) => {
   if (!dateString) return ''
@@ -30,7 +33,13 @@ const UserCardContainer = ({ children, className }) => (
 )
 
 export const UserCard = ({ user, className }) => {
-  const { approveUser, deleteUser, rejectUser, isPending } = useUserMutations()
+  const { approveUser, deleteUser, rejectUser, generatePassword, isPending } =
+    useUserMutations()
+
+  const copyPassword = (psw) => {
+    navigator.clipboard.writeText(psw)
+    tgAlert('Пароль скопирован')
+  }
 
   const BUTTONS = [
     {
@@ -52,6 +61,18 @@ export const UserCard = ({ user, className }) => {
       show: ['rejected', 'approved'].includes(user.status),
       confirmText: 'Вы уверены, что хотите удалить игрока?',
       onClick: () => deleteUser(user.tg_id),
+    },
+    {
+      Component: GenPswButton,
+      label: 'Сгенерировать пароль',
+      show: user.status === 'approved',
+      onClick: () => generatePassword(user.tg_id),
+    },
+    {
+      Component: CopyPswButton,
+      label: 'Скопировать пароль',
+      show: user.status === 'approved',
+      onClick: () => copyPassword(user.psw),
     },
   ]
 
@@ -103,13 +124,18 @@ export const UserCard = ({ user, className }) => {
                 <Cake size={14} />
                 {formatDate(user.birthday)}
               </span>
+
+              <span className="text-xs text-gray-400 flex gap-1">
+                <KeyRound size={14} />
+                {user.psw}
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       {user.role === 'player' && (
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-col gap-2">
           {BUTTONS.filter((btn) => btn.show).map(
             ({ Component, label, ...props }, idx) => (
               <Component

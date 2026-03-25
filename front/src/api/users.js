@@ -40,4 +40,9 @@ export const usersApi = {
     const { data } = await api.get('/users/gen_psws')
     return data
   },
+
+  generatePassword: async (tgId) => {
+    const { data } = await api.get(`/users/gen_psw/${tgId}`)
+    return data
+  },
 }
