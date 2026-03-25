@@ -7,13 +7,12 @@ const ThemeContext = createContext({
 })
 
 export const ThemeProvider = ({ children, theme: manualTheme }) => {
-  const [currentTheme, setCurrentTheme] = useState(
-    manualTheme || WebApp.colorScheme
-  )
+  const [currentTheme, setCurrentTheme] = useState(manualTheme)
 
   useEffect(() => {
+    console.log({ WebApp })
     const syncTheme = () => {
-      const newTheme = manualTheme ? manualTheme : WebApp.colorScheme || 'light'
+      const newTheme = manualTheme ? manualTheme : 'light'
 
       setCurrentTheme(newTheme)
 
