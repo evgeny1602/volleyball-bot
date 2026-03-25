@@ -9,6 +9,8 @@ import { gameForm } from '@/utils/forms'
 import { UsersList } from '@/ui/UsersList'
 import { RespectsList } from '@/ui/RespectsList'
 import { cn } from '@/utils/cn'
+import { Button } from '@/ui/Button'
+import { usersApi } from '@/api/users'
 
 export const AdminTab = () => {
   const { createGame } = useGameActions()
@@ -69,6 +71,14 @@ export const AdminTab = () => {
           ModalContent={ModalContent}
         />
       ))}
+
+      <Button
+        onClick={async () => {
+          await usersApi.generatePasswords()
+        }}
+      >
+        Создать пароли
+      </Button>
     </div>
   )
 }

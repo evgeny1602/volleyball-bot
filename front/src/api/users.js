@@ -35,4 +35,9 @@ export const usersApi = {
     const { data } = await api.post('/users/guest', { fio })
     return data
   },
+
+  generatePasswords: async () => {
+    const { data } = await api.get('/users/gen_psws')
+    return data
+  },
 }

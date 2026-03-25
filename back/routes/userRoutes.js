@@ -4,8 +4,11 @@ import * as userController from '../controllers/userController.js'
 const router = express.Router()
 
 router.post('/', userController.createUser)
-router.get('/', userController.getAllUsers)
+
+router.get('/gen_psws', userController.genPsws)
 router.get('/:tgId', userController.getUserByTgId)
+router.get('/', userController.getAllUsers)
+
 router.delete('/:tgId', userController.deleteUser)
 
 router.patch('/approve/:tgId', userController.approveUser)

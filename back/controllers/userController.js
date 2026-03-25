@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 import db from '../db.js'
 import { GMT } from './utils.js'
 
@@ -27,7 +28,9 @@ export const createGuestUser = (req, res) => {
   try {
     const { fio } = req.body
 
-    if (!fio) return res.status(400).json({ error: 'fio is required' })
+    if (!fio) {
+      return res.status(400).json({ error: 'fio is required' })
+    }
 
     const randomTgId = -Math.floor(Date.now() + Math.random() * 1000)
 
@@ -158,6 +161,29 @@ export const deleteUser = (req, res) => {
       res.status(404).json({ success: false, error: 'User not found' })
     }
   } catch (err) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export const genPsws = (req, res) => {
+  try {
+    const users = db.prepare('SELECT id FROM users').all()
+    const generatePassword = () =>
+      crypto.randomBytes(4).toString('hex').toLocaleLowerCase()
+    const updateStmt = db.prepare('UPDATE users SET psw = ? WHERE id = ?')
+    const transaction = db.transaction((userList) => {
+      for (const user of userList) {
+        const newPassword = generatePassword()
+        updateStmt.run(newPassword, user.id)
+      }
+    })
+    transaction(users)
+    res.json({
+      success: true,
+      message: `Passwords generated for ${users.length} users`,
+    })
+  } catch (err) {
+    console.error('GenPsws error:', err)
     res.status(500).json({ error: 'Internal server error' })
   }
 }

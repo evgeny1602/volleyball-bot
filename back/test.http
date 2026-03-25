@@ -33,6 +33,11 @@ x-debug-mode: 1
 PATCH http://localhost:3000/api/users/approve/12345
 x-debug-mode: 1
 
+###
+
+GET http://localhost:3000/api/users/gen_psws
+x-debug-mode: 1
+
 ### USERS - end
 
 ### GAMES - begin
