@@ -72,13 +72,13 @@ export const AdminTab = () => {
         />
       ))}
 
-      <Button
+      {/* <Button
         onClick={async () => {
           await usersApi.generatePasswords()
         }}
       >
         Создать пароли
-      </Button>
+      </Button> */}
     </div>
   )
 }
