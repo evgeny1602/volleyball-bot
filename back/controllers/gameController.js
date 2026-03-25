@@ -6,16 +6,11 @@ const getGamePlayers = (gameId) =>
   db
     .prepare(
       `
-        SELECT 
-          u.*, ug.status, ug.created_at AS login_date
-        FROM 
-          users_to_games ug 
-        LEFT JOIN 
-          users u ON ug.user_id=u.id 
-        WHERE 
-          ug.game_id=? 
-        ORDER BY 
-          ug.created_at ASC
+        SELECT u.*, ug.status, ug.created_at AS login_date
+        FROM users_to_games ug 
+        LEFT JOIN users u ON ug.user_id=u.id 
+        WHERE ug.game_id=? 
+        ORDER BY ug.created_at ASC
       `
     )
     .all(gameId)
@@ -25,27 +20,46 @@ const getGamePlayers = (gameId) =>
     }))
 
 export const getAllGames = (req, res) => {
-  // try {
-  const games = db
-    .prepare(`SELECT * FROM games ORDER BY start_datetime ASC`)
-    .all()
-    .map((game) => ({
-      ...game,
-      players: getGamePlayers(game.id),
-    }))
-  res.json({ success: true, count: games.length, data: games })
-  // } catch (err) {
-  //   res.status(500).json({ error: 'Internal server error' })
-  // }
+  try {
+    const data = db
+      .prepare(
+        `
+          SELECT * 
+          FROM games 
+          ORDER BY start_datetime ASC
+        `
+      )
+      .all()
+      .map((game) => ({
+        ...game,
+        players: getGamePlayers(game.id),
+      }))
+
+    res.json({
+      success: true,
+      count: data.length,
+      data,
+    })
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
 }
 
 export const getGameById = (req, res) => {
   try {
-    const { id } = req.params
-    const game = db.prepare(`SELECT * FROM games WHERE id = ?`).get(id)
+    const { id: gameId } = req.params
+    const game = db
+      .prepare(
+        `
+          SELECT * FROM games 
+          WHERE id = ?
+        `
+      )
+      .get(gameId)
+
     res.json(
       game
-        ? { success: true, game: { ...game, players: getGamePlayers(id) } }
+        ? { success: true, game: { ...game, players: getGamePlayers(gameId) } }
         : { success: false, error: 'Game not found' }
     )
   } catch (err) {
@@ -67,8 +81,6 @@ export const createGame = (req, res) => {
       maxPlayers: max_players,
     } = req.body
 
-    const start_datetime = getDateFromStr(`${date} ${time}`, 0)
-
     for (const value of [
       name,
       location_name,
@@ -85,22 +97,35 @@ export const createGame = (req, res) => {
       }
     }
 
-    const stmt = db.prepare(`
-      INSERT INTO games (name, location_name, location_address, start_datetime, duration, description, price, max_players, mode, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
-    `)
-
-    const info = stmt.run(
-      name,
-      location_name || '',
-      location_address || '',
-      start_datetime,
-      duration || 120,
-      description || '',
-      price || 0,
-      max_players || 14,
-      'main'
-    )
+    const info = db
+      .prepare(
+        `
+          INSERT INTO games (
+            name,
+            location_name,
+            location_address,
+            start_datetime,
+            duration,
+            description,
+            price,
+            max_players,
+            mode,
+            created_at
+          )
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
+        `
+      )
+      .run(
+        name,
+        location_name || '',
+        location_address || '',
+        getDateFromStr(`${date} ${time}`, 0),
+        duration || 120,
+        description || '',
+        price || 0,
+        max_players || 14,
+        'main'
+      )
 
     res.status(201).json({
       success: true,
@@ -128,34 +153,46 @@ export const updateGame = (req, res) => {
       mode,
     } = req.body
 
-    const start_datetime = getDateFromStr(`${date} ${time}`, 0)
-
-    // console.log({ date, time, start_datetime })
-
-    const stmt = db.prepare(`
-      UPDATE games 
-      SET name = ?, location_name = ?, location_address = ?, start_datetime = ?, 
-          duration = ?, description = ?, price = ?, max_players = ?, mode = ?
-      WHERE id = ?
-    `)
-
-    const info = stmt.run(
-      name,
-      location_name,
-      location_address,
-      start_datetime,
-      duration,
-      description,
-      price,
-      max_players,
-      mode,
-      id
-    )
+    const info = db
+      .prepare(
+        `
+          UPDATE games 
+          SET 
+            name = ?, 
+            location_name = ?, 
+            location_address = ?, 
+            start_datetime = ?, 
+            duration = ?, 
+            description = ?, 
+            price = ?, 
+            max_players = ?, 
+            mode = ?
+          WHERE id = ?
+        `
+      )
+      .run(
+        name,
+        location_name,
+        location_address,
+        getDateFromStr(`${date} ${time}`, 0),
+        duration,
+        description,
+        price,
+        max_players,
+        mode,
+        id
+      )
 
     if (info.changes > 0) {
-      res.json({ success: true, message: 'Game updated successfully' })
+      res.json({
+        success: true,
+        message: 'Game updated successfully',
+      })
     } else {
-      res.status(404).json({ success: false, error: 'Game not found' })
+      res.status(404).json({
+        success: false,
+        error: 'Game not found',
+      })
     }
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' })
@@ -164,31 +201,60 @@ export const updateGame = (req, res) => {
 
 export const deleteGame = (req, res) => {
   try {
-    const { id } = req.params
+    const { id: gameId } = req.params
 
-    const guests = db
+    const guestIds = db
       .prepare(
-        `SELECT users.tg_id as tg_id FROM users_to_games LEFT JOIN users ON users_to_games.user_id=users.id WHERE users.tg_id < 0 AND users_to_games.game_id=?`
+        `
+          SELECT u.id as id 
+          FROM users_to_games ug 
+          LEFT JOIN users u ON ug.user_id=u.id 
+          WHERE u.tg_username = 'Guest' AND ug.game_id = ?
+        `
       )
-      .all(id)
+      .all(gameId)
+      .map((guest) => guest.id)
 
-    const deleteMany = db.transaction((tgIds) => {
-      const stmt = db.prepare('DELETE FROM users WHERE tg_id = ?')
-      for (const tgId of tgIds) {
-        stmt.run(tgId)
+    const deleteMany = db.transaction((userIds) => {
+      const stmt = db.prepare(
+        `
+          DELETE FROM users 
+          WHERE id = ?
+        `
+      )
+      for (const userId of userIds) {
+        stmt.run(userId)
       }
     })
 
-    deleteMany(guests.map((guest) => guest.tg_id))
+    deleteMany(guestIds)
 
-    db.prepare(`DELETE FROM users_to_games WHERE game_id = ?`).run(id)
+    db.prepare(
+      `
+        DELETE FROM users_to_games 
+        WHERE game_id = ?
+      `
+    ).run(gameId)
 
-    const info = db.prepare('DELETE FROM games WHERE id = ?').run(id)
+    const info = db
+      .prepare(
+        `
+          DELETE FROM games 
+          WHERE id = ?
+        `
+      )
+      .run(gameId)
 
     if (info.changes > 0) {
-      res.json({ success: true, message: `Game ${id} deleted` })
+      res.json({
+        success: true,
+        message: `Game ${gameId} deleted`,
+      })
     } else {
-      res.status(404).json({ success: false, error: 'Game not found' })
+      res.status(404).json({
+        success: false,
+        error: 'Game not found',
+      })
     }
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' })
@@ -197,16 +263,22 @@ export const deleteGame = (req, res) => {
 
 export const joinGame = (req, res) => {
   try {
-    const { id: game_id } = req.params
-    const { user_id } = req.body
+    const { id: gameId } = req.params
+    const { user_id: userId } = req.body
 
-    if (!user_id) {
+    if (!userId) {
       return res.status(400).json({ error: 'User ID is required' })
     }
 
     const game = db
-      .prepare('SELECT max_players, mode FROM games WHERE id = ?')
-      .get(game_id)
+      .prepare(
+        `
+          SELECT max_players, mode 
+          FROM games 
+          WHERE id = ?
+        `
+      )
+      .get(gameId)
 
     if (!game) {
       return res.status(404).json({ error: 'Game not found' })
@@ -214,43 +286,50 @@ export const joinGame = (req, res) => {
 
     const existingPlayer = db
       .prepare(
-        'SELECT id FROM users_to_games WHERE game_id = ? AND user_id = ?'
+        `
+          SELECT id 
+          FROM users_to_games 
+          WHERE game_id = ? AND user_id = ?
+        `
       )
-      .get(game_id, user_id)
+      .get(gameId, userId)
 
     if (existingPlayer) {
       return res.status(400).json({ error: 'Player already joined this game' })
     }
 
-    // Считаем сколько игроков сейчас в "основе"
-    const { current_count } = db
+    const { current_count: currentCount } = db
       .prepare(
-        "SELECT COUNT(*) as current_count FROM users_to_games WHERE game_id = ? AND status = 'main'"
+        `
+          SELECT COUNT(*) as current_count 
+          FROM users_to_games 
+          WHERE game_id = ? AND status = 'main'
+        `
       )
-      .get(game_id)
+      .get(gameId)
 
-    // Вычисляем сколько мест осталось в "основе"
-    const restCount = game.max_players - current_count
+    const restCount = game.max_players - currentCount
 
-    // Если режим игры = reserve, то статус нового участника = reserve
-    // Если режим игры = main и в "основе" есть места - статус нового участника = main
     const status =
       game.mode == 'reserve' ? 'reserve' : restCount > 0 ? 'main' : 'reserve'
 
-    // Если участник занял последнее место, то новый режим игры будет reserve, иначе - main
     const gameNewMode = restCount <= 1 ? 'reserve' : 'main'
 
-    const stmt = db.prepare(`
-      INSERT INTO users_to_games (game_id, user_id, status, created_at)
-      VALUES (?, ?, ?, datetime('now', '+${GMT} hours'))
-    `)
+    db.prepare(
+      `
+        INSERT INTO users_to_games (game_id, user_id, status, created_at)
+        VALUES (?, ?, ?, datetime('now', '+${GMT} hours'))
+      `
+    ).run(gameId, userId, status)
 
-    stmt.run(game_id, user_id, status)
-
-    // Если режим игры был main, а стал reserve - переключаем на новый режим
     if (game.mode == 'main' && gameNewMode == 'reserve') {
-      const stmt = db.prepare(`UPDATE games SET mode = ? WHERE id = ?`)
-      stmt.run(gameNewMode, game_id)
+      db.prepare(
+        `
+          UPDATE games 
+          SET mode = ? 
+          WHERE id = ?
+        `
+      ).run(gameNewMode, gameId)
     }
 
     res.json({
@@ -266,65 +345,97 @@ export const joinGame = (req, res) => {
 
 export const leaveGame = (req, res) => {
   try {
-    const { id: game_id } = req.params
-    const { user_id } = req.body
+    const { id: gameId } = req.params
+    const { user_id: userId } = req.body
 
-    // Проверяем, что игрок существует
-    if (!user_id) {
+    if (!userId) {
       return res.status(400).json({ error: 'User ID is required' })
     }
 
-    // Проверяем, что игра существует
     const game = db
-      .prepare('SELECT max_players, mode FROM games WHERE id = ?')
-      .get(game_id)
+      .prepare(
+        `
+          SELECT max_players, mode 
+          FROM games 
+          WHERE id = ?
+        `
+      )
+      .get(gameId)
 
     if (!game) {
       return res.status(404).json({ error: 'Game not found' })
     }
 
-    // Проверяем, что игрок записан на эту игру
     const playerRecord = db
       .prepare(
-        'SELECT status FROM users_to_games WHERE game_id = ? AND user_id = ?'
+        `
+          SELECT status 
+          FROM users_to_games 
+          WHERE game_id = ? AND user_id = ?
+        `
       )
-      .get(game_id, user_id)
+      .get(gameId, userId)
 
     if (!playerRecord) {
       return res.status(404).json({ error: 'Player record not found' })
     }
 
-    // Убираем игрока из игры
     db.prepare(
-      'DELETE FROM users_to_games WHERE game_id = ? AND user_id = ?'
-    ).run(game_id, user_id)
+      `
+        DELETE FROM users_to_games 
+        WHERE game_id = ? AND user_id = ?
+      `
+    ).run(gameId, userId)
 
-    // Считаем сколько игроков сейчас в "основе"
-    const { current_count } = db
+    const { cnt: currentCount } = db
       .prepare(
-        "SELECT COUNT(*) as current_count FROM users_to_games WHERE game_id = ? AND status = 'main'"
+        `
+          SELECT COUNT(*) as cnt 
+          FROM users_to_games 
+          WHERE game_id = ? AND status = 'main'
+        `
       )
-      .get(game_id)
+      .get(gameId)
 
-    // Вычисляем сколько мест осталось в "основе"
-    const restCount = game.max_players - current_count
+    const restCount = game.max_players - currentCount
 
-    // Считаем сколько игроков сейчас в "резерве"
-    const { current_count_reserve } = db
+    const { cnt: currentCountReserve } = db
       .prepare(
-        "SELECT COUNT(*) as current_count_reserve FROM users_to_games WHERE game_id = ? AND status = 'reserve'"
+        `
+          SELECT COUNT(*) as cnt 
+          FROM users_to_games 
+          WHERE game_id = ? AND status = 'reserve'
+        `
       )
-      .get(game_id)
+      .get(gameId)
 
-    // Если в "основе" есть места и в "резерве" никого нет и режим игры = "В резерв" - включаем режим игры "В основу"
-    if (restCount > 0 && current_count_reserve == 0 && game.mode == 'reserve') {
-      db.prepare('UPDATE games SET mode = ? WHERE id = ?').run('main', game_id)
+    if (restCount > 0 && currentCountReserve == 0 && game.mode == 'reserve') {
+      db.prepare(
+        `
+          UPDATE games 
+          SET mode = 'main' 
+          WHERE id = ?
+        `
+      ).run(gameId)
     }
 
-    // Если убрали из игры Гостя, то еще удалеям его из пользователей
-    const tgId = db.prepare('SELECT tg_id FROM users WHERE id = ?').get(user_id)
-    if (tgId && parseInt(tgId.tg_id) < 0) {
-      db.prepare('DELETE FROM users WHERE tg_id = ?').run(tgId.tg_id)
+    const userData = db
+      .prepare(
+        `
+          SELECT tg_username
+          FROM users 
+          WHERE id = ?
+        `
+      )
+      .get(userId)
+
+    if (userData?.tg_username == 'Guest') {
+      db.prepare(
+        `
+          DELETE FROM users 
+          WHERE id = ?
+        `
+      ).run(userId)
     }
 
     res.json({
@@ -339,18 +450,22 @@ export const leaveGame = (req, res) => {
 
 export const promotePlayer = (req, res) => {
   try {
-    const { id: game_id } = req.params
-    const { user_id } = req.body
+    const { id: gameId } = req.params
+    const { user_id: userId } = req.body
 
-    if (!user_id) {
+    if (!userId) {
       return res.status(400).json({ error: 'User ID is required' })
     }
 
     const playerRecord = db
       .prepare(
-        'SELECT status FROM users_to_games WHERE game_id = ? AND user_id = ?'
+        `
+          SELECT status 
+          FROM users_to_games 
+          WHERE game_id = ? AND user_id = ?
+        `
       )
-      .get(game_id, user_id)
+      .get(gameId, userId)
 
     if (!playerRecord) {
       return res.status(404).json({ error: 'Player not found in this game' })
@@ -363,27 +478,40 @@ export const promotePlayer = (req, res) => {
     }
 
     const game = db
-      .prepare('SELECT max_players FROM games WHERE id = ?')
-      .get(game_id)
-    const { current_main_count } = db
       .prepare(
-        "SELECT COUNT(*) as current_main_count FROM users_to_games WHERE game_id = ? AND status = 'main'"
+        `
+          SELECT max_players 
+          FROM games 
+          WHERE id = ?
+        `
       )
-      .get(game_id)
+      .get(gameId)
 
-    if (current_main_count >= game.max_players) {
+    const { cnt: currentMainCount } = db
+      .prepare(
+        `
+          SELECT COUNT(*) as cnt 
+          FROM users_to_games 
+          WHERE game_id = ? AND status = 'main'
+        `
+      )
+      .get(gameId)
+
+    if (currentMainCount >= game.max_players) {
       return res.status(400).json({
         error: 'Main roster is full. Remove someone first or increase limit.',
       })
     }
 
-    const stmt = db.prepare(`
-      UPDATE users_to_games 
-      SET status = 'main' 
-      WHERE game_id = ? AND user_id = ?
-    `)
-
-    const info = stmt.run(game_id, user_id)
+    const info = db
+      .prepare(
+        `
+          UPDATE users_to_games 
+          SET status = 'main' 
+          WHERE game_id = ? AND user_id = ?
+        `
+      )
+      .run(gameId, userId)
 
     if (info.changes > 0) {
       res.json({

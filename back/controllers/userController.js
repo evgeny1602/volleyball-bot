@@ -5,13 +5,26 @@ import { GMT } from './utils.js'
 const generatePassword = () =>
   crypto.randomBytes(4).toString('hex').toLowerCase()
 
+const getRandomTgId = () => -Math.floor(Date.now() + Math.random() * 1000)
+
 export const getAllUsers = (req, res) => {
   try {
-    const stmt = db.prepare(
-      'SELECT * FROM users WHERE tg_id > 0 ORDER BY created_at DESC'
-    )
-    const users = stmt.all()
-    res.json({ success: true, count: users.length, data: users })
+    const data = db
+      .prepare(
+        `
+          SELECT * 
+          FROM users 
+          WHERE tg_username != 'Guest' 
+          ORDER BY created_at DESC
+        `
+      )
+      .all()
+
+    res.json({
+      success: true,
+      count: data.length,
+      data,
+    })
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' })
   }
@@ -20,7 +33,17 @@ export const getAllUsers = (req, res) => {
 export const getUserByTgId = (req, res) => {
   try {
     const { tgId } = req.params
-    const user = db.prepare(`SELECT * FROM users WHERE tg_id = ?`).get(tgId)
+
+    const user = db
+      .prepare(
+        `
+          SELECT * 
+          FROM users 
+          WHERE tg_id = ?
+        `
+      )
+      .get(tgId)
+
     res.json(user ? { exists: true, user } : { exists: false })
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' })
@@ -35,30 +58,33 @@ export const createGuestUser = (req, res) => {
       return res.status(400).json({ error: 'fio is required' })
     }
 
-    const randomTgId = -Math.floor(Date.now() + Math.random() * 1000)
+    const tgId = getRandomTgId()
 
-    const stmt = db.prepare(`
-        INSERT INTO users (tg_id, tg_username, tg_avatar_url, fio, gender, phone, birthday, role, status, created_at)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
-    `)
-
-    const info = stmt.run(
-      randomTgId,
-      'Guest', // tg_username
-      '', // tg_avatar_url
-      fio, // fio
-      'male', // gender
-      '', // phone
-      '', // birthday
-      'player', // role
-      'approved' // status
-    )
+    const info = db
+      .prepare(
+        `
+          INSERT INTO users (
+            tg_id, 
+            tg_username, 
+            tg_avatar_url, 
+            fio, 
+            gender, 
+            phone, 
+            birthday, 
+            role, 
+            status, 
+            created_at
+          ) 
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
+        `
+      )
+      .run(tgId, 'Guest', '', fio, 'male', '', '', 'player', 'approved')
 
     res.status(201).json({
       success: true,
       message: 'Guest user created successfully',
       userId: info.lastInsertRowid,
-      tgId: randomTgId,
+      tgId,
     })
   } catch (err) {
     console.error('Create guest error:', err)
@@ -83,32 +109,45 @@ export const createUser = (req, res) => {
       status,
     } = req.body
 
-    if (!tg_id) return res.status(400).json({ error: 'tg_id is required' })
-
-    const stmt = db.prepare(`
-            INSERT INTO users (tg_id, tg_username, tg_avatar_url, fio, gender, phone, birthday, role, status, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
-        `)
-
-    const info = stmt.run(
-      tg_id,
-      tg_username || '',
-      tg_avatar_url || '',
-      fio || '',
-      gender || 'male',
-      phone || '',
-      birthday || '',
-      role || 'player',
-      status || 'registered'
-    )
+    const info = db
+      .prepare(
+        `
+          INSERT INTO users (
+            tg_id, 
+            tg_username, 
+            tg_avatar_url, 
+            fio, 
+            gender, 
+            phone, 
+            birthday, 
+            role, 
+            status, 
+            created_at
+          )
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
+        `
+      )
+      .run(
+        tg_id || getRandomTgId(),
+        tg_username || '',
+        tg_avatar_url || '',
+        fio || '',
+        gender || 'male',
+        phone || '',
+        birthday || '',
+        role || 'player',
+        status || 'registered'
+      )
 
     res.status(201).json({
       message: 'User created successfully',
       userId: info.lastInsertRowid,
     })
   } catch (err) {
-    if (err.code === 'SQLITE_CONSTRAINT_UNIQUE')
+    if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
       return res.status(409).json({ error: 'User already exists' })
+    }
+
     res.status(500).json({ error: 'Internal server error' })
   }
 }
@@ -116,8 +155,15 @@ export const createUser = (req, res) => {
 export const rejectUser = (req, res) => {
   try {
     const { tgId } = req.params
+
     const info = db
-      .prepare(`UPDATE users SET status = 'rejected' WHERE tg_id = ?`)
+      .prepare(
+        `
+          UPDATE users 
+          SET status = 'rejected' 
+          WHERE tg_id = ?
+        `
+      )
       .run(tgId)
 
     if (info.changes > 0) {
@@ -136,8 +182,15 @@ export const rejectUser = (req, res) => {
 export const approveUser = (req, res) => {
   try {
     const { tgId } = req.params
+
     const info = db
-      .prepare(`UPDATE users SET status = 'approved' WHERE tg_id = ?`)
+      .prepare(
+        `
+          UPDATE users 
+          SET status = 'approved' 
+          WHERE tg_id = ?
+        `
+      )
       .run(tgId)
 
     if (info.changes > 0) {
@@ -156,12 +209,26 @@ export const approveUser = (req, res) => {
 export const deleteUser = (req, res) => {
   try {
     const { tgId } = req.params
-    const info = db.prepare('DELETE FROM users WHERE tg_id = ?').run(tgId)
+
+    const info = db
+      .prepare(
+        `
+          DELETE FROM users 
+          WHERE tg_id = ?
+        `
+      )
+      .run(tgId)
 
     if (info.changes > 0) {
-      res.json({ success: true, message: `User ${tgId} deleted` })
+      res.json({
+        success: true,
+        message: `User ${tgId} deleted`,
+      })
     } else {
-      res.status(404).json({ success: false, error: 'User not found' })
+      res.status(404).json({
+        success: false,
+        error: 'User not found',
+      })
     }
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' })
@@ -170,18 +237,35 @@ export const deleteUser = (req, res) => {
 
 export const genPsws = (req, res) => {
   try {
-    const users = db.prepare('SELECT id FROM users').all()
-    const updateStmt = db.prepare('UPDATE users SET psw = ? WHERE id = ?')
-    const transaction = db.transaction((userList) => {
-      for (const user of userList) {
-        const newPassword = generatePassword()
-        updateStmt.run(newPassword, user.id)
+    const userIds = db
+      .prepare(
+        `
+          SELECT id 
+          FROM users
+        `
+      )
+      .all()
+      .map((user) => user.id)
+
+    const updateStmt = db.prepare(
+      `
+        UPDATE users 
+        SET psw = ? 
+        WHERE id = ?
+      `
+    )
+
+    const transaction = db.transaction((_userIds) => {
+      for (const _userId of _userIds) {
+        updateStmt.run(generatePassword(), _userId)
       }
     })
-    transaction(users)
+
+    transaction(userIds)
+
     res.json({
       success: true,
-      message: `Passwords generated for ${users.length} users`,
+      message: `Passwords generated for ${userIds.length} users`,
     })
   } catch (err) {
     console.error('GenPsws error:', err)
@@ -192,9 +276,15 @@ export const genPsws = (req, res) => {
 export const genPsw = (req, res) => {
   try {
     const { tgId } = req.params
-    const updateStmt = db.prepare('UPDATE users SET psw = ? WHERE tg_id = ?')
-    const newPassword = generatePassword()
-    updateStmt.run(newPassword, tgId)
+
+    db.prepare(
+      `
+        UPDATE users 
+        SET psw = ? 
+        WHERE tg_id = ?
+      `
+    ).run(generatePassword(), tgId)
+
     res.json({
       success: true,
       message: `Password generated for users with tg_id ${tgId}`,

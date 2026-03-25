@@ -5,7 +5,7 @@ x-debug-mode: 1
 
 ###
 
-GET http://localhost:3000/api/users/12345
+GET http://localhost:3000/api/users/1234601
 x-debug-mode: 1
 
 ###
@@ -14,23 +14,38 @@ x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "tg_id": "123460",
-    "tg_username": "dev_test5",
+    "tg_id": "1234601",
+    "tg_username": "dev_test55",
     "tg_avatar_url": "https://example.com/avatar.jpg",
-    "fio": "Иванов Иван",
+    "fio": "Иванов Иван2",
     "gender": "male",
-    "phone": "79999999999",
-    "birthday": "01.01.1990"
+    "phone": "79999999989",
+    "birthday": "02.01.1990"
 }
 
 ###
 
-DELETE http://localhost:3000/api/users/123456
+POST http://localhost:3000/api/users/guest
+x-debug-mode: 1
+Content-Type: application/json
+
+{
+    "fio": "Гость 1"
+}
+
+###
+
+DELETE http://localhost:3000/api/users/1234601
 x-debug-mode: 1
 
 ###
 
-PATCH http://localhost:3000/api/users/approve/12345
+PATCH http://localhost:3000/api/users/approve/123457
+x-debug-mode: 1
+
+###
+
+PATCH http://localhost:3000/api/users/reject/123457
 x-debug-mode: 1
 
 ###
@@ -55,7 +70,7 @@ Content-Type: application/json
     "name": "Тренировка в Юбилейном 14",
     "location": "СП Юбилейный",
     "address": "пр. Ленина 203",
-    "date": "18.02.2026",
+    "date": "28.03.2026",
     "time": "20:00",
     "duration": "120",
     "description": "Низкий уровень сложности",
@@ -65,7 +80,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/api/games/7
+GET http://localhost:3000/api/games/71
 x-debug-mode: 1
 
 ###
@@ -75,21 +90,22 @@ x-debug-mode: 1
 
 ###
 
-PUT http://localhost:3000/api/games/2
+PUT http://localhost:3000/api/games/72
 x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "name": "Тренировка в Юбилейном 3",
+    "name": "Тренировка в Юбилейном 33",
     "location_name": "СП Юбилейный",
     "location_address": "пр.Ленина 203",
-    "start_datetime": "2024-02-13T19:00:00",
+    "date": "28.03.2026",
+    "time": "20:00",
     "duration": "120"
 }
 
 ###
 
-DELETE http://localhost:3000/api/games/16
+DELETE http://localhost:3000/api/games/74
 x-debug-mode: 1
 
 ###
@@ -99,32 +115,32 @@ x-debug-mode: 1
 
 ###
 
-POST http://localhost:3000/api/games/7/join
+POST http://localhost:3000/api/games/74/join
 x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "user_id": "14"
+    "user_id": "543212"
 }
 
 ###
 
-POST http://localhost:3000/api/games/7/leave
+POST http://localhost:3000/api/games/73/leave
 x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "user_id": "14"
+    "user_id": "145"
 }
 
 ###
 
-POST http://localhost:3000/api/games/7/promote
+POST http://localhost:3000/api/games/73/promote
 x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "user_id": "14"
+    "user_id": "145"
 }
 
 ###
