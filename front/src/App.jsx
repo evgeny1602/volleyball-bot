@@ -38,7 +38,7 @@ export const App = () => {
         className={cn(
           'text-gray-600 bg-gray-100 dark:bg-gray-900',
           'flex flex-col h-screen gap-2 select-none items-center',
-          'scrollable-content overflow-y-auto'
+          'scrollable-content overflow-y-auto w-120'
         )}
       >
         {isLoading && <Loader />}
