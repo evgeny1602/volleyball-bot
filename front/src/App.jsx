@@ -33,18 +33,20 @@ export const App = () => {
   }, [])
 
   return (
-    <div
-      className={cn(
-        'text-gray-600 bg-gray-100 dark:bg-gray-900',
-        'flex flex-col h-screen gap-2 select-none items-center',
-        'scrollable-content overflow-y-auto'
-      )}
-    >
-      {isLoading && <Loader />}
-      {!isLoading && !user && <RegisterPage />}
-      {user?.status == 'registered' && <RegisteredPage />}
-      {user?.status == 'approved' && <MainPage />}
-      {user?.status == 'rejected' && <RejectedPage />}
+    <div className="flex w-full justify-center bg-gray-100">
+      <div
+        className={cn(
+          'text-gray-600 bg-gray-100 dark:bg-gray-900',
+          'flex flex-col h-screen gap-2 select-none items-center',
+          'scrollable-content overflow-y-auto'
+        )}
+      >
+        {isLoading && <Loader />}
+        {!isLoading && !user && <RegisterPage />}
+        {user?.status == 'registered' && <RegisteredPage />}
+        {user?.status == 'approved' && <MainPage />}
+        {user?.status == 'rejected' && <RejectedPage />}
+      </div>
     </div>
   )
 }
