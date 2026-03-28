@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { PhoneInput } from '@/ui/PhoneInput'
 import { PasswordInput } from '@/ui/PasswordInput'
+import { CheckInput } from '@/ui/CheckInput'
 import { RegisterButton } from '@/ui/buttons/RegisterButton'
 import { loginSchema } from '@/utils/validations'
 import { tgVibro } from '@/utils/telegram'
@@ -9,6 +10,7 @@ import { ErrorBubble } from '@/ui/ErrorBubble'
 export const LoginForm = ({ onSubmit, isLoading }) => {
   const [phone, setPhone] = useState('')
   const [password, setPassword] = useState('')
+  const [rememberMe, setRememberMe] = useState(false)
   const [isErrorVisible, setIsErrorVisible] = useState(false)
 
   const handleAction = () => {
@@ -16,7 +18,7 @@ export const LoginForm = ({ onSubmit, isLoading }) => {
 
     if (result.success) {
       tgVibro('success')
-      onSubmit({ phone, password })
+      onSubmit({ phone, password, rememberMe })
     } else {
       tgVibro('error')
       setIsErrorVisible(true)
@@ -43,6 +45,12 @@ export const LoginForm = ({ onSubmit, isLoading }) => {
           label="Пароль"
           onChange={(val) => setPassword(val)}
           value={password}
+        />
+
+        <CheckInput
+          label="Запомнить меня на неделю"
+          checked={rememberMe}
+          onChange={(newVal) => setRememberMe(newVal)}
         />
 
         <RegisterButton

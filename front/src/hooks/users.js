@@ -59,9 +59,9 @@ export const useUserMutations = () => {
 
   const loginMutation = useMutation({
     mutationFn: usersApi.login,
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       if (data.success && data.user?.tg_id) {
-        setCookieTgId(data.user.tg_id)
+        setCookieTgId(data.user.tg_id, variables.rememberMe)
         queryClient.invalidateQueries({ queryKey: ['users', 'me'] })
         invalidate()
       }
