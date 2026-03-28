@@ -37,16 +37,29 @@ export const DateInput = ({ value = '', onChange, label, className }) => {
     <div className={cn('flex flex-col gap-1.5 w-full', className)}>
       {label && <InputLabel>{label}</InputLabel>}
 
-      <div className="relative flex items-center">
+      <div
+        className={cn(
+          'relative flex items-center cursor-pointer hover:opacity-80',
+          'transition-all duration-200'
+        )}
+      >
         <div className="absolute left-2 z-10 flex items-center justify-center">
-          <div className="p-2 bg-bot-primary text-white rounded-full flex items-center justify-center transition-transform active:scale-95">
-            <Calendar className="w-4 h-4" />
+          <div
+            className={cn(
+              'p-2 bg-bot-primary text-white rounded-full flex',
+              'items-center justify-center transition-transform',
+              'active:scale-95'
+            )}
+          >
+            <Calendar className="w-4 h-4 cursor-pointer" />
           </div>
         </div>
 
         <input
           type="date"
-          className="absolute left-1 z-20 opacity-0 cursor-pointer w-10 h-10"
+          className={cn(
+            'absolute left-1 z-20 opacity-0 cursor-pointer w-10 h-10'
+          )}
           onChange={handleChangeFromDatepicker}
           onInput={() => tgVibro('light')}
         />

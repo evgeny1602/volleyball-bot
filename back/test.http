@@ -1,5 +1,21 @@
 ### USERS - begin
 
+GET http://localhost:3000/api/users/by_phone/79236558212
+x-debug-mode: 1
+
+###
+
+POST http://localhost:3000/api/users/login
+x-debug-mode: 1
+Content-Type: application/json
+
+{
+    "phone": "79236558204",
+    "password": "498713e1"
+}
+
+###
+
 GET http://localhost:3000/api/users
 x-debug-mode: 1
 
@@ -10,17 +26,14 @@ x-debug-mode: 1
 
 ###
 POST http://localhost:3000/api/users
-x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "tg_id": "1234601",
-    "tg_username": "dev_test55",
-    "tg_avatar_url": "https://example.com/avatar.jpg",
-    "fio": "Иванов Иван2",
+    "fio": "Тестов Тест",
     "gender": "male",
-    "phone": "79999999989",
-    "birthday": "02.01.1990"
+    "birthday": "16.02.1983",
+    "phone": "79236558211",
+    "tg_id": 0
 }
 
 ###

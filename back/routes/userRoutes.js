@@ -5,6 +5,7 @@ const router = express.Router()
 
 router.post('/', userController.createUser)
 
+router.get('/by_phone/:phone', userController.getUserByPhone)
 router.get('/gen_psw/:tgId', userController.genPsw)
 router.get('/gen_psws', userController.genPsws)
 router.get('/:tgId', userController.getUserByTgId)
@@ -16,5 +17,6 @@ router.patch('/approve/:tgId', userController.approveUser)
 router.patch('/reject/:tgId', userController.rejectUser)
 
 router.post('/guest', userController.createGuestUser)
+router.post('/login', userController.login)
 
 export default router

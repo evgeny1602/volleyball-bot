@@ -10,7 +10,6 @@ export const ThemeProvider = ({ children, theme: manualTheme }) => {
   const [currentTheme, setCurrentTheme] = useState(manualTheme)
 
   useEffect(() => {
-    console.log({ WebApp })
     const syncTheme = () => {
       const newTheme = manualTheme ? manualTheme : 'light'
 

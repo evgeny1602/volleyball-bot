@@ -49,11 +49,19 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
   return (
     <div
       className={cn(
-        'flex flex-col items-center bg-white dark:bg-gray-700 rounded-4xl shadow-sm dark:shadow-sm-dark overflow-hidden w-full pt-2 pb-4 touch-none border border-gray-200 dark:border-gray-800',
+        'flex flex-col items-center bg-white dark:bg-gray-700',
+        'rounded-4xl shadow-sm dark:shadow-sm-dark overflow-hidden',
+        'w-full pt-2 pb-4 touch-none border border-gray-200',
+        'dark:border-gray-800',
         className
       )}
     >
-      <div className="text-md font-light text-gray-600 dark:text-gray-200 uppercase tracking-tight">
+      <div
+        className={cn(
+          'text-md font-light text-gray-600 dark:text-gray-200',
+          'uppercase tracking-tight'
+        )}
+      >
         {monthYear}
       </div>
 
@@ -74,12 +82,10 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
             <motion.div
               key={currentWeekStart.toISOString()}
               custom={direction}
-              // Настройки Drag
               drag="x"
               dragConstraints={{ left: 0, right: 0 }}
               dragElastic={0.7}
               onDragEnd={handleDragEnd}
-              // Анимации
               variants={{
                 enter: (direction) => ({
                   x: direction > 0 ? '100%' : '-100%',
@@ -101,7 +107,10 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
                 x: { type: 'spring', stiffness: 200, damping: 25 },
                 opacity: { duration: 0.2 },
               }}
-              className="flex justify-between items-center w-full h-full cursor-grab active:cursor-grabbing"
+              className={cn(
+                'flex justify-between items-center w-full h-full',
+                'cursor-grab active:cursor-grabbing'
+              )}
             >
               {weekDays.map((date, index) => {
                 const isSelected = isSameDay(date, selectedDate)
@@ -109,16 +118,19 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
 
                 return (
                   <button
-                    key={date.toISOString()} // Лучше использовать дату как ключ
+                    key={date.toISOString()}
                     onClick={() => handleDateClick(date)}
                     className={cn(
-                      'date-button shrink-0 w-9 h-9 flex flex-col items-center justify-center rounded-full transition-all duration-200',
-                      isSelected && 'bg-bot-primary text-white'
+                      'date-button shrink-0 w-9 h-9 flex flex-col items-center',
+                      'justify-center rounded-full transition-all duration-200',
+                      isSelected && 'bg-bot-primary text-white',
+                      !isSelected && 'cursor-pointer hover:bg-bot-primary/10'
                     )}
                   >
                     <span
                       className={cn(
-                        'text-xs tracking-tighter font-semibold pointer-events-none',
+                        'text-xs tracking-tighter font-semibold',
+                        'pointer-events-none',
                         isSelected
                           ? 'text-white'
                           : isToday
@@ -130,7 +142,8 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
                     </span>
                     <span
                       className={cn(
-                        'text-[10px] uppercase tracking-tighter font-regular pointer-events-none',
+                        'text-[10px] uppercase tracking-tighter font-regular',
+                        'pointer-events-none',
                         isSelected
                           ? 'text-white'
                           : isToday

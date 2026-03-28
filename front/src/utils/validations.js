@@ -7,6 +7,11 @@ export const registerSchema = z.object({
   phone: z.string().regex(/^7\d{10}$/, 'Неверный номер телефона'),
 })
 
+export const loginSchema = z.object({
+  phone: z.string().regex(/^7\d{10}$/, 'Неверный номер телефона'),
+  password: z.string().min(1, 'Пароль обязателен для заполнения'),
+})
+
 export const gameSchema = z.object({
   name: z.string().min(3, 'Минимум 3 символа'),
   location: z.string().min(2, 'Укажите место'),

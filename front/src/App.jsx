@@ -36,7 +36,8 @@ export const App = () => {
     <div
       className={cn(
         'text-gray-600 bg-gray-100 dark:bg-gray-900',
-        'flex flex-col h-screen gap-2 select-none items-center  scrollable-content overflow-y-auto'
+        'flex flex-col h-screen gap-2 select-none items-center',
+        'scrollable-content overflow-y-auto'
       )}
     >
       {isLoading && <Loader />}

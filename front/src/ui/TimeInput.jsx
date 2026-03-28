@@ -34,7 +34,13 @@ export const TimeInput = ({ value = '', onChange, label, className }) => {
 
       <div className="relative flex items-center">
         <div className="absolute left-2 z-10 flex items-center justify-center">
-          <div className="p-1.5 bg-bot-primary text-white rounded-full flex items-center justify-center transition-transform active:scale-95">
+          <div
+            className={cn(
+              'p-1.5 bg-bot-primary text-white rounded-full flex',
+              'items-center justify-center transition-transform',
+              'active:scale-95'
+            )}
+          >
             <Clock className="w-5 h-5" />
           </div>
         </div>

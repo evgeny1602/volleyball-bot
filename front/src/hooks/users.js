@@ -1,10 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { usersApi } from '@/api/users'
-import { tgGetUser } from '@/utils/telegram'
+import { tgGetUser, setCookieTgId } from '@/utils/telegram'
 
 export const USER_KEYS = {
   all: ['users'],
   detail: (tgId) => ['users', tgId],
+  byPhone: (phone) => ['users', 'by_phone', phone],
 }
 
 export const useCurrentUser = () => {
@@ -47,9 +48,35 @@ export const useUserMutations = () => {
     queryClient.invalidateQueries({ queryKey: USER_KEYS.all })
   }
 
+  const getUserByPhoneMutation = useMutation({
+    mutationFn: usersApi.getByPhone,
+    onSuccess: (data, phone) => {
+      if (data?.user) {
+        queryClient.setQueryData(USER_KEYS.byPhone(phone), data)
+      }
+    },
+  })
+
+  const loginMutation = useMutation({
+    mutationFn: usersApi.login,
+    onSuccess: (data) => {
+      if (data.success && data.user?.tg_id) {
+        setCookieTgId(data.user.tg_id)
+        queryClient.invalidateQueries({ queryKey: ['users', 'me'] })
+        invalidate()
+      }
+    },
+  })
+
   const createMutation = useMutation({
     mutationFn: usersApi.create,
-    onSuccess: invalidate,
+    onSuccess: (data) => {
+      if (data.success && data.tgId) {
+        queryClient.invalidateQueries({ queryKey: ['users', 'me'] })
+        setCookieTgId(data.tgId)
+        invalidate()
+      }
+    },
   })
 
   const approveMutation = useMutation({
@@ -81,16 +108,20 @@ export const useUserMutations = () => {
   })
 
   return {
+    login: loginMutation.mutateAsync,
     createUser: createMutation.mutateAsync,
     approveUser: approveMutation.mutateAsync,
     rejectUser: rejectMutation.mutateAsync,
     deleteUser: deleteMutation.mutateAsync,
     createGuest: createGuestMutation.mutateAsync,
     generatePassword: generatePasswordMutation.mutateAsync,
+    getUserByPhone: getUserByPhoneMutation.mutateAsync,
     isPending:
+      loginMutation.isPending ||
       createMutation.isPending ||
       approveMutation.isPending ||
       deleteMutation.isPending ||
-      generatePasswordMutation.isPending,
+      generatePasswordMutation.isPending ||
+      getUserByPhoneMutation.isPending,
   }
 }

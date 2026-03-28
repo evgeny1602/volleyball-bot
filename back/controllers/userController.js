@@ -95,6 +95,25 @@ export const createGuestUser = (req, res) => {
   }
 }
 
+export const getUserByPhone = (req, res) => {
+  try {
+    const { phone } = req.params
+    const user = db
+      .prepare(
+        `
+          SELECT * 
+          FROM users 
+          WHERE phone = ?
+        `
+      )
+      .get(phone)
+
+    res.json(user ? { exists: true, user } : { exists: false })
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 export const createUser = (req, res) => {
   try {
     const {
@@ -108,6 +127,22 @@ export const createUser = (req, res) => {
       role,
       status,
     } = req.body
+
+    const existingUser = db
+      .prepare(
+        `
+          SELECT * 
+          FROM users 
+          WHERE phone = ?
+        `
+      )
+      .get(phone)
+
+    if (existingUser) {
+      return res.status(409).json({ error: 'User already exists' })
+    }
+
+    const tgId = tg_id || getRandomTgId()
 
     const info = db
       .prepare(
@@ -128,7 +163,7 @@ export const createUser = (req, res) => {
         `
       )
       .run(
-        tg_id || getRandomTgId(),
+        tgId,
         tg_username || '',
         tg_avatar_url || '',
         fio || '',
@@ -139,16 +174,48 @@ export const createUser = (req, res) => {
         status || 'registered'
       )
 
-    res.status(201).json({
+    return res.status(201).json({
+      success: true,
       message: 'User created successfully',
       userId: info.lastInsertRowid,
+      tgId,
     })
   } catch (err) {
     if (err.code === 'SQLITE_CONSTRAINT_UNIQUE') {
       return res.status(409).json({ error: 'User already exists' })
     }
 
-    res.status(500).json({ error: 'Internal server error' })
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export const login = (req, res) => {
+  const { phone, password } = req.body
+
+  try {
+    const user = db
+      .prepare(
+        `
+          SELECT * 
+          FROM users 
+          WHERE phone = ? AND psw = ?
+        `
+      )
+      .get(phone, password)
+
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' })
+    }
+
+    const { psw, ...userNoPsw } = user
+
+    return res.status(200).json({
+      success: true,
+      user: userNoPsw,
+    })
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ error: 'Internal server error' })
   }
 }
 

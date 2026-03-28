@@ -1,10 +1,15 @@
 import { tgVibro } from '@/utils/telegram'
 import { CircleX } from 'lucide-react'
+import { cn } from '@/utils/cn'
 
 export const CloseButton = ({ onClick }) => {
   return (
     <CircleX
-      className="text-bot-primary  w-5 cursor-pointer active:scale-80 transition-transform shrink-0"
+      className={cn(
+        'text-bot-primary  w-5 cursor-pointer',
+        ' active:scale-80 transition-all shrink-0',
+        'hover:opacity-80 duration-200'
+      )}
       onClick={() => {
         tgVibro('medium')
         if (onClick) onClick()

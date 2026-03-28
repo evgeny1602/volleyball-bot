@@ -9,7 +9,14 @@ import { cn } from '@/utils/cn'
 //   { id: 'female', label: 'Чемпионка', Icon: GrUserFemale },
 // ]
 
-export const BaseRadio = ({ label, onChange, className, value, options }) => {
+export const BaseRadio = ({
+  label,
+  onChange,
+  className,
+  value,
+  options,
+  layoutId = 'active-pill',
+}) => {
   const handleChange = (id) => {
     tgVibro('medium')
     onChange?.(id)
@@ -19,14 +26,23 @@ export const BaseRadio = ({ label, onChange, className, value, options }) => {
     <div className={cn('flex flex-col gap-1.5', className)}>
       {label && <InputLabel>{label}</InputLabel>}
 
-      <div className="flex w-full bg-gray-100 dark:bg-gray-800 rounded-full p-1 border border-gray-300 dark:border-gray-900 relative overflow-hidden">
+      <div
+        className={cn(
+          'flex w-full bg-gray-100 dark:bg-gray-800 rounded-full p-1',
+          ' border border-gray-300 dark:border-gray-900 relative',
+          ' overflow-hidden'
+        )}
+      >
         {options.map(({ id, label, Icon }) => {
           const isActive = value === id
 
           return (
             <label
               key={id}
-              className="flex-1 flex items-center justify-center py-2.5 px-4 rounded-full cursor-pointer select-none relative"
+              className={cn(
+                'flex-1 flex items-center justify-center py-2.5 px-4',
+                ' rounded-full cursor-pointer select-none relative'
+              )}
             >
               <input
                 type="radio"
@@ -39,8 +55,11 @@ export const BaseRadio = ({ label, onChange, className, value, options }) => {
               <AnimatePresence>
                 {isActive && (
                   <motion.div
-                    layoutId="active-pill"
-                    className="absolute inset-0 bg-bot-primary rounded-full shadow-sm z-0"
+                    layoutId={layoutId}
+                    className={cn(
+                      'absolute inset-0 bg-bot-primary rounded-full',
+                      'shadow-sm z-0'
+                    )}
                     transition={{
                       type: 'spring',
                       stiffness: 400,

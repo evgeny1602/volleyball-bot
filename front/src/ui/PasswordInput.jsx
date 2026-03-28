@@ -1,18 +1,23 @@
 import { useRef } from 'react'
-import { IMaskInput } from 'react-imask'
 import { motion, AnimatePresence } from 'framer-motion'
 import { InputLabel } from '@/ui/InputLabel'
 import { CloseIcon } from '@/ui/CloseIcon'
 import { tgVibro } from '@/utils/telegram'
 import { cn } from '@/utils/cn'
 
-export const PhoneInput = ({ label, value, onChange, className, ...props }) => {
-  const imaskRef = useRef(null)
+export const PasswordInput = ({
+  label,
+  value,
+  onChange,
+  className,
+  ...props
+}) => {
+  const inputRef = useRef(null)
 
   const handleClear = () => {
     tgVibro('light')
     onChange?.('')
-    imaskRef.current?.focus()
+    inputRef.current?.focus()
   }
 
   const hasValue = value?.length > 0
@@ -22,20 +27,20 @@ export const PhoneInput = ({ label, value, onChange, className, ...props }) => {
       {label && <InputLabel>{label}</InputLabel>}
 
       <div className="relative flex items-center">
-        <IMaskInput
-          {...props}
-          inputRef={(el) => (imaskRef.current = el)}
-          inputMode="tel"
-          mask="+{7} (000) 000-00-00"
+        <input
+          type="password"
+          ref={inputRef}
           value={value ?? ''}
-          unmask={true}
-          onAccept={(val) => onChange?.(val)}
           onFocus={() => tgVibro('medium')}
+          onChange={(e) => onChange?.(e.target.value)}
           className={cn(
-            'w-full py-2.5 rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 transition-all text-center',
+            'w-full py-2.5 rounded-full border border-gray-300',
+            'dark:border-gray-600 text-gray-600 dark:text-gray-300',
+            'transition-all text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
             hasValue ? 'px-12' : 'px-4'
           )}
+          {...props}
         />
 
         <AnimatePresence>
@@ -48,7 +53,10 @@ export const PhoneInput = ({ label, value, onChange, className, ...props }) => {
               exit={{ opacity: 0, scale: 0.5 }}
               transition={{ type: 'spring', stiffness: 500, damping: 30 }}
               onClick={handleClear}
-              className="absolute right-1 p-1 text-bot-grey-400 hover:text-bot-grey-600 outline-none active:scale-90"
+              className={cn(
+                'absolute right-1 p-1 text-bot-grey-400',
+                ' hover:text-bot-grey-600 outline-none active:scale-90'
+              )}
             >
               <CloseIcon className="w-8 h-8" />
             </motion.button>

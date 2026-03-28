@@ -7,6 +7,9 @@ import { ProfileXp } from '@/ui/ProfileXp'
 import { ProfileStats } from '@/ui/ProfileStats'
 import { LoaderFullScreen } from '@/ui/LoaderFullscreen'
 import { cn } from '@/utils/cn'
+import { Button } from '@/ui/Button'
+import { LogOut } from 'lucide-react'
+import { removeCookieTgId, tgConfirm, IS_WEB } from '@/utils/telegram'
 
 export const UserProfile = ({ tgUserId, variant = 'full', className }) => {
   const { data, isLoading: isUserLoading } = useUser(tgUserId)
@@ -26,6 +29,15 @@ export const UserProfile = ({ tgUserId, variant = 'full', className }) => {
     () => thanks.filter((thank) => !thank.is_anonymous),
     [thanks]
   )
+
+  const handleExitClick = async () => {
+    const isYes = await tgConfirm('Вы уверены, что хотите выйти?')
+
+    if (isYes) {
+      removeCookieTgId()
+      document.location.reload()
+    }
+  }
 
   if (!tgUserId) {
     return <p className="text-sm font-mono">ОШИБКА: Не получен tgUserId</p>
@@ -63,6 +75,17 @@ export const UserProfile = ({ tgUserId, variant = 'full', className }) => {
         namedThanks={namedThanks}
         variant={variant}
       />
+
+      {IS_WEB && (
+        <Button
+          variant="danger"
+          className="text-sm mt-10"
+          onClick={handleExitClick}
+        >
+          <LogOut size={14} />
+          Выйти из приложения
+        </Button>
+      )}
     </div>
   )
 }
