@@ -41,7 +41,7 @@ export const UserCard = ({ user, className }) => {
     tgAlert('Пароль скопирован')
   }
 
-  const BUTTONS = [
+  const FOR_PLAYERS_ONLY_BUTTONS = [
     {
       Component: ApproveButton,
       label: 'Одобрить',
@@ -62,6 +62,9 @@ export const UserCard = ({ user, className }) => {
       confirmText: 'Вы уверены, что хотите удалить игрока?',
       onClick: () => deleteUser(user.tg_id),
     },
+  ]
+
+  const FOR_ALL_BUTTONS = [
     {
       Component: GenPswButton,
       label: 'Сгенерировать пароль',
@@ -76,6 +79,11 @@ export const UserCard = ({ user, className }) => {
     },
   ]
 
+  const BUTTONS =
+    user.role == 'admin'
+      ? FOR_ALL_BUTTONS
+      : [...FOR_PLAYERS_ONLY_BUTTONS, ...FOR_ALL_BUTTONS]
+
   if (isPending) {
     return (
       <UserCardContainer className={className}>
@@ -84,21 +92,28 @@ export const UserCard = ({ user, className }) => {
     )
   }
 
-  // console.log({ user })
-
   return (
     <UserCardContainer className={className}>
       <div className="flex flex-row items-center gap-2">
         <UserAvatar url={user.tg_avatar_url} />
 
         <div className="w-full flex flex-col gap-1">
-          <div className="font-medium flex justify-start gap-2 flex-wrap items-center">
+          <div
+            className={cn(
+              'font-medium flex justify-start gap-2 flex-wrap items-center'
+            )}
+          >
             <span>{user.fio}</span>
 
             {user.role == 'admin' && <AdminBadge className="self-center" />}
           </div>
 
-          <div className="text-xs text-gray-400 flex flex-wrap gap-2 justify-between w-full">
+          <div
+            className={cn(
+              'text-xs text-gray-400 flex flex-wrap gap-2',
+              'justify-between w-full'
+            )}
+          >
             <div className="flex flex-col gap-1">
               <span className="flex items-center gap-1">
                 <TelegramIcon
@@ -134,20 +149,18 @@ export const UserCard = ({ user, className }) => {
         </div>
       </div>
 
-      {user.role === 'player' && (
-        <div className="flex flex-col gap-2">
-          {BUTTONS.filter((btn) => btn.show).map(
-            ({ Component, label, ...props }, idx) => (
-              <Component
-                key={idx}
-                {...props}
-              >
-                {label}
-              </Component>
-            )
-          )}
-        </div>
-      )}
+      <div className="flex flex-col gap-2">
+        {BUTTONS.filter((btn) => btn.show).map(
+          ({ Component, label, ...props }, idx) => (
+            <Component
+              key={idx}
+              {...props}
+            >
+              {label}
+            </Component>
+          )
+        )}
+      </div>
     </UserCardContainer>
   )
 }
