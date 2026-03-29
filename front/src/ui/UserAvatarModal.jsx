@@ -4,20 +4,16 @@ import { UserAvatar } from '@/ui/UserAvatar'
 import { UserProfile } from '@/ui/UserProfile'
 import { User } from 'lucide-react'
 
-export const UserAvatarModal = ({
-  url,
-  variant = 'default',
-  className,
-  tgUserId,
-}) => {
+export const UserAvatarModal = ({ user, variant = 'default', className }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const isGuest = tgUserId < 0
+  const isGuest = user.tg_username == 'Guest'
+  const tgUserId = user.tg_id
 
   return (
     <>
       <UserAvatar
         onClick={() => setIsOpen(true)}
-        url={url}
+        user={user}
         variant={variant}
         className={className}
       />

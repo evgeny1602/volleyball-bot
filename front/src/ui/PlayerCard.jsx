@@ -9,7 +9,6 @@ import { RespectBadge } from '@/ui/RespectBadge'
 import { useCurrentUser } from '@/hooks/users'
 import { useRestThanks } from '@/hooks/thanks'
 import { Button } from '@/ui/Button'
-import { IS_WEB } from '@/utils/telegram'
 
 export const PlayerCard = ({
   player,
@@ -38,7 +37,7 @@ export const PlayerCard = ({
     ({ from_user_id }) => from_user_id == user.id
   )
   const hasMyRespect = myRespect || false
-  const isGuest = player.tg_id < 0
+  const isGuest = player.tg_username == 'Guest'
   const canSendRespect =
     haveThanks &&
     isPastGame &&
@@ -54,8 +53,7 @@ export const PlayerCard = ({
     <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 p-2 rounded-2xl">
       <UserAvatarModal
         variant="small"
-        url={IS_WEB ? `avatars/${player.avatar_url}` : player.tg_avatar_url}
-        tgUserId={player.tg_id}
+        user={player}
       />
 
       <div className="flex flex-col flex-1 min-w-0 gap-1">

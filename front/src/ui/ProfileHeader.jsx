@@ -3,13 +3,13 @@ import { UserAvatar } from '@/ui/UserAvatar'
 import { fioFormat } from '@/utils/formatters'
 import { cn } from '@/utils/cn'
 
-export const ProfileHeader = ({ avatarUrl, userFio, rankName, className }) => {
-  const { first, last } = useMemo(() => fioFormat(userFio), [userFio])
+export const ProfileHeader = ({ user, rankName, className }) => {
+  const { first, last } = useMemo(() => fioFormat(user.fio), [user])
 
   return (
     <div className={cn('flex flex-col items-center gap-2', className)}>
       <UserAvatar
-        url={avatarUrl || ''}
+        user={user}
         variant="big"
       />
 
