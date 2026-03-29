@@ -11,7 +11,12 @@ import { Button } from '@/ui/Button'
 import { LogOut } from 'lucide-react'
 import { removeCookieTgId, tgConfirm, IS_WEB } from '@/utils/telegram'
 
-export const UserProfile = ({ tgUserId, variant = 'full', className }) => {
+export const UserProfile = ({
+  tgUserId,
+  variant = 'full',
+  className,
+  displayExitBtn = false,
+}) => {
   const { data, isLoading: isUserLoading } = useUser(tgUserId)
   const user = data?.user
   const {
@@ -58,7 +63,7 @@ export const UserProfile = ({ tgUserId, variant = 'full', className }) => {
       )}
     >
       <ProfileHeader
-        avatarUrl={user?.tg_avatar_url}
+        avatarUrl={IS_WEB ? `avatars/${user?.avatar_url}` : user?.tg_avatar_url}
         userFio={user?.fio}
         rankName={rank?.name}
       />
@@ -76,7 +81,7 @@ export const UserProfile = ({ tgUserId, variant = 'full', className }) => {
         variant={variant}
       />
 
-      {IS_WEB && (
+      {IS_WEB && displayExitBtn && (
         <Button
           variant="danger"
           className="text-sm mt-10"

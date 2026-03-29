@@ -35,6 +35,7 @@ app.use(express.json())
 // app.use(dbLogger)
 
 app.use('/uploads', express.static('uploads'))
+app.use('/avatars', express.static('avatars'))
 
 app.use('/api/users', userRoutes)
 app.use('/api/games', gameRoutes)

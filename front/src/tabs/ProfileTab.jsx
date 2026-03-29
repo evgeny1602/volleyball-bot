@@ -6,6 +6,7 @@ export const ProfileTab = () => {
     <UserProfile
       className="scrollable-content overflow-y-auto mb-20"
       tgUserId={tgGetUser().id}
+      displayExitBtn={true}
     />
   )
 }

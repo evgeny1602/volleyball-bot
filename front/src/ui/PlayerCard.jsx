@@ -9,6 +9,7 @@ import { RespectBadge } from '@/ui/RespectBadge'
 import { useCurrentUser } from '@/hooks/users'
 import { useRestThanks } from '@/hooks/thanks'
 import { Button } from '@/ui/Button'
+import { IS_WEB } from '@/utils/telegram'
 
 export const PlayerCard = ({
   player,
@@ -53,7 +54,7 @@ export const PlayerCard = ({
     <div className="flex items-center gap-3 bg-gray-100 dark:bg-gray-700 p-2 rounded-2xl">
       <UserAvatarModal
         variant="small"
-        url={player.tg_avatar_url}
+        url={IS_WEB ? `avatars/${player.avatar_url}` : player.tg_avatar_url}
         tgUserId={player.tg_id}
       />
 
