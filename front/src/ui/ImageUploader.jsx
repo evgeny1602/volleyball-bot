@@ -5,7 +5,7 @@ import { tgVibro, tgAlert } from '@/utils/telegram'
 import { useUpload } from '@/hooks/useUpload'
 import { InputLabel } from '@/ui/InputLabel'
 
-export const ImageUploader = ({ value, onChange, label }) => {
+export const ImageUploader = ({ value, onChange, label, className }) => {
   const [preview, setPreview] = useState(value)
   const fileInputRef = useRef(null)
   const { uploadFile, deleteFile, isLoading } = useUpload()
@@ -32,8 +32,8 @@ export const ImageUploader = ({ value, onChange, label }) => {
     onChange?.('')
     if (fileInputRef.current) fileInputRef.current.value = ''
 
-    if (value) {
-      await deleteFile(value)
+    if (preview) {
+      await deleteFile(preview.split('?ts=')[0])
     }
   }
 
@@ -53,7 +53,8 @@ export const ImageUploader = ({ value, onChange, label }) => {
           preview
             ? 'border-transparent'
             : 'border-gray-200 dark:border-gray-600 dark:bg-gray-700 bg-gray-100 active:bg-gray-100 active:dark:bg-gray-600',
-          isLoading && 'opacity-60 cursor-not-allowed'
+          isLoading && 'opacity-60 cursor-not-allowed',
+          className
         )}
       >
         {preview ? (
@@ -66,13 +67,18 @@ export const ImageUploader = ({ value, onChange, label }) => {
             <button
               type="button"
               onClick={handleDelete}
-              className="absolute p-2 bg-bot-danger/90 backdrop-blur-md rounded-full text-white shadow-sm active:scale-90 transition-transform"
+              className={cn(
+                'absolute p-2 bg-bot-danger/90 backdrop-blur-md rounded-full',
+                'text-white shadow-sm active:scale-90 transition-transform',
+                'cursor-pointer hover:opacity-100 transition-all duration-200',
+                'opacity-70'
+              )}
             >
               <X size={20} />
             </button>
           </>
         ) : (
-          <div className="flex flex-col items-center gap-2">
+          <div className="flex flex-col items-center gap-2 cursor-pointer">
             {isLoading ? (
               <Loader2
                 className="animate-spin text-bot-primary"
@@ -84,11 +90,12 @@ export const ImageUploader = ({ value, onChange, label }) => {
                 className="text-gray-300 dark:text-gray-500"
               />
             )}
-            <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
-              {isLoading
-                ? 'Загрузка...'
-                : 'Нажмите, чтобы добавить изображение'}
-            </span>
+
+            {isLoading && (
+              <span className="text-xs font-medium text-gray-400 dark:text-gray-500">
+                Загрузка...
+              </span>
+            )}
           </div>
         )}
       </div>

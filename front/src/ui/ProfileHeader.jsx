@@ -3,7 +3,7 @@ import { UserAvatar } from '@/ui/UserAvatar'
 import { fioFormat } from '@/utils/formatters'
 import { cn } from '@/utils/cn'
 
-export const ProfileHeader = ({ user, rankName, className }) => {
+export const ProfileHeader = ({ user, rankName, className, isChangable }) => {
   const { first, last } = useMemo(() => fioFormat(user.fio), [user])
 
   return (
@@ -11,6 +11,7 @@ export const ProfileHeader = ({ user, rankName, className }) => {
       <UserAvatar
         user={user}
         variant="big"
+        isChangable={isChangable}
       />
 
       <div className="flex flex-col items-center">

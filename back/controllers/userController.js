@@ -1,11 +1,90 @@
+import fs from 'fs'
+import path from 'path'
 import crypto from 'crypto'
 import db from '../db.js'
 import { GMT } from './utils.js'
+
+const imgExts = ['jpg', 'jpeg', 'png', 'svg']
 
 const generatePassword = () =>
   crypto.randomBytes(4).toString('hex').toLowerCase()
 
 const getRandomTgId = () => -Math.floor(Date.now() + Math.random() * 1000)
+
+const clearPsw = (user) => {
+  const { psw, ...userNoPsw } = user
+  return userNoPsw
+}
+
+const deleteOldAvatars = (userId) => {
+  const oldAvatarFiles = imgExts
+    .map((e) => path.join('avatars', `${userId}.${e}`))
+    .filter((f) => fs.existsSync(f))
+
+  for (const f of oldAvatarFiles) {
+    fs.unlinkSync(f)
+  }
+}
+
+export const setAvatar = (req, res) => {
+  try {
+    const { tgId, filename } = req.body
+
+    if (!tgId) {
+      return res.status(400).json({ error: 'tgId is required' })
+    }
+
+    if (!filename) {
+      return res.status(400).json({ error: 'filename is required' })
+    }
+
+    const ext = filename.split('.').at(-1).toLowerCase()
+    const uploadedFilename = path.join('uploads', filename)
+
+    if (!fs.existsSync(uploadedFilename)) {
+      return res
+        .status(404)
+        .json({ error: `File "${uploadedFilename}" not found` })
+    }
+
+    const user = db
+      .prepare(
+        `
+          SELECT * 
+          FROM users 
+          WHERE tg_id = ?
+        `
+      )
+      .get(tgId)
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ error: `User with tg_id "${tgId}" not found` })
+    }
+
+    deleteOldAvatars(user.id)
+
+    const avatarFilename = `${user.id}.${ext}`
+
+    fs.renameSync(uploadedFilename, path.join('avatars', avatarFilename))
+
+    db.prepare(
+      `
+        UPDATE users
+        SET avatar_url = ?
+        WHERE id = ?
+      `
+    ).run(avatarFilename, user.id)
+
+    return res.status(200).json({
+      success: true,
+      user: clearPsw(user),
+    })
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
 
 export const getAllUsers = (req, res) => {
   try {
@@ -44,7 +123,7 @@ export const getUserByTgId = (req, res) => {
       )
       .get(tgId)
 
-    res.json(user ? { exists: true, user } : { exists: false })
+    res.json(user ? { exists: true, user: clearPsw(user) } : { exists: false })
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' })
   }
@@ -207,11 +286,9 @@ export const login = (req, res) => {
       return res.status(401).json({ error: 'Invalid credentials' })
     }
 
-    const { psw, ...userNoPsw } = user
-
     return res.status(200).json({
       success: true,
-      user: userNoPsw,
+      user: clearPsw(user),
     })
   } catch (err) {
     console.log(err)

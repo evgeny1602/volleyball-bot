@@ -1,5 +1,16 @@
 ### USERS - begin
 
+POST http://localhost:3000/api/users/set_avatar
+x-debug-mode: 1
+Content-Type: application/json
+
+{
+    "tgId": "450980607",
+    "filename": "furies.jpg"
+}
+
+###
+
 GET http://localhost:3000/api/users/by_phone/79236558212
 x-debug-mode: 1
 

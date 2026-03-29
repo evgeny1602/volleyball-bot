@@ -6,7 +6,9 @@ export const useUpload = () => {
   const [error, setError] = useState(null)
 
   const uploadFile = async (file) => {
-    if (!file) return null
+    if (!file) {
+      return null
+    }
 
     const formData = new FormData()
     formData.append('image', file)
@@ -28,7 +30,9 @@ export const useUpload = () => {
   }
 
   const deleteFile = async (url) => {
-    if (!url) return
+    if (!url) {
+      return
+    }
 
     const filename = url.split('/').pop()
 

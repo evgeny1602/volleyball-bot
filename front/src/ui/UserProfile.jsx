@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
-import { useUser } from '@/hooks/users'
+import { useMemo, useState } from 'react'
+import { useUser, useUserMutations } from '@/hooks/users'
 import { useXp } from '@/hooks/xp'
 import { useUserThanks } from '@/hooks/thanks'
 import { ProfileHeader } from '@/ui/ProfileHeader'
@@ -14,6 +14,7 @@ export const UserProfile = ({
   variant = 'full',
   className,
   displayExitBtn = false,
+  isChangable = false,
 }) => {
   const { data, isLoading: isUserLoading } = useUser(tgUserId)
   const user = data?.user
@@ -54,6 +55,7 @@ export const UserProfile = ({
       <ProfileHeader
         user={user}
         rankName={rank?.name}
+        isChangable={isChangable}
       />
 
       <ProfileXp

@@ -68,6 +68,19 @@ export const useUserMutations = () => {
     },
   })
 
+  const setAvatarMutation = useMutation({
+    mutationFn: usersApi.setAvatar,
+    onSuccess: (data) => {
+      if (data.success && data.user?.tg_id) {
+        queryClient.invalidateQueries({ queryKey: ['users', 'me'] })
+        queryClient.invalidateQueries({
+          queryKey: USER_KEYS.detail(data.user.tg_id),
+        })
+        invalidate()
+      }
+    },
+  })
+
   const createMutation = useMutation({
     mutationFn: usersApi.create,
     onSuccess: (data) => {
@@ -116,7 +129,9 @@ export const useUserMutations = () => {
     createGuest: createGuestMutation.mutateAsync,
     generatePassword: generatePasswordMutation.mutateAsync,
     getUserByPhone: getUserByPhoneMutation.mutateAsync,
+    setAvatar: setAvatarMutation.mutateAsync,
     isPending:
+      setAvatarMutation.isPending ||
       loginMutation.isPending ||
       createMutation.isPending ||
       approveMutation.isPending ||

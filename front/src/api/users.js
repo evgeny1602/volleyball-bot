@@ -8,6 +8,19 @@ export const usersApi = {
     return data
   },
 
+  setAvatar: async ({ tgId, filename }) => {
+    if (!tgId) {
+      return null
+    }
+
+    if (!filename) {
+      return null
+    }
+
+    const { data } = await api.post(`${prefix}/set_avatar`, { tgId, filename })
+    return data
+  },
+
   getByTgId: async (tgId) => {
     const { data } = await api.get(`${prefix}/${tgId}`)
     return data

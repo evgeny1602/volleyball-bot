@@ -16,6 +16,7 @@ router.delete('/:tgId', userController.deleteUser)
 router.patch('/approve/:tgId', userController.approveUser)
 router.patch('/reject/:tgId', userController.rejectUser)
 
+router.post('/set_avatar', userController.setAvatar)
 router.post('/guest', userController.createGuestUser)
 router.post('/login', userController.login)
 
