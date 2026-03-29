@@ -1,11 +1,17 @@
 import { ModalOverlay } from '@/ui/ModalOverlay'
-import { ModalWrapper } from '@/ui/ModalWrapper'
 import { ModalHeader } from '@/ui/ModalHeader'
+import { cn } from '@/utils/cn'
 
 export const Modal = ({ onClose, children, headerText, Icon }) => {
   return (
     <ModalOverlay>
-      <ModalWrapper>
+      <div
+        className={cn(
+          'w-full p-4 flex flex-col bg-white dark:bg-gray-800 rounded-3xl',
+          'border border-gray-300 dark:border-gray-900 shadow-sm',
+          'dark:shadow-sm-dark max-h-[95dvh]'
+        )}
+      >
         <ModalHeader onClose={onClose}>
           <div className="flex flex-row items-start gap-2 justify-start">
             {Icon && <Icon className="w-4 h-4 text-current shrink-0 mt-0.5" />}
@@ -13,10 +19,14 @@ export const Modal = ({ onClose, children, headerText, Icon }) => {
           </div>
         </ModalHeader>
 
-        <div className="scrollable-content max-h-[90vh] overflow-y-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:display-none pt-4">
+        <div
+          className={cn(
+            'scrollable-content max-h-[90vh] overflow-y-auto no-scrollbar pt-4'
+          )}
+        >
           {children}
         </div>
-      </ModalWrapper>
+      </div>
     </ModalOverlay>
   )
 }
