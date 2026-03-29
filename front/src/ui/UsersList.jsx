@@ -14,6 +14,8 @@ export const UsersList = ({ statuses }) => {
     statuses.includes(user.status)
   )
 
+  console.log(usersToDisplay)
+
   return (
     <>
       <div className="w-full flex flex-col items-center -mt-1 mb-4">

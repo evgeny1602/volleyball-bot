@@ -1,4 +1,4 @@
-import { UserAvatar } from '@/ui/UserAvatar'
+import { UserAvatarModal } from '@/ui/UserAvatarModal'
 import { cn } from '@/utils/cn'
 import { GenPswButton } from '@/ui/buttons/GenPswButton'
 import { CopyPswButton } from '@/ui/buttons/CopyPswButton'
@@ -95,7 +95,7 @@ export const UserCard = ({ user, className }) => {
   return (
     <UserCardContainer className={className}>
       <div className="flex flex-row items-center gap-2">
-        <UserAvatar user={user} />
+        <UserAvatarModal user={user} />
 
         <div className="w-full flex flex-col gap-1">
           <div
