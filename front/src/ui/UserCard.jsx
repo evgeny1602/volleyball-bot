@@ -95,9 +95,7 @@ export const UserCard = ({ user, className }) => {
   return (
     <UserCardContainer className={className}>
       <div className="flex flex-row items-center gap-2">
-        <UserAvatar
-          url={IS_WEB ? `avatars/${user.avatar_url}` : user.tg_avatar_url}
-        />
+        <UserAvatar user={user} />
 
         <div className="w-full flex flex-col gap-1">
           <div
