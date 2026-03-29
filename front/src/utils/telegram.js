@@ -25,7 +25,8 @@ export const setCookieTgId = (id, rememberMe) => {
   const date = new Date()
   date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000)
   const expires = rememberMe ? '; expires=' + date.toUTCString() : ''
-  document.cookie = `tg_id=${id}${expires}; path=/; SameSite=Lax`
+  const cookieText = `tg_id=${id}${expires}; path=/; SameSite=Lax`
+  document.cookie = cookieText
 }
 
 export const removeCookieTgId = () => {
