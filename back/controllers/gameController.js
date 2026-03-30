@@ -19,13 +19,67 @@ const getGamePlayers = (gameId) =>
       thanks: getPlayerThanks(gameId, player.id),
     }))
 
+// export const getAllGames = (req, res) => {
+//   try {
+//     const data = db
+//       .prepare(
+//         `
+//           SELECT
+//             g.*,
+//             (
+//               SELECT json_group_array(
+//                 json_object(
+//                   'id', u.id,
+//                   'fio', u.fio,
+//                   'status', ug.status,
+//                   'login_date', ug.created_at,
+//                   'thanks', (
+//                     SELECT json_group_array(
+//                       json_object(
+//                         'id', tt.id,
+//                         'name', tt.name,
+//                         'from_user_id', t.from_user_id
+//                       )
+//                     )
+//                     FROM thanks t
+//                     JOIN thank_types tt ON t.type_id = tt.id
+//                     WHERE t.game_id = g.id AND t.to_user_id = u.id
+//                   )
+//                 )
+//               )
+//               FROM users_to_games ug
+//               LEFT JOIN users u ON ug.user_id = u.id
+//               WHERE ug.game_id = g.id
+//             ) AS players
+//           FROM games g
+//           ORDER BY g.start_datetime ASC
+//         `
+//       )
+//       .all()
+
+//     const parsedData = data.map((game) => ({
+//       ...game,
+//       players: JSON.parse(game.players),
+//     }))
+
+//     res.json({
+//       success: true,
+//       count: parsedData.length,
+//       data: parsedData,
+//     })
+//   } catch (err) {
+//     console.error(err)
+//     res.status(500).json({ error: 'Internal server error' })
+//   }
+// }
+
 export const getAllGames = (req, res) => {
   try {
     const data = db
       .prepare(
         `
-          SELECT * 
-          FROM games 
+          SELECT *
+          FROM games
           ORDER BY start_datetime ASC
         `
       )
