@@ -7,7 +7,7 @@ export const GamesMenuIcon = ({ className, onClick, variant = 'default' }) => {
       className={className}
       onClick={onClick}
       icon={icon}
-      text="Игры"
+      text="Мои игры"
       variant={variant}
     />
   )
