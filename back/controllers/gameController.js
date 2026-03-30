@@ -1,98 +1,79 @@
 import db from '../db.js'
 import { getDateFromStr, GMT } from './utils.js'
-import { getPlayerThanks } from './thankController.js'
 
-const getGamePlayers = (gameId) =>
-  db
-    .prepare(
-      `
-        SELECT u.*, ug.status, ug.created_at AS login_date
-        FROM users_to_games ug 
-        LEFT JOIN users u ON ug.user_id=u.id 
-        WHERE ug.game_id=? 
-        ORDER BY ug.created_at ASC
-      `
-    )
-    .all(gameId)
-    .map((player) => ({
-      ...player,
-      thanks: getPlayerThanks(gameId, player.id),
-    }))
-
-// export const getAllGames = (req, res) => {
-//   try {
-//     const data = db
-//       .prepare(
-//         `
-//           SELECT
-//             g.*,
-//             (
-//               SELECT json_group_array(
-//                 json_object(
-//                   'id', u.id,
-//                   'fio', u.fio,
-//                   'status', ug.status,
-//                   'login_date', ug.created_at,
-//                   'thanks', (
-//                     SELECT json_group_array(
-//                       json_object(
-//                         'id', tt.id,
-//                         'name', tt.name,
-//                         'from_user_id', t.from_user_id
-//                       )
-//                     )
-//                     FROM thanks t
-//                     JOIN thank_types tt ON t.type_id = tt.id
-//                     WHERE t.game_id = g.id AND t.to_user_id = u.id
-//                   )
-//                 )
-//               )
-//               FROM users_to_games ug
-//               LEFT JOIN users u ON ug.user_id = u.id
-//               WHERE ug.game_id = g.id
-//             ) AS players
-//           FROM games g
-//           ORDER BY g.start_datetime ASC
-//         `
-//       )
-//       .all()
-
-//     const parsedData = data.map((game) => ({
-//       ...game,
-//       players: JSON.parse(game.players),
-//     }))
-
-//     res.json({
-//       success: true,
-//       count: parsedData.length,
-//       data: parsedData,
-//     })
-//   } catch (err) {
-//     console.error(err)
-//     res.status(500).json({ error: 'Internal server error' })
-//   }
-// }
+const LOOKBACK_DAYS = 184
 
 export const getAllGames = (req, res) => {
+  const startDate = `datetime('now', '-${LOOKBACK_DAYS} days')`
+
   try {
-    const data = db
+    const thanks = db
+      .prepare(
+        `
+          SELECT
+            tt.id AS id,
+            tt.name AS name,
+            t.game_id AS game_id,
+            t.from_user_id AS from_user_id,
+            t.to_user_id AS to_user_id
+          FROM
+            thanks t
+          JOIN
+            thank_types tt ON t.type_id = tt.id
+          WHERE
+            datetime(t.created_at) > ${startDate}
+        `
+      )
+      .all()
+
+    const players = db
+      .prepare(
+        `
+          SELECT 
+            u.*, 
+            ug.game_id AS game_id, 
+            ug.status, 
+            ug.created_at AS login_date
+          FROM 
+            users_to_games ug 
+          LEFT JOIN 
+            users u ON ug.user_id=u.id 
+          WHERE 
+            datetime(ug.created_at) > ${startDate}
+          ORDER BY 
+            ug.created_at ASC
+        `
+      )
+      .all()
+
+    const games = db
       .prepare(
         `
           SELECT *
           FROM games
+          WHERE datetime(start_datetime) > ${startDate}
           ORDER BY start_datetime ASC
         `
       )
       .all()
-      .map((game) => ({
-        ...game,
-        players: getGamePlayers(game.id),
-      }))
+
+    const gamesWithPlayersAndThanks = games.map((game) => ({
+      ...game,
+      players: players
+        .filter((player) => player.game_id === game.id)
+        .map((player) => ({
+          ...player,
+          thanks: thanks.filter(
+            (thank) =>
+              thank.to_user_id === player.id && thank.game_id === game.id
+          ),
+        })),
+    }))
 
     res.json({
       success: true,
-      count: data.length,
-      data,
+      data: gamesWithPlayersAndThanks,
+      count: gamesWithPlayersAndThanks.length,
     })
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' })
@@ -101,7 +82,46 @@ export const getAllGames = (req, res) => {
 
 export const getGameById = (req, res) => {
   try {
-    const { id: gameId } = req.params
+    const { gameId } = req.params
+
+    const thanks = db
+      .prepare(
+        `
+          SELECT
+            tt.id AS id,
+            tt.name AS name,
+            t.game_id AS game_id,
+            t.from_user_id AS from_user_id,
+            t.to_user_id AS to_user_id
+          FROM
+            thanks t
+          JOIN 
+            thank_types tt ON t.type_id = tt.id
+          WHERE 
+            t.game_id = ?
+        `
+      )
+      .all(gameId)
+
+    const players = db
+      .prepare(
+        `
+          SELECT 
+            u.*, 
+            ug.status, 
+            ug.created_at AS login_date
+          FROM 
+            users_to_games ug 
+          LEFT JOIN 
+            users u ON ug.user_id=u.id 
+          WHERE 
+            ug.game_id = ? 
+          ORDER BY 
+            ug.created_at ASC
+        `
+      )
+      .all(gameId)
+
     const game = db
       .prepare(
         `
@@ -111,11 +131,24 @@ export const getGameById = (req, res) => {
       )
       .get(gameId)
 
-    res.json(
-      game
-        ? { success: true, game: { ...game, players: getGamePlayers(gameId) } }
-        : { success: false, error: 'Game not found' }
-    )
+    if (!game) {
+      return res.status(404).json({ error: 'Game not found' })
+    }
+
+    const playersWithThanks = players.map((player) => ({
+      ...player,
+      thanks: thanks.filter((thank) => thank.to_user_id === player.id),
+    }))
+
+    const gameWithPlayers = {
+      ...game,
+      players: playersWithThanks,
+    }
+
+    return res.json({
+      success: true,
+      game: gameWithPlayers,
+    })
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' })
   }
@@ -193,17 +226,17 @@ export const createGame = (req, res) => {
 
 export const updateGame = (req, res) => {
   try {
-    const { id } = req.params
+    const { gameId } = req.params
     const {
       name,
-      location: location_name,
-      address: location_address,
+      location,
+      address,
       date,
       time,
       duration,
       description,
       price,
-      maxPlayers: max_players,
+      maxPlayers,
       mode,
     } = req.body
 
@@ -226,15 +259,15 @@ export const updateGame = (req, res) => {
       )
       .run(
         name,
-        location_name,
-        location_address,
+        location,
+        address,
         getDateFromStr(`${date} ${time}`, 0),
         duration,
         description,
         price,
-        max_players,
+        maxPlayers,
         mode,
-        id
+        gameId
       )
 
     if (info.changes > 0) {
@@ -255,15 +288,20 @@ export const updateGame = (req, res) => {
 
 export const deleteGame = (req, res) => {
   try {
-    const { id: gameId } = req.params
+    const { gameId } = req.params
 
     const guestIds = db
       .prepare(
         `
-          SELECT u.id as id 
-          FROM users_to_games ug 
-          LEFT JOIN users u ON ug.user_id=u.id 
-          WHERE u.tg_username = 'Guest' AND ug.game_id = ?
+          SELECT 
+            u.id as id 
+          FROM 
+            users_to_games ug 
+          LEFT JOIN 
+            users u ON ug.user_id=u.id 
+          WHERE 
+            u.tg_username = 'Guest' 
+            AND ug.game_id = ?
         `
       )
       .all(gameId)
@@ -317,7 +355,7 @@ export const deleteGame = (req, res) => {
 
 export const joinGame = (req, res) => {
   try {
-    const { id: gameId } = req.params
+    const { gameId } = req.params
     const { user_id: userId } = req.body
 
     if (!userId) {
@@ -352,22 +390,26 @@ export const joinGame = (req, res) => {
       return res.status(400).json({ error: 'Player already joined this game' })
     }
 
-    const { current_count: currentCount } = db
+    const { cnt: currentCountMain } = db
       .prepare(
         `
-          SELECT COUNT(*) as current_count 
+          SELECT COUNT(*) as cnt 
           FROM users_to_games 
           WHERE game_id = ? AND status = 'main'
         `
       )
       .get(gameId)
 
-    const restCount = game.max_players - currentCount
+    const restCountMain = game.max_players - currentCountMain
 
     const status =
-      game.mode == 'reserve' ? 'reserve' : restCount > 0 ? 'main' : 'reserve'
+      game.mode == 'reserve'
+        ? 'reserve'
+        : restCountMain > 0
+        ? 'main'
+        : 'reserve'
 
-    const gameNewMode = restCount <= 1 ? 'reserve' : 'main'
+    const gameNewMode = restCountMain <= 1 ? 'reserve' : 'main'
 
     db.prepare(
       `
@@ -386,10 +428,15 @@ export const joinGame = (req, res) => {
       ).run(gameNewMode, gameId)
     }
 
+    const message = {
+      main: 'Joined main roster',
+      reserve: 'Joined reserve',
+    }[status]
+
     res.json({
       success: true,
       status,
-      message: status === 'main' ? 'Joined main roster' : 'Joined reserve',
+      message,
     })
   } catch (err) {
     console.error(err)
@@ -399,7 +446,7 @@ export const joinGame = (req, res) => {
 
 export const leaveGame = (req, res) => {
   try {
-    const { id: gameId } = req.params
+    const { gameId } = req.params
     const { user_id: userId } = req.body
 
     if (!userId) {
@@ -504,7 +551,7 @@ export const leaveGame = (req, res) => {
 
 export const promotePlayer = (req, res) => {
   try {
-    const { id: gameId } = req.params
+    const { gameId } = req.params
     const { user_id: userId } = req.body
 
     if (!userId) {

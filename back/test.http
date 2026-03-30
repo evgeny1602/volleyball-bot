@@ -104,7 +104,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/api/games/71
+GET http://localhost:3000/api/games/47
 x-debug-mode: 1
 
 ###

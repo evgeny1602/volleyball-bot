@@ -4,15 +4,15 @@ import * as gameController from '../controllers/gameController.js'
 const router = express.Router()
 
 router.post('/', gameController.createGame)
-router.post('/:id/join', gameController.joinGame)
-router.post('/:id/leave', gameController.leaveGame)
-router.post('/:id/promote', gameController.promotePlayer)
+router.post('/:gameId/join', gameController.joinGame)
+router.post('/:gameId/leave', gameController.leaveGame)
+router.post('/:gameId/promote', gameController.promotePlayer)
 
 router.get('/', gameController.getAllGames)
-router.get('/:id', gameController.getGameById)
+router.get('/:gameId', gameController.getGameById)
 
-router.put('/:id', gameController.updateGame)
+router.put('/:gameId', gameController.updateGame)
 
-router.delete('/:id', gameController.deleteGame)
+router.delete('/:gameId', gameController.deleteGame)
 
 export default router

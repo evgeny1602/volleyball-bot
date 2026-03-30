@@ -7,8 +7,6 @@ export const MainGamesList = () => {
   const { data, isLoading } = useGames()
   const { start, end } = getWeekDates()
 
-  // console.log({ start, end })
-
   const games =
     data?.data.filter(
       (game) =>
