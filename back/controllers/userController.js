@@ -67,8 +67,6 @@ export const setAvatar = (req, res) => {
 
     const avatarFilename = `${user.id}.${ext}`
 
-    // fs.renameSync(uploadedFilename, path.join('avatars', avatarFilename))
-
     fs.copyFileSync(uploadedFilename, path.join('avatars', avatarFilename))
     fs.unlinkSync(uploadedFilename)
 
