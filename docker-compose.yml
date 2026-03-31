@@ -19,5 +19,6 @@ services:
     volumes:
       - ./back/data:/app/data
       - ./back/uploads:/app/uploads
+      - ./back/avatars:/app/avatars
     environment:
       - NODE_ENV=production
