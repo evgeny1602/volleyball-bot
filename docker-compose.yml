@@ -4,6 +4,7 @@ services:
   frontend:
     build: ./front
     container_name: frontend_service
+    restart: unless-stopped
     ports:
       - '3000:80'
     volumes:
@@ -14,6 +15,7 @@ services:
     build:
       context: ./back
     container_name: backend_service
+    restart: unless-stopped
     ports:
       - '3001:3000'
     volumes:
