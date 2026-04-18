@@ -10,6 +10,8 @@ services:
     volumes:
       - ./front:/app
       - /app/node_modules
+      - ./back/uploads:/var/www/app/uploads:ro
+      - ./back/avatars:/var/www/app/avatars:ro
     stdin_open: true
   backend:
     build:
