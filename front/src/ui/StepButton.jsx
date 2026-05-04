@@ -1,9 +1,9 @@
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { cn } from '@/utils/cn'
 
 export const StepButton = ({ children, onClick, className }) => {
   const handleClick = () => {
-    tgVibro('medium')
+    vibro('medium')
     onClick?.()
   }
 

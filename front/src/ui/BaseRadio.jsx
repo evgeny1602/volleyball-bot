@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { InputLabel } from '@/ui/InputLabel'
 import { cn } from '@/utils/cn'
 
@@ -18,7 +18,7 @@ export const BaseRadio = ({
   layoutId = 'active-pill',
 }) => {
   const handleChange = (id) => {
-    tgVibro('medium')
+    vibro('medium')
     onChange?.(id)
   }
 

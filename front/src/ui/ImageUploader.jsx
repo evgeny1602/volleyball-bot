@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import { ImagePlus, X, Loader2 } from 'lucide-react'
 import { cn } from '@/utils/cn'
-import { tgVibro, tgAlert } from '@/utils/telegram'
+import { vibro, appAlert } from '@/utils/tools'
 import { useUpload } from '@/hooks/useUpload'
 import { InputLabel } from '@/ui/InputLabel'
 
@@ -20,13 +20,13 @@ export const ImageUploader = ({ value, onChange, label, className }) => {
       setPreview(uploadedUrl)
       onChange?.(uploadedUrl)
     } else {
-      tgAlert('Ошибка загрузки файла')
+      appAlert('Ошибка загрузки файла')
     }
   }
 
   const handleDelete = async (e) => {
     e.stopPropagation()
-    tgVibro('medium')
+    vibro('medium')
 
     setPreview(null)
     onChange?.('')
@@ -38,7 +38,7 @@ export const ImageUploader = ({ value, onChange, label, className }) => {
   }
 
   const handleDownloadAreaClick = () => {
-    tgVibro('medium')
+    vibro('medium')
     !isLoading && !preview && fileInputRef.current?.click()
   }
 

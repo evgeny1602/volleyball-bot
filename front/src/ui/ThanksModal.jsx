@@ -4,7 +4,7 @@ import { useXp } from '@/hooks/xp'
 import { LoaderFullScreen } from '@/ui/LoaderFullscreen'
 import { useRestThanks, useThanksMutations } from '@/hooks/thanks'
 import { Circle, CheckCircle2 } from 'lucide-react'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { cn } from '@/utils/cn'
 import { Button } from '@/ui/Button'
 
@@ -33,17 +33,17 @@ export const ThanksModal = ({
   const restThanks = data?.thanks || []
 
   const handleSelect = (id) => {
-    tgVibro('medium')
+    vibro('medium')
     setSelectedId(id)
   }
 
   const handleAnonymousToggle = () => {
-    tgVibro('medium')
+    vibro('medium')
     setisAnomymous(!isAnonymous)
   }
 
   const handleSubmit = async () => {
-    tgVibro('medium')
+    vibro('medium')
     await addThank({
       gameId,
       fromUserId: user?.id,

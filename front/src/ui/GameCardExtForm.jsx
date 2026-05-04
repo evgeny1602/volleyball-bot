@@ -18,7 +18,7 @@ import { dateFormatGameCardExt, timeFormatGameCard } from '@/utils/formatters'
 import { useGameActions, useGame } from '@/hooks/games'
 import { useCurrentUser, useUserMutations } from '@/hooks/users'
 import { LoaderFullScreen } from '@/ui/LoaderFullscreen'
-import { tgConfirm } from '@/utils/telegram'
+import { appConfirm } from '@/utils/tools'
 import { ParagraphedText } from '@/ui/ParagraphedText'
 import { getGameProps, getNewGuestFio } from '@/utils/gameHelpers'
 import { PlayersSection } from '@/ui/PlayersSection'
@@ -43,7 +43,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
   const canPromote = mainCount < game.max_players
 
   const handleRemovePlayer = async (playerId) => {
-    const isConfirmed = await tgConfirm(
+    const isConfirmed = await appConfirm(
       'Вы уверены, что хотите убрать игрока из игры?'
     )
     if (isConfirmed) {
@@ -57,7 +57,7 @@ export const GameCardExtForm = ({ gameId, onCancel, onEdit }) => {
   }
 
   const handleDeleteGame = async () => {
-    const isConfirmed = await tgConfirm('Вы уверены, что хотите удалить игру?')
+    const isConfirmed = await appConfirm('Вы уверены, что хотите удалить игру?')
 
     if (isConfirmed) {
       await deleteGame(game.id)

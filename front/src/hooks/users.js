@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { usersApi } from '@/api/users'
-import { tgGetUser, setCookieTgId } from '@/utils/telegram'
+import { tgGetUser, setCookieTgId } from '@/utils/tools'
 
 export const USER_KEYS = {
   all: ['users'],

@@ -3,7 +3,7 @@ import { CircleUser } from 'lucide-react'
 import { useState, useRef } from 'react'
 import { useUpload } from '@/hooks/useUpload'
 import { useUserMutations } from '@/hooks/users'
-import { tgVibro, tgAlert } from '@/utils/telegram'
+import { vibro, appAlert } from '@/utils/tools'
 
 const SIZES = {
   default: 'w-16 h-16',
@@ -30,7 +30,7 @@ export const UserAvatar = ({
   const sizeClass = SIZES[variant] || SIZES.default
 
   const handleClick = () => {
-    tgVibro('medium')
+    vibro('medium')
 
     if (!isChangable) {
       onClick?.()
@@ -52,7 +52,7 @@ export const UserAvatar = ({
     const uploadedUrl = await uploadFile(file)
 
     if (!uploadedUrl) {
-      tgAlert('Ошибка загрузки файла')
+      appAlert('Ошибка загрузки файла')
       return
     }
 

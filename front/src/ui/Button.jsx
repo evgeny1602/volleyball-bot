@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 
 const VARIANTS = {
   primary: 'bg-bot-primary',
@@ -21,7 +21,7 @@ export const Button = ({
 
   const handleClick = (e) => {
     if (isInactive) return
-    tgVibro('medium')
+    vibro('medium')
     onClick?.(e)
   }
 

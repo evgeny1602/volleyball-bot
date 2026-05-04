@@ -1,7 +1,7 @@
 import { ShakingContainer } from '@/ui/ShakingContainer'
 import { Button } from '@/ui/Button'
 import { useState } from 'react'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { cn } from '@/utils/cn'
 import { Check } from 'lucide-react'
 
@@ -14,7 +14,7 @@ export const SubmitButton = ({ validation, onClick }) => {
     } else {
       setIsShaking(true)
       setTimeout(() => setIsShaking(false), 500)
-      tgVibro('error')
+      vibro('error')
     }
   }
 

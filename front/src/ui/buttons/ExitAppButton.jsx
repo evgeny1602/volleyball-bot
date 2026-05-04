@@ -1,10 +1,10 @@
 import { Button } from '@/ui/Button'
 import { LogOut } from 'lucide-react'
-import { tgConfirm, removeCookieTgId, IS_WEB } from '@/utils/telegram'
+import { appConfirm, removeCookieTgId, IS_WEB } from '@/utils/tools'
 
 export const ExitAppButton = () => {
   const handleClick = async () => {
-    const isYes = await tgConfirm('Вы уверены, что хотите выйти?')
+    const isYes = await appConfirm('Вы уверены, что хотите выйти?')
 
     if (isYes) {
       removeCookieTgId()

@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { InputLabel } from '@/ui/InputLabel'
 import { CloseIcon } from '@/ui/CloseIcon'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { cn } from '@/utils/cn'
 
 export const PasswordInput = ({
@@ -15,7 +15,7 @@ export const PasswordInput = ({
   const inputRef = useRef(null)
 
   const handleClear = () => {
-    tgVibro('light')
+    vibro('light')
     onChange?.('')
     inputRef.current?.focus()
   }
@@ -31,7 +31,7 @@ export const PasswordInput = ({
           type="password"
           ref={inputRef}
           value={value ?? ''}
-          onFocus={() => tgVibro('medium')}
+          onFocus={() => vibro('medium')}
           onChange={(e) => onChange?.(e.target.value)}
           className={cn(
             'w-full py-2.5 rounded-full border border-gray-300',

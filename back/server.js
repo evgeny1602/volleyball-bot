@@ -12,9 +12,6 @@ import newRoutes from './routes/newRoutes.js'
 import xpRoutes from './routes/xpRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 
-// import { validateTelegramData } from './middleware/auth.js'
-// import { dbLogger } from './middleware/logger.js'
-
 const app = express()
 const PORT = 3000
 
@@ -26,13 +23,10 @@ app.use(
   cors({
     origin: '*',
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT'],
-    allowedHeaders: ['Content-Type', 'x-telegram-init-data'],
+    allowedHeaders: ['Content-Type'],
   })
 )
 app.use(express.json())
-// app.use(validateTelegramData)
-
-// app.use(dbLogger)
 
 app.use('/uploads', express.static('uploads'))
 app.use('/avatars', express.static('avatars'))

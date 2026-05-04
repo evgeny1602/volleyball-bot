@@ -1,14 +1,12 @@
 import Linkify from 'linkify-react'
 import { ExternalLink } from 'lucide-react'
 import { cn } from '@/utils/cn'
+import { appOpenLink } from '@/utils/tools'
 
 export const ParagraphedText = ({ text, className }) => {
   const handleLinkClick = (event) => {
-    const url = event.target.href
-    if (window.Telegram?.WebApp?.openLink) {
-      event.preventDefault()
-      window.Telegram.WebApp.openLink(url)
-    }
+    event.preventDefault()
+    appOpenLink(event.target.href)
   }
 
   const linkifyOptions = {

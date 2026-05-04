@@ -1,10 +1,10 @@
 import { Button } from '@/ui/Button'
 import { CircleMinus } from 'lucide-react'
-import { tgConfirm } from '@/utils/telegram'
+import { appConfirm } from '@/utils/tools'
 
 export const DeleteButton = ({ onClick, children, confirmText, ...props }) => {
   const handleClick = async () => {
-    const isConfirmed = await tgConfirm(confirmText)
+    const isConfirmed = await appConfirm(confirmText)
     if (isConfirmed) onClick?.()
   }
 

@@ -7,7 +7,7 @@ import { Modal } from '@/ui/Modal'
 import { GameCardExtForm } from '@/ui/GameCardExtForm'
 import { BaseForm } from '@/ui/BaseForm'
 import { gameToFormData } from '@/utils/formatters'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { useGameActions } from '@/hooks/games'
 import { gameSchema } from '@/utils/validations'
 import { gameForm } from '@/utils/forms'
@@ -35,7 +35,7 @@ export const GamesList = ({ isLoading, games }) => {
   }
 
   const handleCardShortClick = (game) => {
-    tgVibro('medium')
+    vibro('medium')
     setCurrentGame(game)
     openView()
   }

@@ -1,5 +1,5 @@
 import { UserProfile } from '@/ui/UserProfile'
-import { tgGetUser } from '@/utils/telegram'
+import { tgGetUser } from '@/utils/tools'
 
 export const ProfileTab = () => {
   return (

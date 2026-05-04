@@ -4,7 +4,7 @@ import { PasswordInput } from '@/ui/PasswordInput'
 import { CheckInput } from '@/ui/CheckInput'
 import { RegisterButton } from '@/ui/buttons/RegisterButton'
 import { loginSchema } from '@/utils/validations'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { ErrorBubble } from '@/ui/ErrorBubble'
 
 export const LoginForm = ({ onSubmit, isLoading }) => {
@@ -17,10 +17,10 @@ export const LoginForm = ({ onSubmit, isLoading }) => {
     const result = loginSchema.safeParse({ phone, password })
 
     if (result.success) {
-      tgVibro('success')
+      vibro('success')
       onSubmit({ phone, password, rememberMe })
     } else {
-      tgVibro('error')
+      vibro('error')
       setIsErrorVisible(true)
     }
   }

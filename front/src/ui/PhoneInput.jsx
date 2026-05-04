@@ -3,14 +3,14 @@ import { IMaskInput } from 'react-imask'
 import { motion, AnimatePresence } from 'framer-motion'
 import { InputLabel } from '@/ui/InputLabel'
 import { CloseIcon } from '@/ui/CloseIcon'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { cn } from '@/utils/cn'
 
 export const PhoneInput = ({ label, value, onChange, className, ...props }) => {
   const imaskRef = useRef(null)
 
   const handleClear = () => {
-    tgVibro('light')
+    vibro('light')
     onChange?.('')
     imaskRef.current?.focus()
   }
@@ -30,7 +30,7 @@ export const PhoneInput = ({ label, value, onChange, className, ...props }) => {
           value={value ?? ''}
           unmask={true}
           onAccept={(val) => onChange?.(val)}
-          onFocus={() => tgVibro('medium')}
+          onFocus={() => vibro('medium')}
           className={cn(
             'w-full py-2.5 rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 transition-all text-center',
             'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',

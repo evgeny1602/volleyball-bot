@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CloseIcon } from '@/ui/CloseIcon'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { InputLabel } from '@/ui/InputLabel'
 import { cn } from '@/utils/cn'
 
@@ -9,7 +9,7 @@ export const Input = ({ label, onChange, className, value, ...props }) => {
   const inputRef = useRef(null)
 
   const handleClear = () => {
-    tgVibro('light')
+    vibro('light')
     onChange?.('')
     inputRef.current?.focus()
   }
@@ -30,13 +30,13 @@ export const Input = ({ label, onChange, className, value, ...props }) => {
           ref={inputRef}
           value={value ?? ''}
           onChange={handleChange}
-          onFocus={() => tgVibro('medium')}
+          onFocus={() => vibro('medium')}
           type="text"
           className={cn(
-            'w-full py-2.5 rounded-full border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 transition-all text-center',
-            'focus:border-bot-primary focus:outline-0 focus:bg-bot-primary/5',
-            // Стандартный горизонтальный паддинг px-4 заменяем на динамический:
-            // Если текст есть, добавляем по 48px (12 ед.) с каждой стороны для симметрии
+            'w-full py-2.5 rounded-full border border-gray-300',
+            'dark:border-gray-600 text-gray-600 dark:text-gray-300',
+            'transition-all text-center focus:border-bot-primary',
+            'focus:outline-0 focus:bg-bot-primary/5',
             hasValue ? 'px-12' : 'px-4'
           )}
         />

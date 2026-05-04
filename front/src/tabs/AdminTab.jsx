@@ -6,7 +6,7 @@ import { Users, Volleyball, ClipboardList, Megaphone, Star } from 'lucide-react'
 import { useGameActions } from '@/hooks/games'
 import { gameSchema } from '@/utils/validations'
 import { gameForm } from '@/utils/forms'
-import { UsersList } from '@/ui/UsersList'
+import { UsersListFiltered } from '@/ui/UsersListFiltered'
 import { RespectsList } from '@/ui/RespectsList'
 import { cn } from '@/utils/cn'
 import { Button } from '@/ui/Button'
@@ -39,7 +39,10 @@ export const AdminTab = () => {
     {
       label: 'Игроки',
       Icon: Users,
-      ModalContent: () => <UsersList statuses={['registered', 'approved']} />,
+      ModalContent: () => (
+        <UsersListFiltered statuses={['registered', 'approved']} />
+      ),
+      fullHeight: true,
     },
     {
       label: 'Новости',
@@ -62,13 +65,14 @@ export const AdminTab = () => {
         'overflow-hidden'
       )}
     >
-      {ADMIN_ACTIONS.map(({ label, Icon, ModalContent }) => (
+      {ADMIN_ACTIONS.map(({ label, Icon, ModalContent, fullHeight }) => (
         <ModalButton
           className="w-full"
           key={label}
           modalHeader={label}
           Icon={Icon}
           ModalContent={ModalContent}
+          fullHeight={fullHeight ?? false}
         />
       ))}
 

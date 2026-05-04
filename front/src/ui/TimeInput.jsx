@@ -3,7 +3,7 @@ import { IMaskInput, IMask } from 'react-imask'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Clock } from 'lucide-react'
 import { CloseIcon } from '@/ui/CloseIcon'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { InputLabel } from '@/ui/InputLabel'
 import { cn } from '@/utils/cn'
 
@@ -15,7 +15,7 @@ export const TimeInput = ({ value = '', onChange, label, className }) => {
   }
 
   const handleClearClick = () => {
-    tgVibro('light')
+    vibro('light')
     imaskRef.current?.focus()
     handleChange('')
   }
@@ -49,11 +49,11 @@ export const TimeInput = ({ value = '', onChange, label, className }) => {
           type="time"
           className="absolute left-1 z-20 opacity-0 cursor-pointer w-10 h-10"
           onChange={handleChangeFromTimepicker}
-          onInput={() => tgVibro('light')}
+          onInput={() => vibro('light')}
         />
 
         <IMaskInput
-          onFocus={() => tgVibro('medium')}
+          onFocus={() => vibro('medium')}
           inputRef={(el) => (imaskRef.current = el)}
           inputMode="numeric"
           mask="HH:mm"

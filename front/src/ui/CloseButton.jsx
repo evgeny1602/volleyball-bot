@@ -1,4 +1,4 @@
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { CircleX } from 'lucide-react'
 import { cn } from '@/utils/cn'
 
@@ -11,7 +11,7 @@ export const CloseButton = ({ onClick }) => {
         'hover:opacity-80 duration-200'
       )}
       onClick={() => {
-        tgVibro('medium')
+        vibro('medium')
         if (onClick) onClick()
       }}
     />

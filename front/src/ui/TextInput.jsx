@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CloseIcon } from '@/ui/CloseIcon'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { InputLabel } from '@/ui/InputLabel'
 import { cn } from '@/utils/cn'
 
@@ -16,7 +16,7 @@ export const TextInput = ({
   const textareaRef = useRef(null)
 
   const handleClear = () => {
-    tgVibro('light')
+    vibro('light')
     onChange?.('')
     textareaRef.current?.focus()
   }
@@ -37,7 +37,7 @@ export const TextInput = ({
           ref={textareaRef}
           value={value ?? ''}
           onChange={handleChange}
-          onFocus={() => tgVibro('medium')}
+          onFocus={() => vibro('medium')}
           rows={rows}
           className={cn(
             'w-full px-4 py-3 rounded-2xl border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 transition-all resize-none',

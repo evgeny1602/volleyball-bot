@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/utils/cn'
 import { ArrowButton } from '@/ui/ArrowButton'
 import { getWeekDays, getMonthYear, isSameDay } from '@/utils/formatters'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 
 export const WeeklyCalendar = ({ className, onSelect }) => {
   const [currentWeekStart, setCurrentWeekStart] = useState(new Date())
@@ -21,17 +21,17 @@ export const WeeklyCalendar = ({ className, onSelect }) => {
   }
 
   const handlePrevClick = () => {
-    tgVibro('medium')
+    vibro('medium')
     changeWeek(-1)
   }
 
   const handleNextClick = () => {
-    tgVibro('medium')
+    vibro('medium')
     changeWeek(1)
   }
 
   const handleDateClick = (date) => {
-    tgVibro('medium')
+    vibro('medium')
     setSelectedDate(date)
     onSelect?.(date)
   }

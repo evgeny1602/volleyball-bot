@@ -1,5 +1,5 @@
 import { cn } from '@/utils/cn'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 
 export const BaseMenuIcon = ({
   className,
@@ -11,7 +11,7 @@ export const BaseMenuIcon = ({
   const isActive = variant === 'active'
 
   const handleClick = () => {
-    tgVibro('medium')
+    vibro('medium')
 
     if (onClick) onClick()
   }

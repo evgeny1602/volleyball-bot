@@ -3,7 +3,7 @@ import { Input } from '@/ui/Input'
 import { GenderInput } from '@/ui/GenderInput'
 import { DateInput } from '@/ui/DateInput'
 import { PhoneInput } from '@/ui/PhoneInput'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { registerSchema } from '@/utils/validations'
 import { RegisterButton } from '@/ui/buttons/RegisterButton'
 import { RegisterError } from '@/ui/RegisterError'
@@ -20,10 +20,10 @@ export const RegisterForm = ({ onSubmit, isLoading }) => {
     const result = registerSchema.safeParse({ fio, gender, birthday, phone })
 
     if (result.success) {
-      tgVibro('success')
+      vibro('success')
       onSubmit({ fio, gender, birthday, phone })
     } else {
-      tgVibro('error')
+      vibro('error')
       setIsErrorVisible(true)
     }
   }

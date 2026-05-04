@@ -3,14 +3,14 @@ import { IMaskInput } from 'react-imask'
 import { motion, AnimatePresence } from 'framer-motion'
 import { InputLabel } from '@/ui/InputLabel'
 import { CloseIcon } from '@/ui/CloseIcon'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { cn } from '@/utils/cn'
 
 export const MoneyInput = ({ label, value, onChange, className, ...props }) => {
   const imaskRef = useRef(null)
 
   const handleClear = () => {
-    tgVibro('light')
+    vibro('light')
     onChange?.('')
     imaskRef.current?.focus()
   }
@@ -27,7 +27,7 @@ export const MoneyInput = ({ label, value, onChange, className, ...props }) => {
           {...props}
           inputRef={(el) => (imaskRef.current = el)}
           inputMode="decimal"
-          onFocus={() => tgVibro('medium')}
+          onFocus={() => vibro('medium')}
           mask={Number}
           value={value?.toString() ?? ''}
           unmask={true}

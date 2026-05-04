@@ -11,7 +11,7 @@ import { TelegramIcon } from '@/icons/TelegramIcon'
 import { CalendarDays, Phone, Cake, KeyRound } from 'lucide-react'
 import { formatPhone } from '@/utils/formatters'
 import { AdminBadge } from '@/ui/AdminBadge'
-import { tgAlert, IS_WEB } from '@/utils/telegram'
+import { appAlert } from '@/utils/tools'
 
 const formatDate = (dateString) => {
   if (!dateString) return ''
@@ -38,7 +38,7 @@ export const UserCard = ({ user, className }) => {
 
   const copyPassword = (psw) => {
     navigator.clipboard.writeText(psw)
-    tgAlert('Пароль скопирован')
+    appAlert('Пароль скопирован')
   }
 
   const FOR_PLAYERS_ONLY_BUTTONS = [

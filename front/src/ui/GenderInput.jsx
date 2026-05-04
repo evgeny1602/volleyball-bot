@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { InputLabel } from '@/ui/InputLabel'
 import { cn } from '@/utils/cn'
 import { GrUser, GrUserFemale } from 'react-icons/gr'
@@ -11,7 +11,7 @@ const OPTIONS = [
 
 export const GenderInput = ({ label, onChange, className, value }) => {
   const handleChange = (id) => {
-    tgVibro('medium')
+    vibro('medium')
     onChange?.(id)
   }
 

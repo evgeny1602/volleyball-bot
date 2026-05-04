@@ -1,5 +1,5 @@
 import { X } from 'lucide-react'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { twMerge } from 'tailwind-merge'
 
 export const CloseIcon = ({ onClick, className }) => {
@@ -12,7 +12,7 @@ export const CloseIcon = ({ onClick, className }) => {
     >
       <X
         onClick={() => {
-          tgVibro('medium')
+          vibro('medium')
 
           onClick?.()
         }}

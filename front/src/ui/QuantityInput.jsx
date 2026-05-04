@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { IMaskInput } from 'react-imask'
 import { motion } from 'framer-motion'
 import { InputLabel } from '@/ui/InputLabel'
-import { tgVibro } from '@/utils/telegram'
+import { vibro } from '@/utils/tools'
 import { StepButton } from '@/ui/StepButton'
 import { cn } from '@/utils/cn'
 
@@ -19,14 +19,14 @@ export const QuantityInput = ({
 
   const triggerError = () => {
     setIsError(true)
-    tgVibro('warning')
+    vibro('warning')
     setTimeout(() => setIsError(false), 500)
   }
 
   const handleStep = (step) => {
     const newVal = Math.min(max, Math.max(min, currentVal + step))
     if (newVal !== currentVal) {
-      tgVibro('light')
+      vibro('light')
       onChange?.(String(newVal))
     }
   }
@@ -74,7 +74,7 @@ export const QuantityInput = ({
 
         <IMaskInput
           inputMode="numeric"
-          onFocus={() => tgVibro('medium')}
+          onFocus={() => vibro('medium')}
           onBlur={handleBlur}
           mask={Number}
           value={String(value ?? '')}

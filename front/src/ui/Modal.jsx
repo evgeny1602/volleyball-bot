@@ -2,7 +2,13 @@ import { ModalOverlay } from '@/ui/ModalOverlay'
 import { ModalHeader } from '@/ui/ModalHeader'
 import { cn } from '@/utils/cn'
 
-export const Modal = ({ onClose, children, headerText, Icon }) => {
+export const Modal = ({
+  onClose,
+  children,
+  headerText,
+  Icon,
+  fullHeight = false,
+}) => {
   return (
     <ModalOverlay>
       <div
@@ -21,7 +27,8 @@ export const Modal = ({ onClose, children, headerText, Icon }) => {
 
         <div
           className={cn(
-            'scrollable-content max-h-[90vh] overflow-y-auto no-scrollbar pt-4'
+            fullHeight ? 'h-[90vh]' : 'max-h-[90vh]',
+            'scrollable-content overflow-y-auto no-scrollbar pt-4'
           )}
         >
           {children}
