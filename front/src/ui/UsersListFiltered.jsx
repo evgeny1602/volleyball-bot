@@ -9,7 +9,7 @@ export const UsersListFiltered = ({ statuses }) => {
 
   const users = data?.data
     .filter((user) => statuses.includes(user.status))
-    .filter((user) => user.fio.toLowerCase().includes(fioFilter))
+    .filter((user) => user.fio.toLowerCase().includes(fioFilter.toLowerCase()))
 
   return (
     <>
