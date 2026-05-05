@@ -11,38 +11,6 @@ const SIZES = {
   big: 'w-34 h-34',
 }
 
-const getAvatarUrl = (user) => {
-  if (!user) {
-    return ''
-  }
-
-  if (user.avatar_url && user.avatar_url != '') {
-    return user.avatar_url
-  }
-
-  if (user.tg_avatar_url && user.tg_avatar_url != '') {
-    return user.tg_avatar_url
-  }
-
-  return ''
-}
-
-const DefaultUserPicture = ({ onClick, sizeClass, className }) => {
-  return (
-    <div
-      onClick={onClick}
-      className={cn(
-        'bg-gray-200 dark:bg-gray-600 rounded-full flex',
-        'items-center justify-center shrink-0',
-        sizeClass,
-        className
-      )}
-    >
-      <CircleUser className="text-gray-400 w-2/3 h-2/3" />
-    </div>
-  )
-}
-
 export const UserAvatar = ({
   user,
   variant = 'default',
@@ -53,7 +21,11 @@ export const UserAvatar = ({
   const { setAvatar, isPending } = useUserMutations()
   const fileInputRef = useRef(null)
   const { uploadFile, isLoading } = useUpload()
-  const [preview, setPreview] = useState(getAvatarUrl())
+  const [preview, setPreview] = useState(
+    user.avatar_url != ''
+      ? `avatars/${user.avatar_url}?ts=${Date.now()}`
+      : `${user.tg_avatar_url}`
+  )
 
   const sizeClass = SIZES[variant] || SIZES.default
 
@@ -94,11 +66,17 @@ export const UserAvatar = ({
   return (
     <>
       {user.tg_username == 'Guest' ? (
-        <DefaultUserPicture
+        <div
           onClick={handleClick}
-          sizeClass={sizeClass}
-          className={className}
-        />
+          className={cn(
+            'bg-gray-200 dark:bg-gray-600 rounded-full flex',
+            'items-center justify-center shrink-0',
+            sizeClass,
+            className
+          )}
+        >
+          <CircleUser className="text-gray-400 w-2/3 h-2/3" />
+        </div>
       ) : (
         <img
           onClick={handleClick}
