@@ -93,7 +93,7 @@ export const UserAvatar = ({
 
   return (
     <>
-      {user.tg_username == 'Guest' || preview == '' ? (
+      {user.tg_username == 'Guest' ? (
         <DefaultUserPicture
           onClick={handleClick}
           sizeClass={sizeClass}
