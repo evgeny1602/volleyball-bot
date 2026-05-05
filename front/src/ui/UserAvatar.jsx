@@ -65,7 +65,7 @@ export const UserAvatar = ({
 
   return (
     <>
-      {user.tg_username == 'Guest' ? (
+      {user.tg_username == 'Guest' || preview.includes('null') ? (
         <div
           onClick={handleClick}
           className={cn(
