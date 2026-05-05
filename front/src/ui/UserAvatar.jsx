@@ -23,7 +23,7 @@ export const UserAvatar = ({
   const { uploadFile, isLoading } = useUpload()
   const [preview, setPreview] = useState(
     user.avatar_url != ''
-      ? `avatars/${user.avatar_url}?ts=${Date.now()}`
+      ? `avatars/${user.avatar_url}`
       : `${user.tg_avatar_url}`
   )
 
