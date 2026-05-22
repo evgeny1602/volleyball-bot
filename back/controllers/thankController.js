@@ -66,12 +66,11 @@ export const addThank = (req, res) => {
           FROM thanks 
           WHERE 
             game_id = ? 
-            AND to_user_id = ? 
             AND from_user_id = ? 
             AND type_id = ?
         `
       )
-      .get(gameId, toUserId, fromUserId, typeId)
+      .get(gameId, fromUserId, typeId)
 
     if (existingThank)
       return res.status(409).json({ error: 'Thank already exists' })
