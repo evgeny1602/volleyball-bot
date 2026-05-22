@@ -210,18 +210,11 @@ export const createUser = (req, res) => {
     } = req.body
 
     const existingUser = db
-      .prepare(
-        `
-          SELECT * 
-          FROM users 
-          WHERE phone = ?
-        `
-      )
+      .prepare(`SELECT 1 FROM users WHERE phone = ?`)
       .get(phone)
 
-    if (existingUser) {
+    if (existingUser)
       return res.status(409).json({ error: 'User already exists' })
-    }
 
     const tgId = tg_id || getRandomTgId()
 

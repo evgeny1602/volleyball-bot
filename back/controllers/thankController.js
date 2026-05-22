@@ -59,11 +59,40 @@ export const addThank = (req, res) => {
   try {
     const { gameId, fromUserId, toUserId, typeId, isAnonymous } = req.body
 
+    const existingThank = db
+      .prepare(
+        `
+          SELECT 1 
+          FROM thanks 
+          WHERE 
+            game_id = ? 
+            AND to_user_id = ? 
+            AND from_user_id = ? 
+            AND type_id = ?
+        `
+      )
+      .get(gameId, toUserId, fromUserId, typeId)
+
+    if (existingThank)
+      return res.status(409).json({ error: 'Thank already exists' })
+
     const thank = db
       .prepare(
-        `INSERT INTO thanks (game_id, to_user_id, from_user_id, type_id, is_anonymous, created_at) VALUES (?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))`
+        `
+          INSERT INTO thanks (
+            game_id,
+            to_user_id,
+            from_user_id,
+            type_id,
+            is_anonymous,
+            created_at
+          ) 
+          VALUES 
+            (?, ?, ?, ?, ?, datetime('now', '+${GMT} hours'))
+        `
       )
       .run(gameId, toUserId, fromUserId, typeId, isAnonymous)
+
     res.json({ success: true, thank })
   } catch (err) {
     res.status(500).json({ error: 'Internal server error' })

@@ -293,7 +293,7 @@ x-debug-mode: 1
 DELETE http://localhost:3000/api/upload/volleyball.jpg
 x-debug-mode: 1
 
-### thanks - start
+### THANKS - start
 
 GET http://localhost:3000/api/thanks/rest/69/145/218
 x-debug-mode: 1
@@ -305,7 +305,7 @@ x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "gameId": 69,
+    "gameId": 300,
     "fromUserId": 145,
     "toUserId": 218,
     "typeId": 1,
