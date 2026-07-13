@@ -42,6 +42,14 @@ export const useUser = (tgId) => {
   })
 }
 
+export const useAllPromoRequests = () => {
+  return useQuery({
+    queryKey: USER_KEYS.promo,
+    queryFn: usersApi.getAllPromoRequests,
+    select: (data) => data?.promoRequests || [],
+  })
+}
+
 export const useUserMutations = () => {
   const queryClient = useQueryClient()
 

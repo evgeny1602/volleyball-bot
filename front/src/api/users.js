@@ -36,6 +36,11 @@ export const usersApi = {
     return data
   },
 
+  getAllPromoRequests: async () => {
+    const { data } = await api.get(`${prefix}/promo`)
+    return data
+  },
+
   deletePromoRequest: async (promoRequestId) => {
     const { data } = await api.delete(`${prefix}/promo/${promoRequestId}`)
     return data

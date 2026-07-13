@@ -3,6 +3,10 @@ import * as userController from '../controllers/userController.js'
 
 const router = express.Router()
 
+router.post('/promo', userController.createPromoRequest)
+router.get('/promo', userController.getAllPromoRequests)
+router.delete('/promo/:requestId', userController.deletePromoRequest)
+
 router.post('/', userController.createUser)
 
 router.get('/by_phone/:phone', userController.getUserByPhone)
@@ -19,8 +23,5 @@ router.patch('/reject/:tgId', userController.rejectUser)
 router.post('/set_avatar', userController.setAvatar)
 router.post('/guest', userController.createGuestUser)
 router.post('/login', userController.login)
-
-router.post('/promo', userController.createPromoRequest)
-router.delete('/promo/:requestId', userController.deletePromoRequest)
 
 export default router

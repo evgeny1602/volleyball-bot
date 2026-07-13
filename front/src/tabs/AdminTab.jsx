@@ -2,7 +2,14 @@ import { ModalButton } from '@/ui/ModalButton'
 import { NewsList } from '@/ui/NewsList'
 import { TemplatesList } from '@/ui/TemplatesList'
 import { BaseForm } from '@/ui/BaseForm'
-import { Users, Volleyball, ClipboardList, Megaphone, Star } from 'lucide-react'
+import {
+  Users,
+  Volleyball,
+  ClipboardList,
+  Megaphone,
+  Star,
+  FileUser,
+} from 'lucide-react'
 import { useGameActions } from '@/hooks/games'
 import { gameSchema } from '@/utils/validations'
 import { gameForm } from '@/utils/forms'
@@ -11,6 +18,7 @@ import { RespectsList } from '@/ui/RespectsList'
 import { cn } from '@/utils/cn'
 import { Button } from '@/ui/Button'
 import { usersApi } from '@/api/users'
+import { PromoRequestsList } from '@/ui/PromoRequestsList'
 
 export const AdminTab = () => {
   const { createGame } = useGameActions()
@@ -53,6 +61,11 @@ export const AdminTab = () => {
       label: 'Респекты',
       Icon: Star,
       ModalContent: () => <RespectsList />,
+    },
+    {
+      label: 'Лэндинг-заявки',
+      Icon: FileUser,
+      ModalContent: () => <PromoRequestsList />,
     },
   ]
 

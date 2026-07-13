@@ -240,6 +240,24 @@ export const createPromoRequest = (req, res) => {
   }
 }
 
+export const getAllPromoRequests = (req, res) => {
+  try {
+    const promoRequests = db
+      .prepare(
+        `
+          SELECT * 
+          FROM promo_requests 
+          ORDER BY created_at DESC
+        `
+      )
+      .all()
+
+    res.json({ success: true, promoRequests })
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 export const deletePromoRequest = (req, res) => {
   try {
     const { requestId } = req.params

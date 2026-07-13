@@ -343,9 +343,15 @@ x-debug-mode: 1
 Content-Type: application/json
 
 {
-    "name": "Евгений",
-    "phone": "79236558205"
+    "name": "Иван",
+    "phone": "79236558207"
 }
+
+###
+
+GET http://localhost:3000/api/users/promo
+x-debug-mode: 1
+Content-Type: application/json
 
 ###
 
