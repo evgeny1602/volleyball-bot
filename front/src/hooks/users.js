@@ -6,6 +6,7 @@ export const USER_KEYS = {
   all: ['users'],
   detail: (tgId) => ['users', tgId],
   byPhone: (phone) => ['users', 'by_phone', phone],
+  promo: ['users', 'promo'],
 }
 
 export const useCurrentUser = () => {
@@ -46,6 +47,7 @@ export const useUserMutations = () => {
 
   const invalidate = () => {
     queryClient.invalidateQueries({ queryKey: USER_KEYS.all })
+    queryClient.invalidateQueries({ queryKey: USER_KEYS.promo })
   }
 
   const getUserByPhoneMutation = useMutation({
@@ -120,6 +122,24 @@ export const useUserMutations = () => {
     onSuccess: invalidate,
   })
 
+  const createPromoRequestMutation = useMutation({
+    mutationFn: usersApi.createPromoRequest,
+    onSuccess: (data) => {
+      if (data.success) {
+        queryClient.invalidateQueries({ queryKey: ['users', 'me'] })
+        invalidate()
+      }
+    },
+  })
+
+  const deletePromoRequestMutation = useMutation({
+    mutationFn: usersApi.deletePromoRequest,
+    onSuccess: (data) => {
+      invalidate()
+      queryClient.invalidateQueries({ queryKey: ['users', 'me'] })
+    },
+  })
+
   return {
     login: loginMutation.mutateAsync,
     createUser: createMutation.mutateAsync,
@@ -130,6 +150,8 @@ export const useUserMutations = () => {
     generatePassword: generatePasswordMutation.mutateAsync,
     getUserByPhone: getUserByPhoneMutation.mutateAsync,
     setAvatar: setAvatarMutation.mutateAsync,
+    createPromoRequest: createPromoRequestMutation.mutateAsync,
+    deletePromoRequest: deletePromoRequestMutation.mutateAsync,
     isPending:
       setAvatarMutation.isPending ||
       loginMutation.isPending ||
@@ -137,6 +159,8 @@ export const useUserMutations = () => {
       approveMutation.isPending ||
       deleteMutation.isPending ||
       generatePasswordMutation.isPending ||
-      getUserByPhoneMutation.isPending,
+      getUserByPhoneMutation.isPending ||
+      createPromoRequestMutation.isPending ||
+      deletePromoRequestMutation.isPending,
   }
 }

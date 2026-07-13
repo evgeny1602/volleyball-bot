@@ -336,3 +336,21 @@ x-debug-mode: 1
 
 ### xp - end
 
+### promo requests - start
+
+POST http://localhost:3000/api/users/promo
+x-debug-mode: 1
+Content-Type: application/json
+
+{
+    "name": "Евгений",
+    "phone": "79236558205"
+}
+
+###
+
+DELETE http://localhost:3000/api/users/promo/3
+x-debug-mode: 1
+Content-Type: application/json
+
+### promo requests - end

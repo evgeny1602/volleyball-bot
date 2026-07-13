@@ -31,6 +31,16 @@ export const usersApi = {
     return data
   },
 
+  createPromoRequest: async (promoRequestData) => {
+    const { data } = await api.post(`${prefix}/promo`, promoRequestData)
+    return data
+  },
+
+  deletePromoRequest: async (promoRequestId) => {
+    const { data } = await api.delete(`${prefix}/promo/${promoRequestId}`)
+    return data
+  },
+
   create: async (userData) => {
     const { data } = await api.post(prefix, userData)
     return data

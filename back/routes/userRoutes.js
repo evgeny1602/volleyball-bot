@@ -20,4 +20,7 @@ router.post('/set_avatar', userController.setAvatar)
 router.post('/guest', userController.createGuestUser)
 router.post('/login', userController.login)
 
+router.post('/promo', userController.createPromoRequest)
+router.delete('/promo/:requestId', userController.deletePromoRequest)
+
 export default router

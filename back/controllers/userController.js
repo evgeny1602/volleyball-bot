@@ -195,6 +195,80 @@ export const getUserByPhone = (req, res) => {
   }
 }
 
+export const createPromoRequest = (req, res) => {
+  try {
+    const { name, phone } = req.body
+
+    if (!name || !phone)
+      return res.status(400).json({ error: 'name and phone are required' })
+
+    const existingUser = db
+      .prepare(`SELECT 1 FROM users WHERE phone = ?`)
+      .get(phone)
+
+    if (existingUser)
+      return res.status(409).json({ error: 'User already exists' })
+
+    const existingPromoRequest = db
+      .prepare(`SELECT 1 FROM promo_requests WHERE phone = ?`)
+      .get(phone)
+
+    if (existingPromoRequest)
+      return res.status(409).json({ error: 'Promo request already exists' })
+
+    const info = db
+      .prepare(
+        `
+          INSERT INTO promo_requests (
+            name,
+            phone, 
+            created_at
+          )
+          VALUES (?, ?, datetime('now', '+${GMT} hours'))
+        `
+      )
+      .run(name, phone)
+
+    return res.status(201).json({
+      success: true,
+      message: 'Promo request created successfully',
+      requestId: info.lastInsertRowid,
+    })
+  } catch (err) {
+    console.log(err)
+    return res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
+export const deletePromoRequest = (req, res) => {
+  try {
+    const { requestId } = req.params
+
+    const info = db
+      .prepare(
+        `
+          DELETE FROM promo_requests 
+          WHERE id = ?
+        `
+      )
+      .run(requestId)
+
+    if (info.changes > 0) {
+      res.status(200).json({
+        success: true,
+        message: `Promo request ID ${requestId} deleted`,
+      })
+    } else {
+      res.status(404).json({
+        success: false,
+        error: `Promo request ID ${requestId} not found`,
+      })
+    }
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 export const createUser = (req, res) => {
   try {
     const {

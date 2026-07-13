@@ -91,6 +91,14 @@ const initSqls = [
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `,
+  `
+    CREATE TABLE IF NOT EXISTS promo_requests (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT,
+      phone TEXT,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `,
 ]
 
 export const initDatabase = () => {
