@@ -12,6 +12,7 @@ services:
       - /app/node_modules
       - ./back/uploads:/var/www/app/uploads:ro
       - ./back/avatars:/var/www/app/avatars:ro
+      - ./promo:/usr/share/nginx/html/promo:ro
     stdin_open: true
   backend:
     build:
