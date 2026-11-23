@@ -13,6 +13,8 @@ import newRoutes from './routes/newRoutes.js'
 import xpRoutes from './routes/xpRoutes.js'
 import uploadRoutes from './routes/uploadRoutes.js'
 
+import { isRegistered } from './middleware/auth.js'
+
 const app = express()
 const PORT = 3000
 
@@ -33,13 +35,13 @@ app.use(cookieParser())
 app.use('/uploads', express.static('uploads'))
 app.use('/avatars', express.static('avatars'))
 
-app.use('/api/users', userRoutes)
-app.use('/api/games', gameRoutes)
-app.use('/api/templates', templateRoutes)
-app.use('/api/news', newRoutes)
-app.use('/api/thanks', thankRoutes)
-app.use('/api/xp', xpRoutes)
-app.use('/api/upload', uploadRoutes)
+app.use('/api/users', isRegistered, userRoutes)
+app.use('/api/games', isRegistered, gameRoutes)
+app.use('/api/templates', isRegistered, templateRoutes)
+app.use('/api/news', isRegistered, newRoutes)
+app.use('/api/thanks', isRegistered, thankRoutes)
+app.use('/api/xp', isRegistered, xpRoutes)
+app.use('/api/upload', isRegistered, uploadRoutes)
 
 app.listen(PORT, () =>
   console.log(
