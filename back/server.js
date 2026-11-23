@@ -35,7 +35,7 @@ app.use(cookieParser())
 app.use('/uploads', express.static('uploads'))
 app.use('/avatars', express.static('avatars'))
 
-app.use('/api/users', isRegistered, userRoutes)
+app.use('/api/users', userRoutes)
 app.use('/api/games', isRegistered, gameRoutes)
 app.use('/api/templates', isRegistered, templateRoutes)
 app.use('/api/news', isRegistered, newRoutes)
