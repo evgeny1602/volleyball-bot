@@ -17,7 +17,7 @@ export const removeCookieTgId = () => {
     'tg_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax'
 }
 
-const getCookieTgId = () => {
+export const getCookieTgId = () => {
   const name = 'tg_id='
   const decodedCookie = decodeURIComponent(document.cookie)
   const ca = decodedCookie.split(';')
