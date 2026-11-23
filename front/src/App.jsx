@@ -6,11 +6,24 @@ import { Loader } from '@/ui/Loader'
 import { useCurrentUser } from '@/hooks/users'
 import { useEffect } from 'react'
 import { cn } from '@/utils/cn'
+import { getCookieTgId } from '@/utils/tools'
+
+const setCookieTelegram = () => {
+  const savedTgId = getCookieTgId()
+  if (!savedTgId) {
+    const tgId = window.Telegram?.WebApp?.initDataUnsafe?.user?.id || null
+    if (tgId) {
+      document.cookie = `tg_id=${tgId}; path=/; max-age=86400; SameSite=Lax`
+    }
+  }
+}
 
 export const App = () => {
   const { user, isLoading } = useCurrentUser()
 
   useEffect(() => {
+    setCookieTelegram()
+
     document.body.style.overflow = 'hidden'
     document.body.style.position = 'fixed'
     document.body.style.top = '0'
