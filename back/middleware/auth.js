@@ -1,4 +1,4 @@
-import { db } from '../db.js'
+import db from '../db.js'
 
 const findUserByCookie = (req, res) => {
   const tgId = req.cookies?.tg_id
