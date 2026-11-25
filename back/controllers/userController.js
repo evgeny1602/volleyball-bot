@@ -176,6 +176,26 @@ export const createGuestUser = (req, res) => {
   }
 }
 
+export const doesUserExistByPhone = (req, res) => {
+  try {
+    const { phone } = req.params
+
+    const user = db
+      .prepare(
+        `
+          SELECT id 
+          FROM users 
+          WHERE phone = ?
+        `
+      )
+      .get(phone)
+
+    res.json(user ? { exists: true } : { exists: false })
+  } catch (err) {
+    res.status(500).json({ error: 'Internal server error' })
+  }
+}
+
 export const getUserByPhone = (req, res) => {
   try {
     const { phone } = req.params

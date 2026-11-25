@@ -5,6 +5,7 @@ import { isAdmin, isRegistered } from '../middleware/auth.js'
 
 const router = express.Router()
 
+router.get('/does_exist/:phone', userController.doesUserExistByPhone)
 router.post('/promo', userController.createPromoRequest)
 router.get('/promo', isAdmin, userController.getAllPromoRequests)
 router.delete('/promo/:requestId', isAdmin, userController.deletePromoRequest)
