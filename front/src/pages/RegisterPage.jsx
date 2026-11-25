@@ -9,7 +9,8 @@ import { LogIn, UserRoundPen } from 'lucide-react'
 
 export const RegisterPage = () => {
   const { tgUser, isLoading } = useCurrentUser()
-  const { createUser, login, getUserByPhone, isPending } = useUserMutations()
+  const { createUser, login, doesUserExistByPhone, isPending } =
+    useUserMutations()
 
   const [isErrorVisible, setIsErrorVisible] = useState(false)
   const [errorText, setErrorText] = useState('')
@@ -23,7 +24,7 @@ export const RegisterPage = () => {
       return
     }
 
-    const data = await getUserByPhone(formData.phone)
+    const data = await doesUserExistByPhone(formData.phone)
 
     if (data.exists) {
       setErrorText('Пользователь с таким номером телефона уже существует!')

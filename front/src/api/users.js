@@ -26,6 +26,11 @@ export const usersApi = {
     return data
   },
 
+  doesExist: async (phone) => {
+    const { data } = await api.get(`${prefix}/does_exist/${phone}`)
+    return data
+  },
+
   getByPhone: async (phone) => {
     const { data } = await api.get(`${prefix}/by_phone/${phone}`)
     return data

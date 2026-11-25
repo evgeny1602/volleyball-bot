@@ -6,6 +6,7 @@ export const USER_KEYS = {
   all: ['users'],
   detail: (tgId) => ['users', tgId],
   byPhone: (phone) => ['users', 'by_phone', phone],
+  existsByPhone: (phone) => ['users', 'exists_by_phone', phone],
   promo: ['users', 'promo'],
 }
 
@@ -63,6 +64,15 @@ export const useUserMutations = () => {
     onSuccess: (data, phone) => {
       if (data?.user) {
         queryClient.setQueryData(USER_KEYS.byPhone(phone), data)
+      }
+    },
+  })
+
+  const doesUserExistByPhoneMutation = useMutation({
+    mutationFn: usersApi.doesExist,
+    onSuccess: (data, phone) => {
+      if (data?.exists) {
+        queryClient.setQueryData(USER_KEYS.existsByPhone(phone), data.exists)
       }
     },
   })
@@ -157,6 +167,7 @@ export const useUserMutations = () => {
     createGuest: createGuestMutation.mutateAsync,
     generatePassword: generatePasswordMutation.mutateAsync,
     getUserByPhone: getUserByPhoneMutation.mutateAsync,
+    doesUserExistByPhone: doesUserExistByPhoneMutation.mutateAsync,
     setAvatar: setAvatarMutation.mutateAsync,
     createPromoRequest: createPromoRequestMutation.mutateAsync,
     deletePromoRequest: deletePromoRequestMutation.mutateAsync,
@@ -169,6 +180,7 @@ export const useUserMutations = () => {
       generatePasswordMutation.isPending ||
       getUserByPhoneMutation.isPending ||
       createPromoRequestMutation.isPending ||
-      deletePromoRequestMutation.isPending,
+      deletePromoRequestMutation.isPending ||
+      doesUserExistByPhoneMutation.isPending,
   }
 }
